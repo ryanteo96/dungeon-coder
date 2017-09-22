@@ -27,8 +27,21 @@ public class TestClient {
 			// TEMP! Loop forever recieving data from server
 			// Used to test multi-thread server		
 			while(true) {
+				// Ganerate a random number of
+				int wait = (int)(Math.random() * 600 + 1);
+				wait *= 1000; // convert wait to seconds
+				try {
+					Thread.sleep(wait);
+				}
+				catch(InterruptedException i) {
+					System.out.println("sleep interrupted");
+				}
+				out.writeUTF("Ping");
+				long pingStart = System.currentTimeMillis();
 				// Read recieved data.
-				System.out.println(in.readUTF());
+				in.readUTF();
+				long pingStop = System.currentTimeMillis();
+				System.out.print((pingStop - pingStart + "\r"));
 			}
 		}
 		catch(IOException e) {

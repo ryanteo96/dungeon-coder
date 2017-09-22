@@ -23,6 +23,7 @@ public class ServerThread extends Thread {
 		}
 		catch(IOException e) {
 			e.printStackTrace();
+			System.out.println("something went wrong. STOPPING");
 			this.stop();
 		}
 	}
@@ -36,15 +37,13 @@ public class ServerThread extends Thread {
 		while(true) {
 			try {	
 				System.out.println(incoming.readUTF());		
-			}
+			}	
 			catch(IOException e) {
 				e.printStackTrace();
 				System.out.println("something went wrong. STOPPING");
-				this.stop();
+			this.stop();
 			}
-			while(true) {
-				sendData("ping");
-			}
+			sendData("pong");	
 		}
 	}
 }
