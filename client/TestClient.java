@@ -16,17 +16,20 @@ public class TestClient {
 			// Create an output stream for data going to the server.
 			OutputStream toServer = client.getOutputStream();
 			DataOutputStream out = new DataOutputStream(toServer);
-
+			
 			// Send data to server.
 			out.writeUTF("Hello from " + client.getLocalSocketAddress());
 			
 			// Create an input stream for data from server.
 			InputStream fromServer = client.getInputStream();
 			DataInputStream in = new DataInputStream(fromServer);
-
-			// Read recieved data.
-			System.out.println(in.readUTF());
-			client.close();
+			
+			// TEMP! Loop forever recieving data from server
+			// Used to test multi-thread server		
+			while(true) {
+				// Read recieved data.
+				System.out.println(in.readUTF());
+			}
 		}
 		catch(IOException e) {
 			e.printStackTrace();
