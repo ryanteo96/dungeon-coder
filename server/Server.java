@@ -4,7 +4,27 @@ import java.io.*;
 public class Server {
 	public static void main(String[] args) throws IOException {
 		int port = 37536;
-		// Run forever (currently fails after first connection)
+		ServerSocket serverSocket = null;
+		try {
+			serverSocket = new ServerSocket(port);
+		}
+		catch(SocketTimeoutException s) {
+			System.out.println("Socket timed out!");
+		}
+		while(true) {
+			try {
+				Socket socket = serverSocket.accept();
+				System.out.println(socket.getRemoteSocketAddress() + " just connected.");
+				ServerThread serverThread = new ServerThread(socket);
+				serverThread.start();
+			}
+			catch(IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		/*
+		// Handle's only one connection at a time.
 		while(true) {
 			try {
 				// Wait for client to connect to server
@@ -34,5 +54,6 @@ public class Server {
 				break;
 			}
 		}
+		*/
 	}
 }
