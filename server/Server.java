@@ -9,7 +9,11 @@ public class Server {
 		}
 		catch (UnknownHostException e) {
 			e.printStackTrace();
-		}		
+		}
+		URL whatismyip = new URL("http://checkip.amazonaws.com");
+		BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
+		String ip2 = in.readLine();
+		System.out.println("What's my ip : " + ip2);
 
 		int port = 37536;
 		while(true) {
