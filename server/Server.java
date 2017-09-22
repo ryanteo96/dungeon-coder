@@ -3,14 +3,34 @@ import java.io.*;
 
 public class Server {
 	public static void main(String[] args) throws IOException {
-		int portNumber = 37536;
 		try {
-			ServerSocket server = new ServerSocket(portNumber);
-			Socket client = server.accept();
-			BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+			InetAddress ip = InetAddress.getLocalHost();
+			System.out.println("Server ip is : " + ip.getHostAddress());	
 		}
-		catch (IOException e) {
-			System.out.println(e.getMessage());
+		catch (UnknownHostException e) {
+			e.printStackTrace();
+		}		
+
+		int port = 37536;
+		while(true) {
+			try {
+				System.out.println("Waiting for client on port " + port + "...");
+				ServerSocket serverSocket = new ServerSocket(port);
+				Socket server = serverSocket.accept();
+				System.out.println(server.getRemoteSocketAddress() + " just connected.");
+				DataInputStream toServer = new DataInputStream(server.getInputStream());
+			System.out.println(toServer.readUTF());
+				DataOutputStream toClient = new DataOutputStream(server.getOutputStream());
+			toClient.writeUTF("You have connected to " + server.getLocalSocketAddress());
+			}
+			catch (SocketTimeoutException s) {
+				System.out.println("Socket timed out!");
+				break;
+			}
+			catch (IOException e) {
+				System.out.println(e.getMessage());
+				break;
+			}
 		}
 	}
 }
