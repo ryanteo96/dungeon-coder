@@ -1,7 +1,7 @@
 import java.net.*;
 import java.io.*;
 
-public class Client {
+public class TestClient {
 	public static void main(String[] args) throws IOException {
 	//	String ip = "ec2-18-221-46-132.us-east-2.compute.amazonaws.com";
 		//String ip = "18.221.46.132";
