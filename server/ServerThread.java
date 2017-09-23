@@ -4,8 +4,7 @@ import java.io.*;
 public class ServerThread extends Thread {
 	private Socket socket;
 	DataInputStream incoming;
-	DataOutputStream outgoing; 
-
+	DataOutputStream outgoing;
 	public ServerThread(Socket socket) {
 		this.socket = socket;		
 		try {
@@ -33,17 +32,62 @@ public class ServerThread extends Thread {
 		
 	}
 
+	public void recieveFile() {
+
+	}	
+
 	public void run() {
 		while(true) {
-			try {	
-				System.out.println(incoming.readUTF());		
-			}	
+			String request = "";
+			try {
+				// Wait for a request from the client.	
+				System.out.println("waiting for request");
+				request = incoming.readUTF();		
+			}
 			catch(IOException e) {
 				e.printStackTrace();
 				System.out.println("something went wrong. STOPPING");
 			this.stop();
 			}
-			sendData("pong");	
+
+			switch (request) {
+				case "SendString" :
+					sendData("y");
+					try {
+						String recieveData = incoming.readUTF();
+					}
+					catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				break;
+
+				case "SendFile" :
+					sendData("y");
+					try {
+						System.out.println("recieving file name");
+						String fileName = incoming.readUTF();
+						OutputStream out = new FileOutputStream(fileName);
+						System.out.println("recieving file size");
+						long fileSize = incoming.readLong();
+
+						byte[] buffer = new byte[16 * 1024];
+						int count;
+						System.out.println("writing bytes to file");
+						while (fileSize > 0 && (count = incoming.read(buffer, 0, (int)Math.min(buffer.length, fileSize))) != -1) {
+							out.write(buffer, 0, count);
+							fileSize -= count;
+						}
+						out.close();
+					}
+					catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				break;
+
+				default:
+					sendData("n");
+				break;
+			}
 		}
 	}
 }
