@@ -40,7 +40,7 @@ public class TestClient {
 				}
 
 				// Generate a string of between 512 kB to 1 mB.
-				int byteCount = (int)(Math.random() * (Math.pow(2, 20) - Math.pow(2, 19) +Math.pow(2, 19)));
+				int byteCount = (int)(Math.random() * (Math.pow(2, 24) - Math.pow(2, 20) +Math.pow(2, 20)));
 				System.out.println(byteCount/2);
 				
 				// Write the string to a file.
