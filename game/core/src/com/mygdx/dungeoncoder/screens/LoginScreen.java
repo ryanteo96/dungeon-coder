@@ -18,6 +18,8 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 
 import static com.badlogic.gdx.utils.Scaling.fit;
+import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
+import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
 public class LoginScreen implements Screen {
 
@@ -25,9 +27,6 @@ public class LoginScreen implements Screen {
     private Stage stage;
     private TextField txfUsername;
     private TextField txfPassword;
-
-    public static final int VIRTUAL_WIDTH = 1280;
-    public static final int VIRTUAL_HEIGHT = 720;
 
 
     public LoginScreen(DungeonCoder g) {
@@ -39,11 +38,11 @@ public class LoginScreen implements Screen {
 
         Skin skin = new Skin(Gdx.files.internal("comic-ui.json"));
 
-
         // creating buttons
         TextButton btnLogin = new TextButton("Login", skin);
         btnLogin.setPosition(750,200);
         btnLogin.setSize(150,60);
+
         TextButton btnCreateAcc = new TextButton("Create Account", skin);
         btnCreateAcc.setPosition(350,200);
         btnCreateAcc.setSize(300,60);
@@ -52,6 +51,7 @@ public class LoginScreen implements Screen {
         txfUsername = new TextField("", skin);
         txfUsername.setPosition(400, 360);
         txfUsername.setSize(450,40);
+
         txfPassword = new TextField("", skin, "password");
         txfPassword.setPosition(400, 280);
         txfPassword.setSize(450,40);
@@ -60,22 +60,28 @@ public class LoginScreen implements Screen {
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         BitmapFont myFont = new BitmapFont(Gdx.files.internal("comic-sans.fnt"));
         labelStyle.font = myFont;
+
         Label lblGameLogo = new Label("DUNGEON CODER", labelStyle);
         lblGameLogo.setPosition(360, 500);
         lblGameLogo.setFontScale(2);
+        lblGameLogo.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.net.openURI("https://github.com/ryanteo96/dungeon-coder");
+            }
+        });
+
         Label lblUsername = new Label("Username", labelStyle);
         lblUsername.setPosition(400, 400);
+
         Label lblPassword = new Label("Password", labelStyle);
         lblPassword.setPosition(400, 320);
-
-
-
 
         // button listeners.
         btnLogin.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
-                btnLoginClicked();
+                btnLoginClicked(game);
             }
         });
 
@@ -95,7 +101,7 @@ public class LoginScreen implements Screen {
     }
 
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClearColor(172/255f, 115/255f, 57/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.draw();
@@ -127,9 +133,8 @@ public class LoginScreen implements Screen {
 
     }
 
-    public void btnLoginClicked() {
-        System.out.println(txfUsername.getText());
+    public void btnLoginClicked(DungeonCoder g) {
+        g.setScreen(new MainMenuScreen(g));
     }
-
 
 }

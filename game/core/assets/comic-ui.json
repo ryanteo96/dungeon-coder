@@ -14,7 +14,7 @@ com.badlogic.gdx.graphics.g2d.BitmapFont: {
 		file: password-font.fnt
 	}
 }
-com.badlogic.gdx.graphics.Color: {
+	com.badlogic.gdx.graphics.Color: {
 	black: {
 		r: 0
 		g: 0
