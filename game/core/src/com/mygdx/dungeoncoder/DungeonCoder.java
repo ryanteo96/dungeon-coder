@@ -10,12 +10,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.dungeoncoder.screens.LoginScreen;
+import com.mygdx.dungeoncoder.screens.MainMenuScreen;
 
 public class DungeonCoder extends Game {
 
 	@Override
 	public void create() {
-		this.setScreen(new LoginScreen(this));
+		this.setScreen(new MainMenuScreen(this));
 	}
 
 	@Override
