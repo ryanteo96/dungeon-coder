@@ -1,7 +1,7 @@
 function body_onload() {
-    testbutton.onclick = testbutton_onclick();
+    testButton.onclick = testButton_onclick;
 }
 
-function testbutton_onclick() {
-    windows.location.href("test.html"); 
+function testButton_onclick() {
+    window.location.href = "web/test.html";
 }
