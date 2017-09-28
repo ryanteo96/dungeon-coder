@@ -16,8 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
-
-import static com.badlogic.gdx.utils.Scaling.fit;
+import com.mygdx.dungeoncoder.utils.ClientConnection;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
@@ -46,6 +45,12 @@ public class LoginScreen implements Screen {
         TextButton btnCreateAcc = new TextButton("Create Account", skin);
         btnCreateAcc.setPosition(350,200);
         btnCreateAcc.setSize(300,60);
+        btnCreateAcc.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.net.openURI("https://ryanteo96.github.io/dungeon-coder/web/CreateAccount.html");
+            }
+        });
 
         // creating text fields
         txfUsername = new TextField("", skin);
@@ -64,12 +69,12 @@ public class LoginScreen implements Screen {
         Label lblGameLogo = new Label("DUNGEON CODER", labelStyle);
         lblGameLogo.setPosition(360, 500);
         lblGameLogo.setFontScale(2);
-        lblGameLogo.addListener(new ClickListener(){
+        /*lblGameLogo.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.net.openURI("https://github.com/ryanteo96/dungeon-coder");
             }
-        });
+        });*/
 
         Label lblUsername = new Label("Username", labelStyle);
         lblUsername.setPosition(400, 400);
@@ -81,7 +86,7 @@ public class LoginScreen implements Screen {
         btnLogin.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
-                btnLoginClicked(game);
+                    btnLoginClicked(game);
             }
         });
 
@@ -134,7 +139,11 @@ public class LoginScreen implements Screen {
     }
 
     public void btnLoginClicked(DungeonCoder g) {
-        g.setScreen(new MainMenuScreen(g));
-    }
 
+        if (ClientConnection.requestLogin(txfUsername.getText(), txfPassword.getText())) {
+            g.setScreen(new MainMenuScreen(g));
+        } else {
+            System.out.println("Login Failed");
+        }
+    }
 }
