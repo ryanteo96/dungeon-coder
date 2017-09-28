@@ -25,10 +25,41 @@ public class TestClient {
 			InputStream fromServer = client.getInputStream();
 			DataInputStream incoming = new DataInputStream(fromServer);
 			incoming.readUTF();
+			
+			System.out.println("Creating new account");
+			outgoing.writeUTF("CreateAccount");
+			String response = incoming.readUTF();
+			if (response.equals("y")) {
+				outgoing.writeUTF("TestUser");
+				String available = incoming.readUTF();
+				System.out.println(available);
+				if (available.equals("Username available")) {
+					outgoing.writeUTF("NewPass");
+				}
+				System.out.println("New account info sent");
+			}
+			else {
+				System.out.println("Server refused account creation");
+			}
+
+			System.out.println("Attempting to login to new account");
+			outgoing.writeUTF("login");
+			response = incoming.readUTF();
+			if (response.equals("y")) {
+				outgoing.writeUTF("TestUser");
+				outgoing.writeUTF("NewPass");
+				System.out.println(incoming.readUTF());
+			}
+			else {
+				System.out.println("Server refused login attempt");
+			}
+
 			// TEMP! Loop forever recieving data from server
-			// Used to test multi-thread server		
+			// Used to test multi-thread server
+			//=======================================
+			// Code for generating random files for transfer
+			/*
 			while(true) {
-				System.out.println("loop");	
 				// Generate a random number of
 				int wait = (int)(Math.random() * 600 + 1);
 				wait *= 1000; // convert wait to seconds
@@ -78,7 +109,8 @@ public class TestClient {
 				catch (IOException ex) {
 					ex.printStackTrace();
 				}
-			}
+				
+			}*/
 		}
 		catch(IOException e) {
 			e.printStackTrace();
