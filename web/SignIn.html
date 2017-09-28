@@ -2,8 +2,24 @@
     <head>
         <title>Sign In - Dungeon Coder</title>
         <script language="javascript" type="text/javascript" src="SignIn.js"></script>
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700" rel="stylesheet">
+
         <style type="text/css">
+            #gameHdr {
+                position:absolute;
+                width:532px;
+                top:20px;
+                margin:auto;
+                right:0;
+                left:0;
+            }
+
+            h1 {
+                position:absolute;
+                font-size:60;
+                font-family:'Open Sans', san-serif;
+            }
+
             #signInForm {
                 position:absolute;
                 width:300px;
@@ -11,10 +27,9 @@
                 border-style:solid;
                 border-width:1px;
                 margin: auto;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                left: 0;
+                top:200px;
+                right:0;
+                left:0;
             }
 
             #signInHdr {
@@ -76,7 +91,6 @@
             }
 
             #createAccountLbl {
-                display:block;
                 position:absolute;
                 top:310px;
                 left:75px;
@@ -113,14 +127,19 @@
                 font-family:'Open Sans', san-serif;
                 font-size:12;
             }
-            
         </style>
+
     </head>
 
     <body onload="body_onload()">
         
+        <div id="gameHdr">
+            <h1>DUNGEON CODER</h1>
+        </div>
+       
+        
         <div id="signInForm">
-            <label id="signInHdr">Sign In</label>
+            <label id="signInHdr">SIGN IN</label>
 
             <label id="usernameLbl">Username</label>
             <input id="usernameInput" type="text"/>
