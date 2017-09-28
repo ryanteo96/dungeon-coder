@@ -15,10 +15,9 @@ public class Server {
 			System.out.println("Socket timed out!");
 		}
 		
-		System.out.println("\nListening for new connections.");		
 		while(true) {
 			// Accept a new connection and spawn a a new thread to handle it.
-			System.out.println("listening");
+			System.out.println("Listening for new connection...");
 			try {
 				Socket socket = serverSocket.accept();
 				System.out.println(socket.getRemoteSocketAddress() + " just connected.");

@@ -1,6 +1,5 @@
 import java.security.*;
 import java.sql.*;
-import javax.sql.rowset.serial.SerialBlob;
 import java.net.*;
 import java.io.*;
 
@@ -16,7 +15,6 @@ public class ServerThread extends Thread {
 	private Statement stmt = null;
 	private ResultSet rs = null;
 
-
 	public ServerThread(Socket socket) {
 		this.socket = socket;		
 		try {
@@ -28,6 +26,7 @@ public class ServerThread extends Thread {
 		}
 	}
 
+	// Send data in the form af a String to the client.
 	private void sendData(String data) {
 		try {
 			outgoing.writeUTF(data);	
@@ -39,6 +38,7 @@ public class ServerThread extends Thread {
 		}
 	}
 
+	// Connect this thread to the database.
 	private void connectDB() {
 		try {
 			conn = DriverManager.getConnection(dburl, dbUsername, dbPassword);
@@ -52,6 +52,7 @@ public class ServerThread extends Thread {
 		}
 	}
 
+	// Disconnect this thread from the database.
 	private void disconnectDB() {
 		if (rs != null) {
 			try {
@@ -79,6 +80,7 @@ public class ServerThread extends Thread {
 		}
 	}
 
+	// Check if the user exists in the database.
 	private boolean userExists(String username) {
 		if (conn == null) {
 			connectDB();
@@ -97,7 +99,36 @@ public class ServerThread extends Thread {
 		}
 		return false;
 	}
+	
+	// Check the database if account exists and the password in correct.
+	private boolean checkAccount(String username, String password) {
+		boolean goodCheck = false;
+		if (conn == null) {
+			connectDB();
+		}
+		try {
+			rs = stmt.executeQuery("SELECT USERNAME, hash, salt From UserAccounts");
+			while (rs.next()) {
+				if (username.equals(rs.getString("username"))) {
+					String knownHash = rs.getString("hash");
+					String hexSalt = rs.getString("salt");
+					byte[] salt = hexToSalt(hexSalt);
+					if (knownHash.equals(hash(password, salt))) {
+						goodCheck = true;
+					}
+				}
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return goodCheck;
+	}
 
+	// Attempt to log the client in with the given username and password.
 	private String login() {
 		String loginStatus = "username or password is incorrect";
 		String username = "";
@@ -108,7 +139,6 @@ public class ServerThread extends Thread {
 		try {
 			username = incoming.readUTF();
 			password = incoming.readUTF();
-			System.out.println("Attempting to login with username: " + username + " and password: " + password);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -117,31 +147,14 @@ public class ServerThread extends Thread {
 		if (conn == null) {
 			connectDB();
 		}
-		try {
-			rs = stmt.executeQuery("SELECT USERNAME, HASH, SALT FROM UserAccounts");
-			while (rs.next()) {
-				if (username.equals(rs.getString("username"))) {
-					String knownHash = rs.getString("hash");
-					String hexSalt = rs.getString("salt");
-					System.out.println("known salt in hex form is: " + hexSalt);
-					byte[] salt = hexToSalt(hexSalt);
-					System.out.println("known hash is: " + knownHash);
-					System.out.println("tested hash is: " + hash(password, salt));
-					if (knownHash.equals(hash(password, salt))) {
-						loginStatus = "login successful";
-					}
-				}
-			}
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-		catch(Exception e) {
-			e.printStackTrace();
+
+		if (checkAccount(username, password)) {
+			loginStatus = "login successful";
 		}
 		return loginStatus;
 	}
 
+	// Attempt to create a new user with given username and password.
 	private void createAccount() {
 		sendData("y");
 		String username = "";
@@ -157,15 +170,12 @@ public class ServerThread extends Thread {
 				outgoing.writeUTF("Username available");
 			}
 			password = incoming.readUTF();
-			System.out.println("Creating new account with username: " + username + " and password: " + password); 
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
 		byte[] salt = salt();
-		System.out.println("hashing with salt " + saltyString(salt));
 		String hash = hash(password, salt);
-		System.out.println("Initial hash is" + hash);
 		String hexSalt = saltyString(salt);
 		if (conn == null) {
 			connectDB();
@@ -177,7 +187,8 @@ public class ServerThread extends Thread {
 			e.printStackTrace();
 		}
 	}
-
+	
+	// Convert the byte[] salt to a hex string for storage.
 	private String saltyString(byte[] salt) {
 		char[] hex = "0123456789ABCDEF".toCharArray();
 		char[] hexChars = new char[salt.length * 2];
@@ -189,6 +200,7 @@ public class ServerThread extends Thread {
 		return new String(hexChars);
 	}
 
+	// Convert the hex string to byte[] for hashing.
 	private byte[] hexToSalt(String hex) {
 		int length = hex.length();
 		byte[] salt = new byte[length / 2];
@@ -203,6 +215,7 @@ public class ServerThread extends Thread {
 		
 	}
 
+	// Recieve data for a file from the client and write it.
 	private void recieveFile() {
 		sendData("y");
 		try {
