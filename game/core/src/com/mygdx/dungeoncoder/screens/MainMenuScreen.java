@@ -86,38 +86,7 @@ public class MainMenuScreen implements Screen {
     public void dispose() {
 
     }
-/*
-    private void createSignOutButton() {
-        Texture signOut = new Texture(Gdx.files.internal("UIElements/signout.png"));
-        TextureRegion signOutRegion = new TextureRegion(signOut);
-        TextureRegionDrawable signOutDrawable = new TextureRegionDrawable(signOutRegion);
-        Image signOutImage = new Image(signOutDrawable);
-        signOutImage.setPosition(0,680);
-        signOutImage.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                signOut(game);
-            }
-        });
 
-        stage.addActor(signOutImage);
-    }
-
-    private void signOut(DungeonCoder g) {
-        g.setScreen(new LoginScreen(g));
-    }
-
-*/
-/*
-    private void createPlay() {
-        Texture playTitle = new Texture(Gdx.files.internal("UIElements/playTitle.png"));
-        TextureRegion playTitleRegion = new TextureRegion(playTitle);
-        TextureRegionDrawable playTitleDrawable = new TextureRegionDrawable(playTitleRegion);
-        Image playTitleImage = new Image(playTitleDrawable);
-        playTitleImage.setPosition(550,600);
-        stage.addActor(playTitleImage);
-    }
-*/
     private void createInstructional() {
         Texture instructionalMode = new Texture(Gdx.files.internal("UIElements/instructional.png"));
         TextureRegion instructionalModeRegion = new TextureRegion(instructionalMode);

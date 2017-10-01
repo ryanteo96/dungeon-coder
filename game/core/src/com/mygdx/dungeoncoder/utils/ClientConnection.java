@@ -6,8 +6,8 @@ public class ClientConnection {
 	public String ip = "13.59.183.75";
 	int port = 37536;
 	Socket client;
-	DataOutputStream outgoing;
-	DataInputStream incoming;
+	static DataOutputStream outgoing;
+	static DataInputStream incoming;
 	public ClientConnection() {
 		try {
 			Socket client = new Socket(ip, port);
@@ -23,7 +23,7 @@ public class ClientConnection {
 		}
 	}
 
-	public boolean requestLogin(String username, String password) {
+	public static boolean requestLogin(String username, String password) {
 		boolean login = false;
 		try {
 			outgoing.writeUTF("login");
