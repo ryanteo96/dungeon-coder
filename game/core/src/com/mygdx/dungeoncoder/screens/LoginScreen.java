@@ -32,9 +32,7 @@ public class LoginScreen implements Screen {
         game = g;
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
-
         Gdx.input.setInputProcessor(stage);
-
         Skin skin = new Skin(Gdx.files.internal("comic-ui.json"));
 
         // creating buttons
@@ -90,6 +88,7 @@ public class LoginScreen implements Screen {
             }
         });
 
+
         // adding stage actors.
         stage.addActor(txfUsername);
         stage.addActor(txfPassword);
@@ -98,6 +97,18 @@ public class LoginScreen implements Screen {
         stage.addActor(lblGameLogo);
         stage.addActor(lblUsername);
         stage.addActor(lblPassword);
+
+
+        TextButton btnBack = new TextButton("Back", skin);
+        btnBack.setPosition(0, 600);
+        btnBack.setSize(100, 100);
+        btnBack.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent e, float x, float y, int point, int button) {
+                btnBackClicked(game);
+            }
+        });
+        stage.addActor(btnBack);
     }
 
     @Override
@@ -139,11 +150,15 @@ public class LoginScreen implements Screen {
     }
 
     public void btnLoginClicked(DungeonCoder g) {
-
         if (ClientConnection.requestLogin(txfUsername.getText(), txfPassword.getText())) {
             g.setScreen(new MainMenuScreen(g));
         } else {
             System.out.println("Login Failed");
         }
     }
+
+    public void btnBackClicked(DungeonCoder g){
+         g.setScreen(new SplashScreen(g));
+    }
+
 }
