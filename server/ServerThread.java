@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.security.*;
 import java.sql.*;
 import java.net.*;
@@ -36,6 +37,17 @@ public class ServerThread extends Thread {
 			System.out.println("something went wrong. STOPPING");
 			this.stop();
 		}
+	}
+
+	private String recieveData() {
+		String data = "";
+		try {
+			data = incoming.readUTF();
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+		return data;
 	}
 
 	// Connect this thread to the database.
@@ -210,6 +222,43 @@ public class ServerThread extends Thread {
 		return salt;
 	}
 
+	private void updateAccount() {
+		sendData("y");
+		boolean changeUsername = false;
+		boolean changePassword = false;
+		boolean changeEmail = false;
+		boolean changeClass = false;
+		String list = recieveData();
+		String token = recieveData();
+		String[] updateList = parseList(list, token);
+		if (Arrays.asList(updateList).contains("username")) {
+			changeUsername = true;
+		}
+		if (Arrays.asList(updateList).contains("email")) {
+			changeEmail = true;
+		}
+		if (Arrays.asList(updateList).contains("class")) {
+			changeClass = true;
+		}
+		if (Arrays.asList(updateList).contains("password")) {
+			changePassword = true;
+		}
+	}
+
+	private void updateProgress() {
+		sendData("y");
+		int module;
+		int percentage;
+	}
+
+	private String[] parseList(String list, String token) {
+		String[] listItems = list.split(token);
+		for (int i = 0; i < listItems.length; i++) {
+			System.out.println(listItems[i]);
+		}
+		return listItems;
+	}
+
 	// To Be Implemented
 	private void sendFile(File file) {
 		
@@ -269,6 +318,7 @@ public class ServerThread extends Thread {
 	}	
 
 	public void run() {
+		parseList("email,password,username", ",");
 		while(true) {
 			String request = "";
 			try {
