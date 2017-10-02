@@ -1,6 +1,5 @@
 package com.mygdx.dungeoncoder.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -17,6 +16,8 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.ClientConnection;
+import com.sun.deploy.util.SessionState;
+
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
@@ -26,6 +27,7 @@ public class LoginScreen implements Screen {
     private Stage stage;
     private TextField txfUsername;
     private TextField txfPassword;
+    private ClientConnection clientConnection;
 
 
     public LoginScreen(DungeonCoder g) {
@@ -43,6 +45,7 @@ public class LoginScreen implements Screen {
         TextButton btnCreateAcc = new TextButton("Create Account", skin);
         btnCreateAcc.setPosition(350,200);
         btnCreateAcc.setSize(300,60);
+        clientConnection = new ClientConnection();
         btnCreateAcc.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -80,11 +83,12 @@ public class LoginScreen implements Screen {
         Label lblPassword = new Label("Password", labelStyle);
         lblPassword.setPosition(400, 320);
 
+
         // button listeners.
         btnLogin.addListener(new ClickListener() {
             @Override
-            public void touchUp(InputEvent e, float x, float y, int point, int button) {
-                    btnLoginClicked(game);
+            public void clicked(InputEvent event, float x, float y) {
+                btnLoginClicked(game);
             }
         });
 
@@ -150,7 +154,7 @@ public class LoginScreen implements Screen {
     }
 
     public void btnLoginClicked(DungeonCoder g) {
-        if (ClientConnection.requestLogin(txfUsername.getText(), txfPassword.getText())) {
+        if (clientConnection.requestLogin(txfUsername.getText(), txfPassword.getText())) {
             g.setScreen(new MainMenuScreen(g));
         } else {
             System.out.println("Login Failed");
