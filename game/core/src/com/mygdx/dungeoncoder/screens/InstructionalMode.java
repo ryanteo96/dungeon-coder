@@ -31,7 +31,7 @@ public class InstructionalMode implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         createBack();
-        createInProgress();
+        createStages();
 
     }
 
@@ -94,13 +94,24 @@ public class InstructionalMode implements Screen {
         game.setScreen(new MainMenuScreen(game));
     }
 
-    private void createInProgress() {
-        Texture inProgress = new Texture(Gdx.files.internal("UIElements/inProgress1.png"));
-        TextureRegion inProgressRegion = new TextureRegion(inProgress);
-        TextureRegionDrawable inProgressDrawable = new TextureRegionDrawable(inProgressRegion);
-        Image inProgressImage = new Image(inProgressDrawable);
-        inProgressImage.setPosition(450,300);
 
-        stage.addActor(inProgressImage);
+    private void createStages(){
+        Texture stage_One = new Texture(Gdx.files.internal("UIElements/stage1.png"));
+        TextureRegion stage_OneRegion = new TextureRegion(stage_One);
+        TextureRegionDrawable stage_OneDrawable = new TextureRegionDrawable(stage_OneRegion);
+        Image stage_OneImage = new Image(stage_OneDrawable);
+        stage_OneImage.setPosition(100,400);
+        stage_OneImage.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stage_One(game);
+            }
+        });
+
+        stage.addActor(stage_OneImage);
+    }
+
+    private void stage_One(DungeonCoder g) {
+        g.setScreen(new StageOne(g));
     }
 }
