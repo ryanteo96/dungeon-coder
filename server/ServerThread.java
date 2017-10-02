@@ -124,8 +124,11 @@ public class ServerThread extends Thread {
 				if (username.equals(rs.getString("username"))) {
 					String knownHash = rs.getString("hash");
 					String hexSalt = rs.getString("salt");
+					//System.out.println("known hash is " + knownHash);
 					byte[] salt = hexToSalt(hexSalt);
-					if (knownHash.equals(hash(password, salt))) {
+					String checkHash = hash(password, salt);
+					//System.out.println("check hash is " + checkHash);
+					if (knownHash.equals(checkHash)) {
 						goodCheck = true;
 					}
 				}
@@ -151,6 +154,7 @@ public class ServerThread extends Thread {
 		try {
 			username = incoming.readUTF();
 			password = incoming.readUTF();
+			//System.out.println("username is " + username + "\npassword is " + password + "\n");
 		}
 		catch (IOException e) {
 			e.printStackTrace();
