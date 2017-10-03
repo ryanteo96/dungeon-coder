@@ -144,17 +144,12 @@ public class ServerThread extends Thread {
 	}
 
 	// Attempt to log the client in with the given username and password.
-	private String login() {
-		String loginStatus = "username or password is incorrect";
+	private void login() {
 		String username = "";
 		String password = "";
-		
-		sendData("y");
-
 		try {
 			username = incoming.readUTF();
 			password = incoming.readUTF();
-			//System.out.println("username is " + username + "\npassword is " + password + "\n");
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -165,31 +160,36 @@ public class ServerThread extends Thread {
 		}
 
 		if (checkAccount(username, password)) {
-			loginStatus = "login successful";
+			try {
+				outgoing.write(0x10);
+			}
+			catch(IOException e) {
+			}
+			return;
 		}
-		return loginStatus;
+		try {
+			outgoing.write(0x40);
+		}
+		catch(IOException e) {
+		}
 	}
 
 	// Attempt to create a new user with given username and password.
 	private void createAccount() {
-		sendData("y");
 		String username = "";
 		String password = "";
 		
 		try {
 			username = incoming.readUTF();
+			password = incoming.readUTF();
 			if (userExists(username)) {
-				outgoing.writeUTF("Username already exists");
+				outgoing.write(0x40);
 				return;
 			}
-			else {
-				outgoing.writeUTF("Username available");
-			}
-			password = incoming.readUTF();
 		}
 		catch (IOException e) {
-			e.printStackTrace();
 		}
+
 		byte[] salt = salt();
 		String hash = hash(password, salt);
 		String hexSalt = saltyString(salt);
@@ -200,7 +200,17 @@ public class ServerThread extends Thread {
 			stmt.executeUpdate("INSERT INTO UserAccounts (USERNAME, HASH, SALT)" + "VALUES ('" + username + "','" + hash + "','" + hexSalt + "')");
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			try {
+				outgoing.write(0x60);
+			}
+			catch (IOException ex) {
+			}
+			return;
+		}
+		try {
+			outgoing.write(0x10);
+		}
+		catch (IOException e) {
 		}
 	}
 	
@@ -319,12 +329,58 @@ public class ServerThread extends Thread {
 			e.printStackTrace();
 		}
 		return hash;
-	}	
+	}
+
+	private void shutdown() {
+		try {
+			outgoing.write(0x00);
+			socket.close();
+			disconnectDB();
+		}
+		catch(IOException e) {
+		}
+	}
 
 	public void run() {
-		parseList("email,password,username", ",");
+		// Set socket to timeout after a second if no login/account creation request
+		byte[] code = new byte[1];
+	
+		try {
+			socket.setSoTimeout(1000);
+			incoming.read(code);
+			if (code[0] == 0x01 ) {
+				System.out.println("requested login");	
+				outgoing.write(0x10);
+				login();
+			}
+			else if (code[0] == 0x02 ) {
+				System.out.println("requested account creation");
+				outgoing.write(0x10);
+				createAccount();
+			}
+			else {
+				shutdown();
+				return;
+			}
+		}
+		catch(SocketTimeoutException e) {
+			shutdown();
+			return;	
+		}
+		catch(IOException e) {
+		}
+
+		try {
+			socket.setSoTimeout(0);
+		}
+		catch(IOException e) {
+		}
+		
+		//============
+		//To Be updated Later
 		while(true) {
 			String request = "";
+		
 			try {
 				// Wait for a request from the client.	
 				System.out.println("waiting for request");
@@ -335,7 +391,7 @@ public class ServerThread extends Thread {
 				System.out.println("something went wrong. STOPPING");
 			this.stop();
 			}
-
+				
 			switch (request) {
 				case "SendString" :
 					sendData("y");
@@ -346,7 +402,7 @@ public class ServerThread extends Thread {
 						ex.printStackTrace();
 					}
 				break;
-
+			
 				case "SendFile" :
 					recieveFile();
 				break;
@@ -356,7 +412,6 @@ public class ServerThread extends Thread {
 				break;
 
 				case "login" :
-					sendData(login());
 				break;
 
 				default:

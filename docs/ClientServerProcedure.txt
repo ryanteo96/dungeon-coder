@@ -47,11 +47,13 @@ Binary:		Hex:		Operation/Message:
 ==========Initial Connection==========
 C/S)	Open a new socket for communication
 C)	Request login/account creation
+S)	Send request status
+C)	Send login/account creation data
 S)	Attempt to verify login/create account
 S)	Send request status
 C/S)	Terminate socket if login failed
 
 Notes:
--> The server will terminate connection if it does not recieve a login/account creation request within 3 seconds of opening socket (connection timed out.
+-> The server will terminate connection if it does not recieve a login/account creation request within 1 second of opening socket (connection timed out.
 
 -> This functionality should happen automatically on the client side whenever they attempt initial login/account creation.
