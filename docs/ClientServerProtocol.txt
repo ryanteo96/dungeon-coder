@@ -5,7 +5,7 @@ OPCODES are sent via single byte (java byte[1])
 
 CLIENT AND SERVER OPCODE:
 Binary:		Hex:		Operation:
-00000000  ----	0x00	----	NOP
+00000000  ----	0x00	----	CLOSECONNECTION
 
 CLIENT TO SERVER OPCODES:
 Binary:		Hex:		Operation/Message:
@@ -23,7 +23,7 @@ Binary:		Hex:		Operation/Message:
 00001100  ----	0x0C	----
 00001101  ----	0x0D	----
 00001110  ----	0x0E	----
-00001111  ----	0x0F	----	CLOSECONNECTION
+00001111  ----	0x0F	----	
 --------------------------------------
 SERVER TO CLIENT OPCODES
 Binary:		Hex:		Operation/Message:
@@ -41,7 +41,7 @@ Binary:		Hex:		Operation/Message:
 11000000  ----	0xC0	----
 11010000  ----	0xD0	----
 11100000  ----	0xE0	----
-11110000  ----	0xF0	----	CLOSE CONNECTION
+11110000  ----	0xF0	----
 
 
 ==========Initial Connection==========
