@@ -7,3 +7,7 @@ $username = 'dungeoncoder';
 $password = 'DungeonCoder23';
 
 $dbh = new PDO($dsn, $username, $password);
+
+$result = mysql_query('SELECT USERNAME FROM UserAccounts');
+
+echo $result;
