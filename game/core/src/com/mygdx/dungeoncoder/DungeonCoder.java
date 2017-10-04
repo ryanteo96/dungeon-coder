@@ -15,7 +15,9 @@ import com.mygdx.dungeoncoder.screens.SplashScreen;
 
 public class DungeonCoder extends Game {
 
-	@Override
+
+
+    @Override
 	public void create() {
 		this.setScreen(new SplashScreen(this));
 	}
@@ -31,5 +33,8 @@ public class DungeonCoder extends Game {
 	public void dispose() {
 		super.dispose();
 	}
+
+
+
 
 }

@@ -54,7 +54,7 @@ public class StageOne implements Screen {
     }
     @Override
     public void show() {
-
+        System.out.println("yes you are in stage one");
     }
 
     @Override

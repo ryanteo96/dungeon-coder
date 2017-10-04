@@ -8,14 +8,18 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
+import com.sun.org.apache.xpath.internal.SourceTree;
 
 import javax.swing.plaf.basic.BasicOptionPaneUI;
 
@@ -71,13 +75,13 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
 
     @Override
     public void hide() {
-        dispose();
+//        dispose();
     }
 
     @Override
     public void dispose() {
         stage.dispose();
-        skin.dispose();
+     //   skin.dispose();
     }
 
     private void createBack() {
@@ -120,23 +124,60 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
     }
 
     private void stage_One(DungeonCoder g) {
-        //Dialog dialog = new Dialog("Stage 1",skin);
-        stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
+        /*stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
-
         Gdx.input.setInputProcessor(stage);
-        // Gdx.input.setInputProcessor(stage = new Stage());
+        Gdx.input.setInputProcessor(stage = new Stage());*/
         skin = new Skin(Gdx.files.internal("dialogSkins/plain-james-ui.json"));
+        TextButton startButton = new TextButton("Start", skin, "default");
+        TextButton cancelButton = new TextButton("Cancel", skin, "default");
+        TextButton x = new TextButton("Start", skin, "default");
+        TextButton y = new TextButton("Start", skin, "default");
+        TextButton z = new TextButton("Start", skin, "default");
 
         Dialog dialog = new Dialog("Stage 1",skin);
-        dialog.getBackground().setMinWidth(300);//size of the dialog
-        dialog.getBackground().setMinHeight(500);
-        dialog.button("Start");
-        dialog.button("Cancel");
-        dialog.text("Objective\n" +
-                "In this challenge, we review some basic concepts that will get you started with this module.\n\n" +
+        dialog.getBackground().setMinWidth(250);//size of the dialog
+        dialog.getBackground().setMinHeight(600);
+       // dialog.getBackground().setBottomHeight(20);//size of the dialog
+        //dialog.getBackground().setLeftWidth(20);
+        //dialog.getBackground().setTopHeight(0);
+
+
+        startButton.setSize(80,30);
+        startButton.setPosition(970,20);
+
+        cancelButton.setSize(100,30);
+        cancelButton.setPosition(1060,20);
+
+        dialog.addActor(startButton);
+        dialog.addActor(cancelButton);
+
+
+        startButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                    stageOne(game);
+
+            }
+        });
+
+        cancelButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                returnToInstructionalMode(game);
+            }
+        });
+
+        //if(cancelButton.isPressed()){
+        //    return;
+        //}
+        //dialog.getButtonTable().row();
+        // dialog.getButtonTable().add(startButton);
+       // dialog.button(cancelButton);
+        //dialog.getButtonTable().add(cancelButton);
+        String str = "Objective\nIn this challenge, we review some basic concepts that will get you started with this module.\n\n" +
                 "Task\n" +
-                "To complete this challenge, you must save a line of input from stdin to a variable, print Hello, World.\n on a single line," +
+                "To complete this challenge, you must save a line of input from stdin to a variable, print Hello, World.\n" +
                 "and finally print the value of your variable on the next line.\n\n" +
                 "Sample Input\n" +
                 "Welcome to Dungeon Coding!\n\n" +
@@ -144,9 +185,12 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
                 "Hello, World.\n" +
                 "Welcome to Dungeon Coding!\n\n" +
                 "Explanation\n" +
-                "On the first line, we print the string literal Hello, World.. On the second line, we print \nthe contents of the  variable which, for this sample case, " +
-                "happens to be Welcome to Dungeon Coding!. \nIf you do not print the variable's contents to stdout, you will not pass the hidden test case.\n\n" +
-                "Difficulty: One Dungeon");
+                "On the first line, we print the string literal Hello, World.. On the second line, we print the contents of the \nvariable which, for this sample case," +
+                "happens to be Welcome to Dungeon Coding!. If you do not print the \nvariable's contents to stdout, you will not pass the hidden test case.\n\n" +
+                "Difficulty: One Dungeon";
+        dialog.text(str);
+
+        //stage.addActor(dialog.button(startButton));
         dialog.show(stage);
 
         /*new Dialog("Stage 1", skin) {
@@ -191,5 +235,12 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         }.show(stage);
 */
 
+    }
+    private void returnToInstructionalMode(DungeonCoder g){
+        g.setScreen(new InstructionalMode(g));
+    }
+
+    private void stageOne(DungeonCoder g) {
+        g.setScreen(new StageOne(g));
     }
 }
