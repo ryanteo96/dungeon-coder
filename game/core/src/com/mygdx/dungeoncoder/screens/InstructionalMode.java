@@ -40,8 +40,6 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         Gdx.input.setInputProcessor(stage);
         createStages();
         createBack();
-
-
     }
 
     @Override
@@ -120,7 +118,33 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
 
         stage.addActor(stage_OneImage);
 
+        Texture stage_Two = new Texture(Gdx.files.internal("UIElements/stage2.png"));
+        TextureRegion stage_TwoRegion = new TextureRegion(stage_Two);
+        TextureRegionDrawable stage_TwoDrawable = new TextureRegionDrawable(stage_TwoRegion);
+        Image stage_TwoImage = new Image(stage_TwoDrawable);
+        stage_TwoImage.setPosition(500,400);
+        stage_TwoImage.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stage_Two(game);
+            }
+        });
 
+        stage.addActor(stage_TwoImage);
+
+        Texture stage_Three = new Texture(Gdx.files.internal("UIElements/stage3.png"));
+        TextureRegion stage_ThreeRegion = new TextureRegion(stage_Three);
+        TextureRegionDrawable stage_ThreeDrawable = new TextureRegionDrawable(stage_ThreeRegion);
+        Image stage_ThreeImage = new Image(stage_ThreeDrawable);
+        stage_ThreeImage.setPosition(900,400);
+        stage_ThreeImage.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stage_Three(game);
+            }
+        });
+
+        stage.addActor(stage_ThreeImage);
     }
 
     private void stage_One(DungeonCoder g) {
@@ -131,18 +155,10 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         skin = new Skin(Gdx.files.internal("dialogSkins/plain-james-ui.json"));
         TextButton startButton = new TextButton("Start", skin, "default");
         TextButton cancelButton = new TextButton("Cancel", skin, "default");
-        TextButton x = new TextButton("Start", skin, "default");
-        TextButton y = new TextButton("Start", skin, "default");
-        TextButton z = new TextButton("Start", skin, "default");
 
         Dialog dialog = new Dialog("Stage 1",skin);
         dialog.getBackground().setMinWidth(250);//size of the dialog
         dialog.getBackground().setMinHeight(600);
-       // dialog.getBackground().setBottomHeight(20);//size of the dialog
-        //dialog.getBackground().setLeftWidth(20);
-        //dialog.getBackground().setTopHeight(0);
-
-
         startButton.setSize(80,30);
         startButton.setPosition(970,20);
 
@@ -168,13 +184,127 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
             }
         });
 
-        //if(cancelButton.isPressed()){
-        //    return;
-        //}
-        //dialog.getButtonTable().row();
-        // dialog.getButtonTable().add(startButton);
-       // dialog.button(cancelButton);
-        //dialog.getButtonTable().add(cancelButton);
+
+        String str = "Objective\nIn this challenge, we review some basic concepts that will get you started with this module.\n\n" +
+                "Task\n" +
+                "To complete this challenge, you must save a line of input from stdin to a variable, print Hello, World.\n" +
+                "and finally print the value of your variable on the next line.\n\n" +
+                "Sample Input\n" +
+                "Welcome to Dungeon Coding!\n\n" +
+                "Sample Output\n" +
+                "Hello, World.\n" +
+                "Welcome to Dungeon Coding!\n\n" +
+                "Explanation\n" +
+                "On the first line, we print the string literal Hello, World.. On the second line, we print the contents of the \nvariable which, for this sample case," +
+                "happens to be Welcome to Dungeon Coding!. If you do not print the \nvariable's contents to stdout, you will not pass the hidden test case.\n\n" +
+                "Difficulty: One Dungeon";
+
+
+        dialog.text(str);
+
+        //stage.addActor(dialog.button(startButton));
+        dialog.show(stage);
+    }
+
+    private void stage_Two(DungeonCoder g) {
+        skin = new Skin(Gdx.files.internal("dialogSkins/plain-james-ui.json"));
+        TextButton startButton = new TextButton("Start", skin, "default");
+        TextButton cancelButton = new TextButton("Cancel", skin, "default");
+        Dialog dialog = new Dialog("Stage 2",skin);
+        dialog.getBackground().setMinWidth(250);//size of the dialog
+        dialog.getBackground().setMinHeight(600);
+
+
+
+        startButton.setSize(80,30);
+        startButton.setPosition(970,20);
+
+        cancelButton.setSize(100,30);
+        cancelButton.setPosition(1060,20);
+
+        dialog.addActor(startButton);
+        dialog.addActor(cancelButton);
+
+
+        startButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                stageTwo(game);
+
+            }
+        });
+
+        cancelButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                returnToInstructionalMode(game);
+            }
+        });
+
+        String str2 = ("Objective \n" +
+                "Today, we're discussing data types.\n\n" +
+                "Task\n" +
+                "Complete the code in the editor.\n" +
+                "1. Declare 3 variables: one of type int, one of type double, and one of type String.\n" +
+                "2. Read 3 lines of input from stdin (according to the sequence given in the Input Format section below) and initialize your  variables.\n" +
+                "3. Use the  operator to perform the following operations: \n" +
+                "   Print the sum of  plus your int variable on a new line.\n" +
+                "   Print the sum of  plus your double variable to a scale of one decimal place on a new line.\n" +
+                "   Concatenate  with the string you read as input and print the result on a new line.\n\n" +
+                "Input Format\n" +
+                "The first line contains an integer that you must sum with i\n" +
+                "The second line contains a double that you must sum with d\n" +
+                "The third line contains a string that you must concatenate with s\n\n" +
+                "Output Format\n" +
+                "Print the sum of both integers on the fist line, the sum of both doubles (scaled to 1 decimal\n" +
+                "place) on the second line, and then the two concatenated strings on the third line)\n\n" +
+                "Sample Input\n" +
+                "12\n" +
+                "4.0\n" +
+                "rocks!\n\n" +
+                "Sample Output\n" +
+                "16\n" +
+                "8.0\n" +
+                "Dungeon Coder rocks!");
+
+        dialog.text(str2);
+        dialog.show(stage);
+    }
+
+    private void stage_Three(DungeonCoder g) {
+        skin = new Skin(Gdx.files.internal("dialogSkins/plain-james-ui.json"));
+        TextButton startButton = new TextButton("Start", skin, "default");
+        TextButton cancelButton = new TextButton("Cancel", skin, "default");
+        Dialog dialog = new Dialog("Stage 3",skin);
+        dialog.getBackground().setMinWidth(250);//size of the dialog
+        dialog.getBackground().setMinHeight(600);
+
+        startButton.setSize(80,30);
+        startButton.setPosition(970,20);
+
+        cancelButton.setSize(100,30);
+        cancelButton.setPosition(1060,20);
+
+        dialog.addActor(startButton);
+        dialog.addActor(cancelButton);
+
+
+        startButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                stageThree(game);
+
+            }
+        });
+
+        cancelButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                returnToInstructionalMode(game);
+            }
+        });
+
+
         String str = "Objective\nIn this challenge, we review some basic concepts that will get you started with this module.\n\n" +
                 "Task\n" +
                 "To complete this challenge, you must save a line of input from stdin to a variable, print Hello, World.\n" +
@@ -189,52 +319,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
                 "happens to be Welcome to Dungeon Coding!. If you do not print the \nvariable's contents to stdout, you will not pass the hidden test case.\n\n" +
                 "Difficulty: One Dungeon";
         dialog.text(str);
-
-        //stage.addActor(dialog.button(startButton));
         dialog.show(stage);
-
-        /*new Dialog("Stage 1", skin) {
-
-            {
-                text("Objective\n" +
-                        "In this challenge, we review some basic concepts that will get you started with this module.\n\n" +
-                        "Task\n" +
-                        "To complete this challenge, you must save a line of input from stdin to a variable, print Hello, World.\n on a single line," +
-                        "and finally print the value of your variable on the next line.\n\n" +
-                        "Sample Input\n" +
-                        "Welcome to Dungeon Coding!\n\n" +
-                        "Sample Output\n" +
-                        "Hello, World.\n" +
-                        "Welcome to Dungeon Coding!\n\n" +
-                        "Explanation\n" +
-                        "On the first line, we print the string literal Hello, World.. On the second line, we print \nthe contents of the  variable which, for this sample case, " +
-                        "happens to be Welcome to Dungeon Coding!. \nIf you do not print the variable's contents to stdout, you will not pass the hidden test case.\n\n" +
-                        "Difficulty: One Dungeon");
-
-                TextButton btnStart = new TextButton("Start",skin);
-                btnStart.setPosition(100,200);
-                btnStart.setSize(100,200);
-
-                stage.addActor(btnStart);
-
-                button("Cancel", "glad you stay");
-            }
-
-            @Override
-            protected void result(final Object object) {
-                new Dialog("", skin) {
-
-                    {
-                        text(object.toString());
-                        button("OK");
-                    }
-
-                }.show(stage);
-            }
-
-        }.show(stage);
-*/
-
     }
     private void returnToInstructionalMode(DungeonCoder g){
         g.setScreen(new InstructionalMode(g));
@@ -242,5 +327,13 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
 
     private void stageOne(DungeonCoder g) {
         g.setScreen(new StageOne(g));
+    }
+
+    private void stageTwo(DungeonCoder g) {
+        g.setScreen(new StageTwo(g));
+    }
+
+    private void stageThree(DungeonCoder g) {
+        g.setScreen(new StageThree(g));
     }
 }
