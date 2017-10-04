@@ -33,7 +33,7 @@ public class ServerThread extends Thread {
 	private void sendString(String data) {
 		try {
 			outgoing.writeUTF(data);	
-		}
+		false}
 		catch(IOException e) {
 			// IO failure. Shut down
 			shutdown(false);
@@ -67,7 +67,7 @@ public class ServerThread extends Thread {
 	}
 
 	private byte recieveCode() {
-		byte code = (byte)(0x0F);
+		byte code = (byte)(0xEE);
 		try {
 			code = (byte)(incoming.read());
 		}
@@ -168,12 +168,12 @@ public class ServerThread extends Thread {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
 			sendCode((byte)(0x60));
+			shutdown();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
 			sendCode((byte)(0x60));
+			shutdown();
 		}
 		return goodCheck;
 	}
@@ -187,7 +187,7 @@ public class ServerThread extends Thread {
 			password = incoming.readUTF();
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			shutdown(false);
 		}
 
 		if (conn == null) {
