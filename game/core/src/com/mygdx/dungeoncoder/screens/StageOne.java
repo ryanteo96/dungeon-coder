@@ -93,11 +93,12 @@ public class StageOne implements Screen {
     }
 
     private void createStageOne(){
-        Texture stage_One = new Texture(Gdx.files.internal("UIElements/stage1.png"));
+        Texture stage_One = new Texture(Gdx.files.internal("UIElements/a6c.jpeg"));
         TextureRegion stage_OneRegion = new TextureRegion(stage_One);
         TextureRegionDrawable stage_OneDrawable = new TextureRegionDrawable(stage_OneRegion);
         Image stage_OneImage = new Image(stage_OneDrawable);
-        stage_OneImage.setPosition(300,400);
+        stage_OneImage.setSize(400,500);
+        stage_OneImage.setPosition(450,150);
         stage.addActor(stage_OneImage);
     }
 }

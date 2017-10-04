@@ -93,11 +93,12 @@ public class StageTwo implements Screen {
     }
 
     private void createStageTwo(){
-        Texture stage_Two = new Texture(Gdx.files.internal("UIElements/stage2.png"));
+        Texture stage_Two = new Texture(Gdx.files.internal("UIElements/a6c.jpeg"));
         TextureRegion stage_TwoRegion = new TextureRegion(stage_Two);
         TextureRegionDrawable stage_TwoDrawable = new TextureRegionDrawable(stage_TwoRegion);
         Image stage_TwoImage = new Image(stage_TwoDrawable);
-        stage_TwoImage.setPosition(300,400);
+        stage_TwoImage.setSize(400,500);
+        stage_TwoImage.setPosition(450,150);
         stage.addActor(stage_TwoImage);
     }
 }
