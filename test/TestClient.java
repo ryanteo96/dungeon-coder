@@ -18,37 +18,23 @@ public class TestClient {
 			OutputStream toServer = client.getOutputStream();
 			DataOutputStream outgoing = new DataOutputStream(toServer);
 			
-			// Send data to server.
-			outgoing.writeUTF("Hello from " + client.getLocalSocketAddress());
-			
 			// Create an input stream for data from server.
 			InputStream fromServer = client.getInputStream();
 			DataInputStream incoming = new DataInputStream(fromServer);
-			incoming.readUTF();
-			
-			System.out.println("Creating new account");
-			outgoing.writeUTF("CreateAccount");
-			String response = incoming.readUTF();
-			if (response.equals("y")) {
-				outgoing.writeUTF("TestUser");
-				String available = incoming.readUTF();
-				System.out.println(available);
-				if (available.equals("Username available")) {
-					outgoing.writeUTF("NewPass");
-				}
-				System.out.println("New account info sent");
-			}
-			else {
-				System.out.println("Server refused account creation");
-			}
 
+			// Attempt to login to an existing account		
+			outgoing.write((byte)(0x01));
+			
 			System.out.println("Attempting to login to new account");
-			outgoing.writeUTF("login");
-			response = incoming.readUTF();
-			if (response.equals("y")) {
+			if (incoming.read() == 0x10) {
 				outgoing.writeUTF("TestUser");
 				outgoing.writeUTF("NewPass");
-				System.out.println(incoming.readUTF());
+				if (incoming.read() == 0x10) {
+					System.out.println("login successful");
+				}
+				else {
+					System.out.println("username or password incorrect");
+				}
 			}
 			else {
 				System.out.println("Server refused login attempt");
