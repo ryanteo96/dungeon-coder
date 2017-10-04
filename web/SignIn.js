@@ -4,9 +4,9 @@ function body_onload() {
 }
 
 function signInBtn_onclick() {
-    alert("In progress.");
+    location.href = "TeacherDashboard.html";
 }
 
 function createAccountBtn_onclick() {
-    window.location.href = "CreateAccount.html";
+    location.href = "CreateAccount.html";
 }

@@ -4,20 +4,416 @@
         <script language="javascript" type="text/javascript" src="TeacherDashboard.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700" rel="stylesheet">
         <style type="text/css">
-        
+            #teacherDashBoardDiv {
+                width:100%;
+                height:100%;
+                overflow-y:auto;
+                overflow-x:auto;
+            }
+
+            #teacherDashboardHdrDiv {
+                top:20px;
+                right: 0px;
+                left: 0px;
+                position:absolute;
+                width:1000px;
+                height:10%;
+                margin:auto;
+            } 
+
+            #teacherDashboardHdr {
+                position:absolute;
+                width:190px;
+                top:0px;
+                left:10px;
+                margin:auto;
+                font-size:30;
+                font-family:'Open Sans', san-serif;
+            }
+
+            #classTasks {
+                position:absolute;  
+                top:80px;
+                left:0px;
+                right:0px;
+                width:1000px;
+                height:40%;
+                margin:auto;
+            }
+
+            #task1 {
+                position:absolute;
+                top:0px;
+                left:0px;
+                width:180px;
+                height:100px;
+                background-color:#FFFFFF;
+                border-style:solid;
+                border-width:1px;
+                border-radius:4px;
+                cursor:pointer;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
+
+            #task1:hover {
+                background-color:rgb(226, 226, 226);
+            }
+
+            #task2 {
+                position:absolute;
+                top:0px;
+                left:200px;
+                width:180px;
+                height:100px;
+                background-color:#FFFFFF;
+                border-style:solid;
+                border-width:1px;
+                border-radius:4px;
+                cursor:pointer;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
+
+            #task2:hover {
+                background-color:rgb(226, 226, 226);
+            }
+
+            #task3 {
+                position:absolute;
+                top:0px;
+                left:400px;
+                width:180px;
+                height:100px;
+                background-color:#FFFFFF;
+                border-style:solid;
+                border-width:1px;
+                border-radius:4px;
+                cursor:pointer;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
+
+            #task3:hover {
+                background-color:rgb(226, 226, 226);
+            }
+
+            #task4 {
+                position:absolute;
+                top:0px;
+                left:600px;
+                width:180px;
+                height:100px;
+                background-color:#FFFFFF;
+                border-style:solid;
+                border-width:1px;
+                border-radius:4px;
+                cursor:pointer;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
+
+            #task4:hover {
+                background-color:rgb(226, 226, 226);
+            }
+
+            #task5 {
+                position:absolute;
+                top:0px;
+                left:800px;
+                width:180px;
+                height:100px;
+                background-color:#FFFFFF;
+                border-style:solid;
+                border-width:1px;
+                border-radius:4px;
+                cursor:pointer;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
+
+            #task5:hover {
+                background-color:rgb(226, 226, 226);
+            }
+
+            #task6 {
+                position:absolute;
+                top:120px;
+                left:0px;
+                width:180px;
+                height:100px;
+                background-color:#FFFFFF;
+                border-style:solid;
+                border-width:1px;
+                border-radius:4px;
+                cursor:pointer;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
+
+            #task6:hover {
+                background-color:rgb(226, 226, 226);
+            }
+
+            #task7 {
+                position:absolute;
+                top:120px;
+                left:200px;
+                width:180px;
+                height:100px;
+                background-color:#FFFFFF;
+                border-style:solid;
+                border-width:1px;
+                border-radius:4px;
+                cursor:pointer;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
+
+            #task7:hover {
+                background-color:rgb(226, 226, 226);
+            }
+
+            #task8 {
+                position:absolute;
+                top:120px;
+                left:400px;
+                width:180px;
+                height:100px;
+                background-color:#FFFFFF;
+                border-style:solid;
+                border-width:1px;
+                border-radius:4px;
+                cursor:pointer;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
+
+            #task8:hover {
+                background-color:rgb(226, 226, 226);
+            }
+
+            #task9 {
+                position:absolute;
+                top:120px;
+                left:600px;
+                width:180px;
+                height:100px;
+                background-color:#FFFFFF;
+                border-style:solid;
+                border-width:1px;
+                border-radius:4px;
+                cursor:pointer;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
+
+            #task9:hover {
+                background-color:rgb(226, 226, 226);
+            }
+
+            #task10 {
+                position:absolute;
+                top:120px;
+                left:800px;
+                width:180px;
+                height:100px;
+                background-color:#FFFFFF;
+                border-style:solid;
+                border-width:1px;
+                border-radius:4px;
+                cursor:pointer;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
+
+            #task10:hover {
+                background-color:rgb(226, 226, 226);
+            }
+
+            #studentListHdrDiv {
+                top:350px;
+                right: 0px;
+                left: 0px;
+                position:absolute;
+                width:1000px;
+                height:10%;
+                margin:auto;
+            }
+
+            #studentListHdr {
+                position:absolute;
+                width:190px;
+                top:0px;
+                left:10px;
+                margin:auto;
+                font-size:30;
+                font-family:'Open Sans', san-serif;
+            }
+
+            #studentListDiv {
+                top:400px;
+                right: 0px;
+                left: 0px;
+                position:absolute;
+                width:1000px;
+                height:300px;
+                margin:auto;
+                border-style:solid;
+                border-width:1px;
+            }
+
+            #colHeadings {
+                position:absolute;
+                background-color: rgb(226, 226, 226);
+                content: "";
+                height:30px;
+                width:1000px;
+                border-bottom:solid;
+                border-width:1px;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
+
+            #studentNameHeading {
+                position:absolute;
+                z-index:1;
+                top:2px;
+                width:200px;
+                height:30px;
+                text-align:center;
+            }
+
+            #studentIDHeading {
+                position:absolute;
+                z-index:1;
+                top:2px;
+                left:200px;
+                width:150px;
+                height:30px;
+                text-align:center;
+            }
+
+            #studentEmailHeading {
+                position:absolute;
+                z-index:1;
+                top:2px;
+                left:350px;
+                width:350px;
+                height:30px;
+                text-align:center;
+            }
+
+            #studentScoreHeading {
+                position:absolute;
+                z-index:1;
+                top:2px;
+                left:700px;
+                width:150px;
+                height:30px;
+                text-align:center;
+            }
+
+            #studentTagHeading {
+                position:absolute;
+                z-index:1;
+                top:2px;
+                left:850px;
+                width:150px;
+                height:30px;
+                text-align:center;
+            }
+
+            #col1 {
+                position:absolute;
+                border-right:solid;
+                border-width:1px;
+                width:200px;
+                height:300px;
+            }
+
+            #col2 {
+                position:absolute;
+                border-right:solid;
+                border-width:1px;
+                width:150px;
+                height:300px;
+                left:200px;
+            }
+            
+            #col3 {
+                position:absolute;
+                border-right:solid;
+                border-width:1px;
+                width:350px;
+                height:300px;
+                left:350px;
+            }
+
+            #col4 {
+                position:absolute;
+                border-right:solid;
+                border-width:1px;
+                width:150px;
+                height:300px;
+                left:700px;
+            }
+
+            #col5 {
+                position:absolute;
+                border-right:solid;
+                border-width:1px;
+                width:150px;
+                height:300px;
+                left:850px;
+            }
+
         </style>
     </head>
 
     <body onload="body_onload()">
-        <div id="createAccountHdr">
-            <h1>DASHBOARD</h1>            
-        </div>
-
-        <div id="studentList">
+        <div id="teacherDashboardDiv">
+            <!-- Div for Dashboard Header Div. -->
+            <div id=teacherDashboardHdrDiv>
+                <label id="teacherDashboardHdr">DASHBOARD</label>  
+            </div>    
+            <!-- Div for Class Task. -->
+            <div id="classTasks">
+                <input id="task1" type=button value="TASK 1"></input>
+                <input id="task2" type=button value="TASK 2"></input>
+                <input id="task3" type=button value="TASK 3"></input>
+                <input id="task4" type=button value="TASK 4"></input>
+                <input id="task5" type=button value="TASK 5"></input>
+                <input id="task6" type=button value="TASK 6"></input>
+                <input id="task7" type=button value="TASK 7"></input>
+                <input id="task8" type=button value="TASK 8"></input>
+                <input id="task9" type=button value="TASK 9"></input>
+                <input id="task10" type=button value="TASK 10"></input>
+            </div>
+            <!-- Div for Student Header Div. -->
+            <div id=studentListHdrDiv>
+                <label id="studentListHdr">STUDENTS</label>
+            </div>
+            <!-- Div for Student List Entries. -->   
+            <div id="studentListDiv">
+                <div id="colHeadings">
+                    <div id="studentNameHeading">Name</div>
+                    <div id="studentIDHeading">ID</div>
+                    <div id="studentEmailHeading">Email Address</div>
+                    <div id="studentScoreHeading">Score</div>
+                    <div id="studentTagHeading">Tag</div>
+                </div>
+                <div id="col1"></div>
+                <div id="col2"></div>
+                <div id="col3"></div>
+                <div id="col4"></div>
+                <div id="col5"></div>
+            </div>
+            <!-- Div for Student List Data. -->
+            <div id="timeLogEntriesDivData"></div>
 
             
         </div>
+        
     </body>
-
-
 </html>

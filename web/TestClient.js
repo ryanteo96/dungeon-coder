@@ -1,13 +1,21 @@
-var ip = "ws://13.59.183.75";
-var port = "37536";
-
+//var ip = "ws://13.59.183.75:8080/";
 
 function body_onload() {
     testBtn.onclick = testBtn_onclick();
 }
 
 function testBtn_onclick() {
-    var ws = new WebSocket(ip, port);
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var myObj = JSON.parse(this.responseText);
+            alert(myObj.name);
+        }
+    };
+    xmlhttp.open("GET", "demo.php", true);
+    xmlhttp.send();
+    
+    /*var ws = new WebSocket(ip);
 
     ws.onopen = function() {
         ws.send("HI from Web!");
@@ -26,5 +34,5 @@ function testBtn_onclick() {
          
     window.onbeforeunload = function(event) {
        socket.close();
-    };
+    };*/
 }
