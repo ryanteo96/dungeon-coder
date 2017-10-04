@@ -2,43 +2,113 @@ package com.mygdx.dungeoncoder.utils;
 import java.net.*;
 import java.io.*;
 
+/*	CLIENT CONNECTION
+ * Creates a new connection to the server via sockets.
+ * A new connection is instantiated when a client attempts to login.
+ * Handles all requests and responses to and from the server.
+ */
 public class ClientConnection {
 	public String ip = "13.59.183.75";
 	int port = 37536;
 	Socket client;
 	DataOutputStream outgoing;
 	DataInputStream incoming;
-	public ClientConnection() {
+
+	// Initialize new Client Connection
+	public ClientConnection(String username, String password) {
 		try {
 			Socket client = new Socket(ip, port);
+			
 			OutputStream toServer = client.getOutputStream();
 			outgoing = new DataOutputStream(toServer);
+			
 			InputStream fromServer = client.getInputStream();
-			outgoing.writeUTF("Hello from " + client.getLocalSocketAddress());
 			incoming = new DataInputStream(fromServer);
-			incoming.readUTF();
 		}
 		catch(IOException e) {
-			// Do Nothing
+			// Connection failed. Do Something
 		}
 	}
 
-	public boolean requestLogin(String username, String password) {
-		boolean login = false;
+	private void sendCode(byte code) {
 		try {
-			outgoing.writeUTF("login");
-			if (incoming.readUTF().equals("y")) {
+			outgoing.write(code);
+		}
+		catch (IOException e) {
+			// Do Something
+		}
+	}
+
+	private byte recieveCode() {
+		byte code = (byte)(0xEE);
+		try {
+			code = (byte)(incoming.read());
+		}
+		catch (IOException e) {
+			// Do Something
+		}
+		return code;
+	}
+
+	// Should be called right after a new client connection is created
+	public boolean requestLogin(String username, String password) {
+		try {
+			sendCode((byte)(0x01));
+			if (recieveCode() == 0x10) {
 				outgoing.writeUTF(username);
 				outgoing.writeUTF(password);
-				if (incoming.readUTF().equals("login successful")) {
-					login = true;
+				if (recieveCode() == 0x10) {
+					return true;
+				}
+				// Database failure.
+				else if (recieveCode() == 0x60) {
+					return false;
+				}
+				// Invalid credantials
+				else if (recieveCode() == 0x40) {
+					return false;
 				}
 			}
+			else {
+				// Server refused login attempt.
+				return false;
+			}
 		}
-		catch(IOException e) {
+		catch (IOException e) {
 			// Do nothing.
 		}
-		return login;
-	}   
+		return false;
+	}
+
+	// Can also be called right after a new client connection is created
+	public boolean requestAccountCreation(String username, String password) {
+		try {
+			sendCode((byte)(0x02));
+			if (recieveCode() == 0x10) {
+				outgoing.writeUTF(username);
+				outgoing.writeUTF(password);
+				
+				if (recieveCode() == 0x10) {
+					return true;
+				}
+				else if (recieveCode() == 0x40) {
+					// Account exists with that username
+					return false;
+				}
+				else if (recieveCode() == 0x60) {
+					// Database failure
+					return false;
+				}
+			}
+			else {
+				// Server refused account creation.
+				return false;
+			}
+		}
+		catch (IOException e) {
+			// Do nothing.
+		}
+		return false;
+	} 
 }
 
