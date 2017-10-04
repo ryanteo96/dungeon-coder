@@ -79,7 +79,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
     @Override
     public void dispose() {
         stage.dispose();
-     //   skin.dispose();
+        skin.dispose();
     }
 
     private void createBack() {
@@ -155,6 +155,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         skin = new Skin(Gdx.files.internal("dialogSkins/plain-james-ui.json"));
         TextButton startButton = new TextButton("Start", skin, "default");
         TextButton cancelButton = new TextButton("Cancel", skin, "default");
+        TextButton repeatButton = new TextButton("Repeat Stage", skin, "default");
 
         Dialog dialog = new Dialog("Stage 1",skin);
         dialog.getBackground().setMinWidth(250);//size of the dialog
@@ -165,14 +166,27 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         cancelButton.setSize(100,30);
         cancelButton.setPosition(1060,20);
 
+
+        repeatButton.setSize(150,40);
+        repeatButton.setPosition(530,20);
+
         dialog.addActor(startButton);
         dialog.addActor(cancelButton);
+        dialog.addActor(repeatButton);
 
 
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                     stageOne(game);
+
+            }
+        });
+
+        repeatButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                stageOne(game);
 
             }
         });
@@ -210,11 +224,11 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         skin = new Skin(Gdx.files.internal("dialogSkins/plain-james-ui.json"));
         TextButton startButton = new TextButton("Start", skin, "default");
         TextButton cancelButton = new TextButton("Cancel", skin, "default");
+        TextButton repeatButton = new TextButton("Repeat Stage", skin, "default");
+
         Dialog dialog = new Dialog("Stage 2",skin);
         dialog.getBackground().setMinWidth(250);//size of the dialog
         dialog.getBackground().setMinHeight(600);
-
-
 
         startButton.setSize(80,30);
         startButton.setPosition(800,20);
@@ -222,11 +236,23 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         cancelButton.setSize(100,30);
         cancelButton.setPosition(900,20);
 
+        repeatButton.setSize(150,40);
+        repeatButton.setPosition(450,10);
+
         dialog.addActor(startButton);
         dialog.addActor(cancelButton);
+        dialog.addActor(repeatButton);
 
 
         startButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                stageTwo(game);
+
+            }
+        });
+
+        repeatButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 stageTwo(game);
@@ -269,6 +295,8 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         skin = new Skin(Gdx.files.internal("dialogSkins/plain-james-ui.json"));
         TextButton startButton = new TextButton("Start", skin, "default");
         TextButton cancelButton = new TextButton("Cancel", skin, "default");
+        TextButton repeatButton = new TextButton("Repeat Stage", skin, "default");
+
         Dialog dialog = new Dialog("Stage 3",skin);
         dialog.getBackground().setMinWidth(250);//size of the dialog
         dialog.getBackground().setMinHeight(600);
@@ -279,11 +307,24 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         cancelButton.setSize(100,30);
         cancelButton.setPosition(1060,20);
 
+        repeatButton.setSize(150,40);
+        repeatButton.setPosition(530,20);
+
         dialog.addActor(startButton);
         dialog.addActor(cancelButton);
+        dialog.addActor(repeatButton);
+
 
 
         startButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                stageThree(game);
+
+            }
+        });
+
+        repeatButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 stageThree(game);

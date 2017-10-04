@@ -25,6 +25,16 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 public class StageOne implements Screen {
     private DungeonCoder game;
     private Stage stage;
+    Object[] listEntries = {"This is a list entry1", "And another one1", "The meaning of life1", "Is hard to come by1",
+            "This is a list entry2", "And another one2", "The meaning of life2", "Is hard to come by2", "This is a list entry3",
+            "And another one3", "The meaning of life3", "Is hard to come by3", "This is a list entry4", "And another one4",
+            "The meaning of life4", "Is hard to come by4", "This is a list entry5", "And another one5", "The meaning of life5",
+            "Is hard to come by5"};
+    Skin skin;
+    Texture texture1;
+    Texture texture2;
+    Label fpsLabel;
+
 
     public StageOne (DungeonCoder g) {
         game = g;
@@ -48,6 +58,10 @@ public class StageOne implements Screen {
             }
         });
         stage.addActor(backiconImage);
+    }
+
+    public void create(){
+
     }
 
     private void backToInstructionalMode(DungeonCoder g) {
@@ -93,12 +107,6 @@ public class StageOne implements Screen {
     }
 
     private void createStageOne(){
-        Texture stage_One = new Texture(Gdx.files.internal("UIElements/a6c.jpeg"));
-        TextureRegion stage_OneRegion = new TextureRegion(stage_One);
-        TextureRegionDrawable stage_OneDrawable = new TextureRegionDrawable(stage_OneRegion);
-        Image stage_OneImage = new Image(stage_OneDrawable);
-        stage_OneImage.setSize(400,500);
-        stage_OneImage.setPosition(450,150);
-        stage.addActor(stage_OneImage);
+
     }
 }
