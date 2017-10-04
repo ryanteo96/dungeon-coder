@@ -31,6 +31,7 @@ public class StageTwo implements Screen {
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
         Gdx.input.setInputProcessor(stage);
+        createStageTwo();
         createBack();
     }
 
@@ -89,5 +90,14 @@ public class StageTwo implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    private void createStageTwo(){
+        Texture stage_Two = new Texture(Gdx.files.internal("UIElements/stage2.png"));
+        TextureRegion stage_TwoRegion = new TextureRegion(stage_Two);
+        TextureRegionDrawable stage_TwoDrawable = new TextureRegionDrawable(stage_TwoRegion);
+        Image stage_TwoImage = new Image(stage_TwoDrawable);
+        stage_TwoImage.setPosition(300,400);
+        stage.addActor(stage_TwoImage);
     }
 }

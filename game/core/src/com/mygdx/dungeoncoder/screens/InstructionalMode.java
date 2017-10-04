@@ -217,10 +217,10 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
 
 
         startButton.setSize(80,30);
-        startButton.setPosition(970,20);
+        startButton.setPosition(800,20);
 
         cancelButton.setSize(100,30);
-        cancelButton.setPosition(1060,20);
+        cancelButton.setPosition(900,20);
 
         dialog.addActor(startButton);
         dialog.addActor(cancelButton);
@@ -246,7 +246,8 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
                 "Task\n" +
                 "Complete the code in the editor.\n" +
                 "1. Declare 3 variables: one of type int, one of type double, and one of type String.\n" +
-                "2. Read 3 lines of input from stdin (according to the sequence given in the Input Format section below) and initialize your  variables.\n" +
+                "2. Read 3 lines of input from stdin (according to the sequence given in the Input \n" +
+                "Format section below) and initialize your  variables.\n" +
                 "3. Use the  operator to perform the following operations: \n" +
                 "   Print the sum of  plus your int variable on a new line.\n" +
                 "   Print the sum of  plus your double variable to a scale of one decimal place on a new line.\n" +
@@ -258,14 +259,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
                 "Output Format\n" +
                 "Print the sum of both integers on the fist line, the sum of both doubles (scaled to 1 decimal\n" +
                 "place) on the second line, and then the two concatenated strings on the third line)\n\n" +
-                "Sample Input\n" +
-                "12\n" +
-                "4.0\n" +
-                "rocks!\n\n" +
-                "Sample Output\n" +
-                "16\n" +
-                "8.0\n" +
-                "Dungeon Coder rocks!");
+                "Difficulty: One Dungeon");
 
         dialog.text(str2);
         dialog.show(stage);
@@ -305,7 +299,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         });
 
 
-        String str = "Objective\nIn this challenge, we review some basic concepts that will get you started with this module.\n\n" +
+        String str3 = "Objective\nIn this challenge, we review some basic concepts that will get you started with this module.\n\n" +
                 "Task\n" +
                 "To complete this challenge, you must save a line of input from stdin to a variable, print Hello, World.\n" +
                 "and finally print the value of your variable on the next line.\n\n" +
@@ -318,7 +312,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
                 "On the first line, we print the string literal Hello, World.. On the second line, we print the contents of the \nvariable which, for this sample case," +
                 "happens to be Welcome to Dungeon Coding!. If you do not print the \nvariable's contents to stdout, you will not pass the hidden test case.\n\n" +
                 "Difficulty: One Dungeon";
-        dialog.text(str);
+        dialog.text(str3);
         dialog.show(stage);
     }
     private void returnToInstructionalMode(DungeonCoder g){

@@ -31,6 +31,7 @@ public class StageThree implements Screen {
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
         Gdx.input.setInputProcessor(stage);
+        createStageThree();
         createBack();
     }
 
@@ -89,5 +90,15 @@ public class StageThree implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    private void createStageThree(){
+
+        Texture stage_Three = new Texture(Gdx.files.internal("UIElements/stage3.png"));
+        TextureRegion stage_ThreeRegion = new TextureRegion(stage_Three);
+        TextureRegionDrawable stage_ThreeDrawable = new TextureRegionDrawable(stage_ThreeRegion);
+        Image stage_ThreeImage = new Image(stage_ThreeDrawable);
+        stage_ThreeImage.setPosition(300,400);
+        stage.addActor(stage_ThreeImage);
     }
 }
