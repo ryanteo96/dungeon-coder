@@ -330,7 +330,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         TextButton startButton = new TextButton("Start", skin, "default");
         TextButton cancelButton = new TextButton("Cancel", skin, "default");
         window = new Window("Stage 2", testSkin);
-        window.setDebug(true);
+        window.setDebug(false);
         window.getTitleTable().add(closeButton).height(window.getPadTop());
         window.setPosition(300,80);
         //window.defaults().spaceBottom(10);//not sure what does this do
