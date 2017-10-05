@@ -143,9 +143,35 @@ public class ClientConnection {
 				return false;
 			}
 		}
-		catch (IOException i) {
+		catch (IOException e) {
 			// Do nothing
 		}	
+		return false;
+	}
+
+	public boolean requestUpdateProgress(String module, int percentage) {
+		try {
+			sendCode((byte)(0x04));
+			if (recieveCode() == 0x10) {
+				outgoing.writeUTF(module);
+				outgoing.writeInt(percentage);
+				byte outcome = recieveCode();
+				if (outcome == 0x10) {
+					return true;
+				}
+				else if (outcome == 0x60) {
+					// Database failure
+					return false;
+				}
+			}
+			else {
+				// Server refused update progress
+				return false;
+			}
+		}
+		catch (IOException e) {
+			// Do nothing
+		}
 		return false;
 	}
  
