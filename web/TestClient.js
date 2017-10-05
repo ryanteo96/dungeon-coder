@@ -8,8 +8,8 @@ function testBtn_onclick() {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            var myObj = this.responseText;
-            alert(myObj);
+            var myObj = JSON.parse(this.responseText);
+            alert(myObj.name);
         }
     };
     xmlhttp.open("GET", "demo.php", true);

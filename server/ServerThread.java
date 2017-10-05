@@ -16,6 +16,8 @@ public class ServerThread extends Thread {
 	private Statement stmt = null;
 	private ResultSet rs = null;
 
+	private boolean run = true;
+
 	public ServerThread(Socket socket) {
 		this.socket = socket;		
 		try {
@@ -28,26 +30,55 @@ public class ServerThread extends Thread {
 	}
 
 	// Send data in the form af a String to the client.
-	private void sendData(String data) {
+	private void sendString(String data) {
 		try {
 			outgoing.writeUTF(data);	
-		}
+		false}
 		catch(IOException e) {
-			e.printStackTrace();
-			System.out.println("something went wrong. STOPPING");
-			this.stop();
+			// IO failure. Shut down
+			shutdown(false);
 		}
 	}
 
-	private String recieveData() {
+	private String recieveString() {
 		String data = "";
 		try {
 			data = incoming.readUTF();
 		}
 		catch(IOException e) {
-			e.printStackTrace();
+			// IO failure. Shut down
+			shutdown(false);
 		}
 		return data;
+	}
+
+	// Send an OPCODE to the client
+	private void sendCode(byte code) {
+		try {
+			outgoing.write(code);
+		}
+		catch (SocketTimeoutException e) {
+			shutdown(true);
+		}
+		catch (IOException e) {
+			// IO failure. Shut down
+			shutdown(false);
+		}
+	}
+
+	private byte recieveCode() {
+		byte code = (byte)(0xEE);
+		try {
+			code = (byte)(incoming.read());
+		}
+		catch (SocketTimeoutException e) {
+			shutdown(true);
+		}
+		catch (IOException e) {
+			// IO failure. Shut down
+			shutdown(false);
+		}
+		return code;
 	}
 
 	// Connect this thread to the database.
@@ -61,6 +92,7 @@ public class ServerThread extends Thread {
 			System.out.println("SQLException: " + e.getMessage());
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());	
+			shutdown(false);
 		}
 	}
 
@@ -108,6 +140,7 @@ public class ServerThread extends Thread {
 		catch(SQLException e) {
 			System.out.println("Something went wrong while fetching users");
 			e.printStackTrace();
+			sendCode((byte)(0x60));
 		}
 		return false;
 	}
@@ -135,10 +168,12 @@ public class ServerThread extends Thread {
 			}
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			sendCode((byte)(0x60));
+			shutdown();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			sendCode((byte)(0x60));
+			shutdown();
 		}
 		return goodCheck;
 	}
@@ -152,7 +187,7 @@ public class ServerThread extends Thread {
 			password = incoming.readUTF();
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			shutdown(false);
 		}
 
 		if (conn == null) {
@@ -160,18 +195,10 @@ public class ServerThread extends Thread {
 		}
 
 		if (checkAccount(username, password)) {
-			try {
-				outgoing.write(0x10);
-			}
-			catch(IOException e) {
-			}
+			sendCode((byte)(0x10));
 			return;
 		}
-		try {
-			outgoing.write(0x40);
-		}
-		catch(IOException e) {
-		}
+		sendCode((byte)(0x40));
 	}
 
 	// Attempt to create a new user with given username and password.
@@ -179,17 +206,14 @@ public class ServerThread extends Thread {
 		String username = "";
 		String password = "";
 		
-		try {
-			username = incoming.readUTF();
-			password = incoming.readUTF();
-			if (userExists(username)) {
-				outgoing.write(0x40);
-				return;
-			}
+		username = recieveString();
+		password = recieveString();
+		
+		if (userExists(username)) {
+			sendCode((byte)(0x40));
+			return;
 		}
-		catch (IOException e) {
-		}
-
+	
 		byte[] salt = salt();
 		String hash = hash(password, salt);
 		String hexSalt = saltyString(salt);
@@ -200,18 +224,10 @@ public class ServerThread extends Thread {
 			stmt.executeUpdate("INSERT INTO UserAccounts (USERNAME, HASH, SALT)" + "VALUES ('" + username + "','" + hash + "','" + hexSalt + "')");
 		}
 		catch (SQLException e) {
-			try {
-				outgoing.write(0x60);
-			}
-			catch (IOException ex) {
-			}
+			sendCode((byte)(0x60));
 			return;
 		}
-		try {
-			outgoing.write(0x10);
-		}
-		catch (IOException e) {
-		}
+		sendCode((byte)(0x10));
 	}
 	
 	// Convert the byte[] salt to a hex string for storage.
@@ -237,30 +253,78 @@ public class ServerThread extends Thread {
 	}
 
 	private void updateAccount() {
-		sendData("y");
 		boolean changeUsername = false;
 		boolean changePassword = false;
 		boolean changeEmail = false;
 		boolean changeClass = false;
-		String list = recieveData();
-		String token = recieveData();
+		String list = recieveString();
+		String token = recieveString();
 		String[] updateList = parseList(list, token);
-		if (Arrays.asList(updateList).contains("username")) {
+		
+		String newUsername = "";
+		String newEmail = "";
+		String newClass = "";
+		String newPass = "";
+
+      		if (Arrays.asList(updateList).contains("username")) {
 			changeUsername = true;
+			newUsername = recieveString();
 		}
 		if (Arrays.asList(updateList).contains("email")) {
 			changeEmail = true;
+			newEmail = recieveString();
 		}
 		if (Arrays.asList(updateList).contains("class")) {
 			changeClass = true;
+			newClass = recieveString();
 		}
 		if (Arrays.asList(updateList).contains("password")) {
 			changePassword = true;
+			newPass = recieveString();
+		}
+		sendCode((byte)(0x30));
+		String username = recieveString();
+		String password = recieveString();
+		boolean update = checkAccount(username, password);
+		if (update == false) {
+			sendCode((byte)(0x40));
+			return;
+		}
+		else {
+			if (conn == null) {
+				connectDB();		
+			}
+			try {
+				if (changeEmail) {
+					stmt.executeUpdate("UPDATE UserAccounts SET email='" + newEmail + "' WHERE username='" + username + "'");
+				}
+				if (changeClass) {
+					stmt.executeUpdate("UPDATE UserAccounts SET class='" + newClass + "' WHERE username='" + username + "'");	
+				}
+				if (changePassword) {
+					byte[] salt = salt();
+					String hash = hash(newPass, salt);
+					String hexSalt = saltyString(salt);
+					stmt.executeUpdate("UPDATE UserAccounts SET hash='" + hash + "' WHERE username='" + username + "'");
+					stmt.executeUpdate("UPDATE UserAccounts SET salt='" + hexSalt + "' WHERE username='" + username + "'");
+				}
+				if (changeUsername) {
+					stmt.executeUpdate("UPDATE UserAccounts SET username='" + newUsername + "' WHERE username='" + username + "'");
+				}
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+				sendCode((byte)(0x60));
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				sendCode((byte)(0x60));
+			}
 		}
 	}
 
 	private void updateProgress() {
-		sendData("y");
+		sendString("y");
 		int module;
 		int percentage;
 	}
@@ -280,7 +344,7 @@ public class ServerThread extends Thread {
 
 	// Recieve data for a file from the client and write it.
 	private void recieveFile() {
-		sendData("y");
+		sendString("y");
 		try {
 			System.out.println("recieving file name...");
 			String fileName = incoming.readUTF();
@@ -331,91 +395,81 @@ public class ServerThread extends Thread {
 		return hash;
 	}
 
-	private void shutdown() {
+	private void shutdown(boolean timedout) {
 		try {
-			outgoing.write(0x00);
+			if (timedout) {
+				outgoing.write((byte)(0x11));
+			}
 			socket.close();
 			disconnectDB();
 		}
 		catch(IOException e) {
 		}
+		System.out.println("There was en error. Terminating connection.");
+		run = false;
 	}
 
 	public void run() {
 		// Set socket to timeout after a second if no login/account creation request
-		byte[] code = new byte[1];
-	
+		//byte[] code = new byte[1];
+		
+		// Wait a max of 1 second for login or account creation instruction
 		try {
 			socket.setSoTimeout(1000);
-			incoming.read(code);
-			if (code[0] == 0x01 ) {
-				System.out.println("requested login");	
-				outgoing.write(0x10);
-				login();
-			}
-			else if (code[0] == 0x02 ) {
-				System.out.println("requested account creation");
-				outgoing.write(0x10);
-				createAccount();
-			}
-			else {
-				shutdown();
-				return;
-			}
 		}
-		catch(SocketTimeoutException e) {
-			shutdown();
-			return;	
+		catch (IOException e) {
+			// Shouldn't happen. Do Nothing
 		}
-		catch(IOException e) {
+		// Read the code sent by the client
+		//incoming.read(code);
+		byte code = recieveCode();
+		// Recieved LOGIN code
+		if (code == 0x01) {
+			System.out.println("requested login");	
+			sendCode((byte)(0x10));
+			login();
 		}
+		// Recieved CREATEACCOUNT code
+		else if (code == 0x02 ) {
+			System.out.println("requested account creation");
+			sendCode((byte)(0x10));
+			createAccount();
+		}
+		// Recieved other or corrupted code
+		else {
+			shutdown(false);
+		}
+
+		// Stop thread if no code is recieved in the given time frame
 
 		try {
-			socket.setSoTimeout(0);
+			// Set timeout time to 1 minute
+			socket.setSoTimeout(60000);
 		}
-		catch(IOException e) {
+		catch (IOException e) {
+			// Shouldn't happen. Do Nothing
 		}
 		
-		//============
-		//To Be updated Later
-		while(true) {
-			String request = "";
-		
-			try {
-				// Wait for a request from the client.	
-				System.out.println("waiting for request");
-				request = incoming.readUTF();		
-			}
-			catch(IOException e) {
-				e.printStackTrace();
-				System.out.println("something went wrong. STOPPING");
-			this.stop();
-			}
-				
-			switch (request) {
-				case "SendString" :
-					sendData("y");
-					try {
-						String recieveData = incoming.readUTF();
-					}
-					catch (IOException ex) {
-						ex.printStackTrace();
-					}
-				break;
+		// TO BE UPDATED WITH FULL DUPLEX
+		while(run) {
+			byte request = recieveCode();
 			
-				case "SendFile" :
-					recieveFile();
+			switch (request) {
+				// UPDATEACCOUNT
+				case 0x03 :
+					sendCode((byte)(0x10));
+					updateAccount();
 				break;
-
-				case "CreateAccount" :
-					createAccount();
+				// UPDATEMODULECOMPLETION
+				case 0x04 :
+					
 				break;
-
-				case "login" :
+				// SEND FILE
+				case 0x07 :
 				break;
-
+				// INVALIDREQUEST
 				default:
-					sendData("n");
+					sendCode((byte)(0xF0));
 				break;
 			}
 		}

@@ -25,7 +25,7 @@ public class TestClient {
 			// Attempt to login to an existing account		
 			outgoing.write((byte)(0x01));
 			
-			System.out.println("Attempting to login to new account");
+			System.out.println("Attempting to login to account");
 			if (incoming.read() == 0x10) {
 				outgoing.writeUTF("TestUser");
 				outgoing.writeUTF("NewPass");
@@ -35,10 +35,39 @@ public class TestClient {
 				else {
 					System.out.println("username or password incorrect");
 				}
+
 			}
 			else {
 				System.out.println("Server refused login attempt");
 			}
+			
+			System.out.println("Attempting to update acccount information");
+			outgoing.write((byte)(0x03));
+			if (incoming.read() == 0x10) {
+				outgoing.writeUTF("username,email,class,password");
+				outgoing.writeUTF(",");
+				outgoing.writeUTF("TestUser");
+				outgoing.writeUTF("test@gmail.com");
+				outgoing.writeUTF("cs99");
+				outgoing.writeUTF("NewPass");
+				if (incoming.read() == 0x30) {
+					outgoing.writeUTF("TestUser");
+					outgoing.writeUTF("pass");
+					if (incoming.read() == 0x40) {
+						System.out.println("Account verification failed");
+					}
+					else {
+						System.out.println("Update complete");
+					}
+				}
+				else {
+					System.out.println("Something went wrong.");
+				}
+			}
+			else {
+				System.out.println("Server refused account update");
+			}
+			
 
 			// TEMP! Loop forever recieving data from server
 			// Used to test multi-thread server
