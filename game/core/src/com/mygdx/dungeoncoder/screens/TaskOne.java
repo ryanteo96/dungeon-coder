@@ -34,6 +34,10 @@ public class TaskOne implements Screen {
     private Skin skin;
     TextField attemptText;
     String attempt;
+    TextField progressText;
+    String progress;
+    TextField moduleText;
+    String module;
 
     public TaskOne(DungeonCoder g) {
         game = g;
@@ -62,6 +66,47 @@ public class TaskOne implements Screen {
     }
 
     private void createProgress(){
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+
+        moduleText = new TextField("",skin);
+        moduleText.setSize(150,50);
+        moduleText.setPosition(270, 500);
+        moduleText.setAlignment(Align.center);
+        moduleText.setMessageText("Type in here!");
+        stage.addActor(moduleText);
+
+        TextButton btnModule = new TextButton("Module: ", skin);
+        btnModule.setPosition(150, 500);
+        btnModule.setSize(100,50);
+        btnModule.addListener(new ClickListener(){
+           @Override
+           public void clicked (InputEvent e, float x, float y){
+               module = moduleText.getText();
+               System.out.println("Module: " + module);
+           }
+        });
+
+        stage.addActor(btnModule);
+
+        progressText = new TextField("", skin);
+        progressText.setMessageText("Type in here!");
+        progressText.setPosition(270,400);
+        progressText.setSize(150,50);
+        progressText.setAlignment(Align.center);
+        stage.addActor(progressText);
+
+        TextButton btnGetProgress = new TextButton("Progress: ", skin);
+        btnGetProgress.setPosition(150,400);
+        btnGetProgress.setSize(100,50);
+        btnGetProgress.addListener(new ClickListener(){
+            @Override
+            public void clicked (InputEvent e, float x, float y){
+                progress = progressText.getText();
+                System.out.println("Progress: " + progress);
+            }
+        });
+
+        stage.addActor(btnGetProgress);
 
     }
 
@@ -85,11 +130,10 @@ public class TaskOne implements Screen {
             @Override
             public void clicked (InputEvent e, float x, float y){
                 attempt = attemptText.getText();
-                System.out.println(attempt);
+                System.out.println("Attempts: " + attempt);
             }
         });
         stage.addActor(btnGetAttempt);
-
     }
 
     public void create(){
