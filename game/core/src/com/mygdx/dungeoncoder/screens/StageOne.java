@@ -177,7 +177,6 @@ public class StageOne implements Screen {
         window.add(fpsLabel).colspan(4);
         window.pack();
         window.setDebug(false);
-        // stage.addActor(new Button("Behind Window", skin));
         stage.addActor(window);
 
         textfield.setTextFieldListener(new TextField.TextFieldListener() {
