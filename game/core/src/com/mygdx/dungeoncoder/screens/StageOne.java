@@ -73,9 +73,9 @@ public class StageOne implements Screen {
         TextureRegion imageFlipped = new TextureRegion(image);
         imageFlipped.flip(true, true);
         TextureRegion image2 = new TextureRegion(texture2);
-        // stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false, new PolygonSpriteBatch());
-        stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
+        //stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false, new PolygonSpriteBatch());
+        //stage = new Stage(new ScreenViewport());
+        //Gdx.input.setInputProcessor(stage);
 
         // Group.debug = true;
 
