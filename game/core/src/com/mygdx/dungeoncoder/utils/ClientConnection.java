@@ -176,7 +176,7 @@ public class ClientConnection {
 	}
 
 	private boolean sendFile(File file, String fileName) {
-		sendCode(0x07) {
+		sendCode((byte)(0x07));
 		if (recieveCode() == 0x10) {
 			try {
 				outgoing.writeUTF(fileName);
@@ -187,7 +187,7 @@ public class ClientConnection {
 				int count;
 				while ((count = in.read(buffer)) > 0) {
 					outgoing.write(buffer, 0, count);
-				{
+				}
 				in.close();
 				byte outcome = recieveCode();
 				if (outcome == 0x10) {
