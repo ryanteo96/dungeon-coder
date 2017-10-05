@@ -28,6 +28,7 @@ public class MainMenuScreen implements Screen {
     private DungeonCoder game;
     private Stage stage;
     private int mode = 0;
+    private Skin backButtonSkin;
 
     public MainMenuScreen(DungeonCoder g) {
         game = g;
@@ -107,18 +108,17 @@ public class MainMenuScreen implements Screen {
     }
 
     private void createBack() {
-        Texture backicon = new Texture(Gdx.files.internal("UIElements/backicon.png"));
-        TextureRegion backiconRegion = new TextureRegion(backicon);
-        TextureRegionDrawable backiconDrawable = new TextureRegionDrawable(backiconRegion);
-        Image backiconImage = new Image(backiconDrawable);
-        backiconImage.setPosition(0,650);
-        backiconImage.addListener(new ClickListener(){
+        backButtonSkin = new Skin(Gdx.files.internal("comic-ui.json"));
+        TextButton btnBack = new TextButton("Back", backButtonSkin);
+        btnBack.setPosition(0, 600);
+        btnBack.setSize(100, 100);
+        btnBack.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                backToSplash(game);
+            public void touchUp(InputEvent e, float x, float y, int point, int button) {
+                btnBackClicked(game);
             }
         });
-        stage.addActor(backiconImage);
+        stage.addActor(btnBack);
     }
 
     private void backToSplash(DungeonCoder g) {

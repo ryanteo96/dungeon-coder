@@ -30,6 +30,7 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 public class StageOne implements Screen {
     private DungeonCoder game;
     private Stage stage;
+    private Skin backButtonSkin;
     Object[] listEntries = {"This is a list entry1", "And another one1", "The meaning of life1", "Is hard to come by1",
             "This is a list entry2", "And another one2", "The meaning of life2", "Is hard to come by2", "This is a list entry3",
             "And another one3", "The meaning of life3", "Is hard to come by3", "This is a list entry4", "And another one4",
@@ -51,18 +52,17 @@ public class StageOne implements Screen {
        }
 
     private void createBack() {
-        Texture backicon = new Texture(Gdx.files.internal("UIElements/back.png"));
-        TextureRegion backiconRegion = new TextureRegion(backicon);
-        TextureRegionDrawable backiconDrawable = new TextureRegionDrawable(backiconRegion);
-        Image backiconImage = new Image(backiconDrawable);
-        backiconImage.setPosition(0,680);
-        backiconImage.addListener(new ClickListener(){
+        backButtonSkin = new Skin(Gdx.files.internal("comic-ui.json"));
+        TextButton btnBack = new TextButton("Back", backButtonSkin);
+        btnBack.setPosition(0, 600);
+        btnBack.setSize(100, 100);
+        btnBack.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                backToInstructionalMode(game);
+            public void touchUp(InputEvent e, float x, float y, int point, int button) {
+                btnBackClicked(game);
             }
         });
-        stage.addActor(backiconImage);
+        stage.addActor(btnBack);
     }
 
     public void create(){
@@ -210,7 +210,7 @@ public class StageOne implements Screen {
         });
     }
 
-    private void backToInstructionalMode(DungeonCoder g) {
+    private void btnBackClicked(DungeonCoder g) {
         g.setScreen(new InstructionalMode(g));
     }
     @Override

@@ -27,7 +27,7 @@ public class LoginScreen implements Screen {
     private TextField txfUsername;
     private final TextField txfPassword;
     private ClientConnection clientConnection;
-
+    private Skin backButtonSkin;
 
     public LoginScreen(DungeonCoder g) {
         game = g;

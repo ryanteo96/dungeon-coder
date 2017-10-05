@@ -97,26 +97,25 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
     public void dispose() {
         stage.dispose();
         skin.dispose();
+        testSkin.dispose();
     }
 
     private void createBack() {
-        Texture back = new Texture(Gdx.files.internal("UIElements/back.png"));
-        TextureRegion backRegion = new TextureRegion(back);
-        TextureRegionDrawable backDrawable = new TextureRegionDrawable(backRegion);
-        Image backImage = new Image(backDrawable);
-        backImage.setPosition(0,680);
-        backImage.addListener(new ClickListener(){
+        skin = new Skin (Gdx.files.internal("comic-ui.json"));
+        TextButton btnBack = new TextButton("Back", skin);
+        btnBack.setPosition(0, 600);
+        btnBack.setSize(100, 100);
+        btnBack.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                back();
+            public void touchUp(InputEvent e, float x, float y, int point, int button) {
+                btnBackClicked(game);
             }
         });
-
-        stage.addActor(backImage);
+        stage.addActor(btnBack);
     }
 
-    private void back() {
-        game.setScreen(new MainMenuScreen(game));
+    private void btnBackClicked(DungeonCoder g) {
+        g.setScreen(new MainMenuScreen(g));
     }
 
 
