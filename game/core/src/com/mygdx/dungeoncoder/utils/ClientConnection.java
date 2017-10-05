@@ -57,15 +57,16 @@ public class ClientConnection {
 			if (recieveCode() == 0x10) {
 				outgoing.writeUTF(username);
 				outgoing.writeUTF(password);
-				if (recieveCode() == 0x10) {
+				byte outcome = recieveCode();
+				if (outcome == 0x10) {
 					return true;
 				}
 				// Database failure.
-				else if (recieveCode() == 0x60) {
+				else if (outcome == 0x60) {
 					return false;
 				}
 				// Invalid credantials
-				else if (recieveCode() == 0x40) {
+				else if (outcome == 0x40) {
 					return false;
 				}
 			}
@@ -87,15 +88,15 @@ public class ClientConnection {
 			if (recieveCode() == 0x10) {
 				outgoing.writeUTF(username);
 				outgoing.writeUTF(password);
-				
-				if (recieveCode() == 0x10) {
+				byte outcome = recieveCode();
+				if (outcome == 0x10) {
 					return true;
 				}
-				else if (recieveCode() == 0x40) {
+				else if (outcome == 0x40) {
 					// Account exists with that username
 					return false;
 				}
-				else if (recieveCode() == 0x60) {
+				else if (outcome == 0x60) {
 					// Database failure
 					return false;
 				}
@@ -109,6 +110,43 @@ public class ClientConnection {
 			// Do nothing.
 		}
 		return false;
-	} 
-}
+	}
 
+	// updateFields should be in the format "field1,field2,field3"
+	// newInfo should be ordered username, email, password
+	public boolean requestAccountUpdate(String username, String password, String updateFields, String token, String[] newInfo) {
+		try {
+			sendCode((byte)(0x03));
+			if (recieveCode() == 0x10) {
+				outgoing.writeUTF(updateFields);
+				outgoing.writeUTF(token);
+				for (int i = 0; i < newInfo.length; i++) {
+					outgoing.writeUTF(newInfo[i]);
+				}
+				outgoing.writeUTF(username);
+				outgoing.writeUTF(password);
+				byte outcome = recieveCode();
+				if (outcome == 0x10) {
+					return true;
+				}
+				else if (outcome == 0x60) {
+					// Database failure
+					return false;
+				}
+				else if (outcome == 0x40) {
+					// Account authentication failed
+					return false;
+				}
+			}
+			else {
+				// Server refused account update
+				return false;
+			}
+		}
+		catch (IOException i) {
+			// Do nothing
+		}	
+		return false;
+	}
+ 
+}
