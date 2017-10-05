@@ -396,24 +396,24 @@ public class ServerThread extends Thread {
 
 	// Recieve data for a file from the client and write it.
 	private void recieveFile() {
-		sendString("y");
 		try {
-			System.out.println("recieving file name...");
 			String fileName = incoming.readUTF();
 			OutputStream out =  new FileOutputStream(fileName);
-			System.out.println("recieving file size...");
+			
 			long fileSize = incoming.readLong();
 			byte[] buffer = new byte[16 * 1024];
 			int count;
-			System.out.println("writing bytes to file...");
+			
 			while (fileSize > 0 && (count = incoming.read(buffer, 0, (int)Math.min(buffer.length, fileSize))) != -1) {
 				out.write(buffer, 0, count);
 				fileSize -= count;
 			}
 			out.close();
+			sendCode((byte)(0x10));
 		}
 		catch(IOException e) {
 			e.printStackTrace();
+			sendCode((byte)(0x60));
 		}
 	}
 
@@ -521,6 +521,8 @@ public class ServerThread extends Thread {
 				break;
 				// SEND FILE
 				case 0x07 :
+					sendCode((byte)(0x10));
+					recieveFile();
 				break;
 				// INVALIDREQUEST
 				default:
