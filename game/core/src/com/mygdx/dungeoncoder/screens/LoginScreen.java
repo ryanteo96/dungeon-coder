@@ -16,7 +16,6 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.ClientConnection;
-import com.sun.deploy.util.SessionState;
 
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
@@ -26,7 +25,7 @@ public class LoginScreen implements Screen {
     private DungeonCoder game;
     private Stage stage;
     private TextField txfUsername;
-    private TextField txfPassword;
+    private final TextField txfPassword;
     private ClientConnection clientConnection;
 
 
@@ -58,7 +57,9 @@ public class LoginScreen implements Screen {
         txfUsername.setPosition(400, 360);
         txfUsername.setSize(450,40);
 
-        txfPassword = new TextField("", skin, "password");
+        txfPassword = new TextField("", skin);
+        txfPassword.setPasswordCharacter('*');
+        txfPassword.setPasswordMode(true);
         txfPassword.setPosition(400, 280);
         txfPassword.setSize(450,40);
 
