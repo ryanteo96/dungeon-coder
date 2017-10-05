@@ -11,16 +11,16 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
+
+import javax.swing.event.ChangeEvent;
 
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
@@ -31,7 +31,22 @@ public class MainMenuScreen implements Screen {
     private Stage stage;
     private int mode = 0;
     private Skin backButtonSkin;
-    private boolean hover;
+
+    Texture instructionalMode_Text = new Texture(Gdx.files.internal("UIElements/instructionalmode.png"));
+    TextureRegion instructionalModeRegion_Text = new TextureRegion(instructionalMode_Text);
+    TextureRegionDrawable instructionalModeDrawable_Text = new TextureRegionDrawable(instructionalModeRegion_Text);
+    Image instructionalModeImage_Text = new Image(instructionalModeDrawable_Text);
+
+    Texture mainStoryMode_Text = new Texture(Gdx.files.internal("UIElements/mainstorymode.png"));
+    TextureRegion mainStoryModeRegion_Text = new TextureRegion(mainStoryMode_Text);
+    TextureRegionDrawable mainStoryModeDrawable_Text = new TextureRegionDrawable(mainStoryModeRegion_Text);
+    Image mainStoryModeImage_Text = new Image(mainStoryModeDrawable_Text);
+
+    Texture freeBattleMode_Text = new Texture(Gdx.files.internal("UIElements/freebattlemode.png"));
+    TextureRegion freeBattleModeRegion_Text = new TextureRegion(freeBattleMode_Text);
+    TextureRegionDrawable freeBattleModeDrawable_Text = new TextureRegionDrawable(freeBattleModeRegion_Text);
+    Image freeBattleModeImage_Text = new Image(freeBattleModeDrawable_Text);
+
 
     public MainMenuScreen(DungeonCoder g) {
         game = g;
@@ -90,22 +105,6 @@ public class MainMenuScreen implements Screen {
 
     }
 
-    private void createInstructional() {
-        Texture instructionalMode = new Texture(Gdx.files.internal("UIElements/instructional.png"));
-        TextureRegion instructionalModeRegion = new TextureRegion(instructionalMode);
-        TextureRegionDrawable instructionalModeDrawable = new TextureRegionDrawable(instructionalModeRegion);
-        Image instructionalModeImage = new Image(instructionalModeDrawable);
-        instructionalModeImage.setPosition(840,585);
-        instructionalModeImage.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                mode = 0;
-            }
-        });
-
-        stage.addActor(instructionalModeImage);
-    }
-
     private void instructionalMode(DungeonCoder g) {
         g.setScreen(new InstructionalMode(g));
     }
@@ -119,10 +118,34 @@ public class MainMenuScreen implements Screen {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
                 btnBackClicked(game);
+
             }
         });
         stage.addActor(btnBack);
     }
+
+    private void createInstructional() {
+        Texture instructionalMode = new Texture(Gdx.files.internal("UIElements/instructional.png"));
+        TextureRegion instructionalModeRegion = new TextureRegion(instructionalMode);
+        TextureRegionDrawable instructionalModeDrawable = new TextureRegionDrawable(instructionalModeRegion);
+        Image instructionalModeImage = new Image(instructionalModeDrawable);
+        instructionalModeImage.setPosition(840,585);
+        instructionalModeImage.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                mode = 0;
+                instructionalModeImage_Text.setPosition(200, 500);
+                System.out.println("You are now in instructional mode");
+                stage.addActor(instructionalModeImage_Text);
+                instructionalModeImage_Text.setVisible(true);
+                mainStoryModeImage_Text.setVisible(false);
+                freeBattleModeImage_Text.setVisible(false);
+            }
+        });
+
+        stage.addActor(instructionalModeImage);
+    }
+
 
     private void createMainStory() {
         Texture mainStoryMode = new Texture(Gdx.files.internal("UIElements/mainStory.png"));
@@ -130,11 +153,16 @@ public class MainMenuScreen implements Screen {
         TextureRegionDrawable mainStoryModeDrawable = new TextureRegionDrawable(mainStoryModeRegion);
         Image mainStoryModeImage = new Image(mainStoryModeDrawable);
         mainStoryModeImage.setPosition(960,585);
-        mainStoryModeImage.addListener(new ClickListener(){
+        mainStoryModeImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 mode = 1;
+                mainStoryModeImage_Text.setPosition(200, 500);
                 System.out.println("You are now in main story mode");
+                stage.addActor(mainStoryModeImage_Text);
+                instructionalModeImage_Text.setVisible(false);
+                mainStoryModeImage_Text.setVisible(true);
+                freeBattleModeImage_Text.setVisible(false);
             }
         });
 
@@ -155,7 +183,12 @@ public class MainMenuScreen implements Screen {
             @Override
              public void clicked(InputEvent event, float x, float y) {
                 mode = 2;
+                freeBattleModeImage_Text.setPosition(200, 500);
                 System.out.println("You are now in free battle mode");
+                stage.addActor(freeBattleModeImage_Text);
+                freeBattleModeImage_Text.setVisible(true);
+                instructionalModeImage_Text.setVisible(false);
+                mainStoryModeImage_Text.setVisible(false);
             }
         });
         stage.addActor(freeBattleModeImage);
