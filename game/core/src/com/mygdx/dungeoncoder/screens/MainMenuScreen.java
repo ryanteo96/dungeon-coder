@@ -2,11 +2,13 @@ package com.mygdx.dungeoncoder.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -29,6 +31,7 @@ public class MainMenuScreen implements Screen {
     private Stage stage;
     private int mode = 0;
     private Skin backButtonSkin;
+    private boolean hover;
 
     public MainMenuScreen(DungeonCoder g) {
         game = g;
@@ -45,8 +48,7 @@ public class MainMenuScreen implements Screen {
         createMenu4();
         createCharacter();
     }
-
-    public void btnBackClicked(DungeonCoder g){
+    public void btnBackClicked(DungeonCoder g) {
         g.setScreen(new SplashScreen(g));
     }
 
@@ -100,6 +102,7 @@ public class MainMenuScreen implements Screen {
                 mode = 0;
             }
         });
+
         stage.addActor(instructionalModeImage);
     }
 
@@ -121,10 +124,6 @@ public class MainMenuScreen implements Screen {
         stage.addActor(btnBack);
     }
 
-    private void backToSplash(DungeonCoder g) {
-        g.setScreen(new SplashScreen(g));
-    }
-
     private void createMainStory() {
         Texture mainStoryMode = new Texture(Gdx.files.internal("UIElements/mainStory.png"));
         TextureRegion mainStoryModeRegion = new TextureRegion(mainStoryMode);
@@ -135,6 +134,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 mode = 1;
+                System.out.println("You are now in main story mode");
             }
         });
 
@@ -153,8 +153,9 @@ public class MainMenuScreen implements Screen {
         freeBattleModeImage.setPosition(1080,585);
         freeBattleModeImage.addListener(new ClickListener(){
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+             public void clicked(InputEvent event, float x, float y) {
                 mode = 2;
+                System.out.println("You are now in free battle mode");
             }
         });
         stage.addActor(freeBattleModeImage);
