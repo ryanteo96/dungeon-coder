@@ -367,6 +367,8 @@ public class ServerThread extends Thread {
 			int currentProgress = rs.getInt(module);
 			if (currentProgress < percentage) {
 				stmt.executeUpdate("UPDATE UserAccounts SET " + module + "='" + percentage + "' WHERE username='" + connectedUser + "'");
+				sendCode((byte)(0x10));
+				return;
 			}	
 		}
 		catch (SQLException e) {
