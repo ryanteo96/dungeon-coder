@@ -335,7 +335,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         window.setPosition(300,80);
         //window.defaults().spaceBottom(10);//not sure what does this do
         window.setSize(700,600);
-        window.add(scrollPane).colspan(3).left().expand().fillX();
+        window.add(scrollPane).colspan(3).left().expand().fillY();
         window.row();
         window.right().bottom();
         window.add(repeatButton).size(50).left();
@@ -448,7 +448,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         window.setPosition(300,80);
         //window.defaults().spaceBottom(10);//not sure what does this do
         window.setSize(700,600);
-        window.add(scrollPane).colspan(3).left().expand().fillX();
+        window.add(scrollPane).colspan(3).left().expand().fillY();
         window.row();
         window.right().bottom();
         window.add(repeatButton).size(50).left();
