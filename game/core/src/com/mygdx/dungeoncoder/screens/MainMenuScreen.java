@@ -1,6 +1,7 @@
 package com.mygdx.dungeoncoder.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -31,6 +32,9 @@ public class MainMenuScreen implements Screen {
     private Stage stage;
     private int mode = 0;
     private Skin backButtonSkin;
+    private Skin dialogSkin;
+    private boolean finishedAssignment = true;
+    TextButton oKButton;
 
     Texture instructionalMode_Text = new Texture(Gdx.files.internal("UIElements/instructionalmode.png"));
     TextureRegion instructionalModeRegion_Text = new TextureRegion(instructionalMode_Text);
@@ -102,7 +106,8 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        backButtonSkin.dispose();
+        stage.dispose();
     }
 
     private void instructionalMode(DungeonCoder g) {
@@ -154,6 +159,7 @@ public class MainMenuScreen implements Screen {
         Image mainStoryModeImage = new Image(mainStoryModeDrawable);
         mainStoryModeImage.setPosition(960,585);
         mainStoryModeImage.addListener(new ClickListener() {
+
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 mode = 1;
@@ -170,7 +176,29 @@ public class MainMenuScreen implements Screen {
     }
 
     private void mainStoryMode(DungeonCoder g) {
+
+        //NOT WORKING
+        /*dialogSkin = new Skin(Gdx.files.internal("UIElements/test.json"));
+        oKButton = new TextButton("Ok", dialogSkin);
+        if(finishedAssignment == true) {
+            new Dialog("Attention!", dialogSkin, "dialog") {
+                protected void result (Object object){
+                    System.out.println("Result: "+ object);
+                }
+            }.text("You have finished your assignment!").button("Ok", true).show(stage);
+
+
+
+        }else{
+            new Dialog("Attention!",dialogSkin,"dialog"){
+                protected void result (Object object){
+                    System.out.println("Result: "+ object);
+                }
+
+            }.text("You have NOT finished your assignment!").button("Ok", true).show(stage);
+        }*/
         g.setScreen(new MainStoryMode(g));
+
     }
 
     private void createFreeBattle() {
@@ -211,11 +239,12 @@ public class MainMenuScreen implements Screen {
                     instructionalMode(game);
                 } else if (mode == 1){
                     mainStoryMode(game);
-                } else if (mode == 2){
+                    } else if (mode == 2){
                     freeBattleMode(game);
                 }
             }
         });
+
         stage.addActor(main1Image);
     }
     private void createMenu2(){

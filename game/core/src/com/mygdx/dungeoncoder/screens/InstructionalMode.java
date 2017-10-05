@@ -1,6 +1,5 @@
 package com.mygdx.dungeoncoder.screens;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -22,20 +21,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
-import com.sun.org.apache.xpath.internal.SourceTree;
-
-import javax.swing.*;
-import javax.swing.plaf.basic.BasicOptionPaneUI;
-import javax.xml.soap.Text;
-
-import java.awt.*;
-import java.awt.font.TextAttribute;
-import java.text.AttributedString;
 
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
@@ -120,7 +108,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
 
 
     private void createStages(){
-        Texture stage_One = new Texture(Gdx.files.internal("UIElements/stage1.png"));
+        Texture stage_One = new Texture(Gdx.files.internal("UIElements/task1.png"));
         TextureRegion stage_OneRegion = new TextureRegion(stage_One);
         TextureRegionDrawable stage_OneDrawable = new TextureRegionDrawable(stage_OneRegion);
         Image stage_OneImage = new Image(stage_OneDrawable);
@@ -135,7 +123,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
 
         stage.addActor(stage_OneImage);
 
-        Texture stage_Two = new Texture(Gdx.files.internal("UIElements/stage2.png"));
+        Texture stage_Two = new Texture(Gdx.files.internal("UIElements/task2.png"));
         TextureRegion stage_TwoRegion = new TextureRegion(stage_Two);
         TextureRegionDrawable stage_TwoDrawable = new TextureRegionDrawable(stage_TwoRegion);
         Image stage_TwoImage = new Image(stage_TwoDrawable);
@@ -149,7 +137,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
 
         stage.addActor(stage_TwoImage);
 
-        Texture stage_Three = new Texture(Gdx.files.internal("UIElements/stage3.png"));
+        Texture stage_Three = new Texture(Gdx.files.internal("UIElements/task3.png"));
         TextureRegion stage_ThreeRegion = new TextureRegion(stage_Three);
         TextureRegionDrawable stage_ThreeDrawable = new TextureRegionDrawable(stage_ThreeRegion);
         Image stage_ThreeImage = new Image(stage_ThreeDrawable);
@@ -216,7 +204,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         TextButton closeButton = new TextButton(String.valueOf(x), testSkin);
         TextButton startButton = new TextButton("Start", skin, "default");
         TextButton cancelButton = new TextButton("Cancel", skin, "default");
-        window = new Window("Stage 1", testSkin);
+        window = new Window("Task 1", testSkin);
         window.setDebug(false);
         window.getTitleTable().add(closeButton).height(window.getPadTop());
         window.setPosition(300,80);
@@ -235,17 +223,17 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         repeatButton.addListener(new ChangeListener(){
             public void changed(ChangeEvent event, Actor actor) {
 
-                new Dialog("Stage 1", testSkin,"dialog"){
+                new Dialog("Task 1", testSkin,"dialog"){
                     protected void result (Object object){
                         gObject = object;
                         System.out.println("Result: "+ object);
                     }
-                }.text("Are you sure you want to repeat the stage?").button(yesButton, true).button("No",false).
+                }.text("Are you sure you want to repeat the task?").button(yesButton, true).button("No",false).
                         key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
             }
         });
 
-        //when yes is clicked, it repeats the stage
+        //when yes is clicked, it repeats the task
         yesButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -253,7 +241,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
             }
         });
 
-        //go to stage one screen when start is clicked
+        //go to task one screen when start is clicked
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -284,22 +272,22 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
 
     private void stage_Two(DungeonCoder g) {
         Object[] listEntries = {"Objective",
-                "STAGE 2 OBJECTIVE",
+                "TASK 2 OBJECTIVE",
                 "===========================================================================================",
                 "Task",
-                "STAGE 2 TASK",
+                "TASK 2 TASK",
                 "",
                 "===========================================================================================",
                 "Sample Input",
-                "STAGE 2 SAMPLE INPUT",
+                "TASK 2 SAMPLE INPUT",
                 "--------------------------------------------------------------------------------------------------------------------------------------------",
                 "Sample Output",
-                "STAGE 2 SAMPLE OUTPUT",
+                "TASK 2 SAMPLE OUTPUT",
                 "===========================================================================================",
                 "Explanation",
-                "STAGE 2 EXPLANATION",
+                "TASK 2 EXPLANATION",
                 "===========================================================================================",
-                "Difficulty: STAGE 2 DIFFICULTY"};
+                "Difficulty: TASK 2 DIFFICULTY"};
 
         skin = new Skin(Gdx.files.internal("dialogSkins/plain-james-ui.json"));
         testSkin = new Skin(Gdx.files.internal("UIElements/test.json"));
@@ -329,7 +317,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         TextButton closeButton = new TextButton(String.valueOf(x), testSkin);
         TextButton startButton = new TextButton("Start", skin, "default");
         TextButton cancelButton = new TextButton("Cancel", skin, "default");
-        window = new Window("Stage 2", testSkin);
+        window = new Window("Task 2", testSkin);
         window.setDebug(false);
         window.getTitleTable().add(closeButton).height(window.getPadTop());
         window.setPosition(300,80);
@@ -348,29 +336,29 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         repeatButton.addListener(new ChangeListener(){
             public void changed(ChangeEvent event, Actor actor) {
 
-                new Dialog("Stage 2", testSkin,"dialog"){
+                new Dialog("Task 2", testSkin,"dialog"){
                     protected void result (Object object){
                         gObject = object;
                         System.out.println("Result: "+ object);
                     }
-                }.text("Are you sure you want to repeat the stage?").button(yesButton, true).button("No",false).
+                }.text("Are you sure you want to repeat the task?").button(yesButton, true).button("No",false).
                         key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
             }
         });
 
-        //when yes is clicked, it repeats the stage
+        //when yes is clicked, it repeats the task
         yesButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                stageOne(game);
+                stageTwo(game);
             }
         });
 
-        //go to stage one screen when start is clicked
+        //go to task two screen when start is clicked
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                stageOne(game);
+                stageTwo(game);
 
             }
         });
@@ -396,22 +384,22 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
 
     private void stage_Three(DungeonCoder g) {
         Object[] listEntries = {"Objective",
-                "STAGE 3 OBJECTIVE",
+                "TASK 3 OBJECTIVE",
                 "===========================================================================================",
                 "Task",
-                "STAGE 3 TASK",
+                "TASK 3 TASK",
                 "",
                 "===========================================================================================",
                 "Sample Input",
-                "STAGE 3 SAMPLE INPUT",
+                "TASK 3 SAMPLE INPUT",
                 "--------------------------------------------------------------------------------------------------------------------------------------------",
                 "Sample Output",
-                "STAGE 3 SAMPLE OUTPUT",
+                "TASK 3 SAMPLE OUTPUT",
                 "===========================================================================================",
                 "Explanation",
-                "STAGE 3 EXPLANATION",
+                "TASK 3 EXPLANATION",
                 "===========================================================================================",
-                "Difficulty: STAGE 3 DIFFICULTY"};
+                "Difficulty: TASK 3 DIFFICULTY"};
 
 
         skin = new Skin(Gdx.files.internal("dialogSkins/plain-james-ui.json"));
@@ -442,7 +430,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         TextButton closeButton = new TextButton(String.valueOf(x), testSkin);
         TextButton startButton = new TextButton("Start", skin, "default");
         TextButton cancelButton = new TextButton("Cancel", skin, "default");
-        window = new Window("Stage 3", testSkin);
+        window = new Window("Task 3", testSkin);
         window.setDebug(false);
         window.getTitleTable().add(closeButton).height(window.getPadTop());
         window.setPosition(300,80);
@@ -461,29 +449,29 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         repeatButton.addListener(new ChangeListener(){
             public void changed(ChangeEvent event, Actor actor) {
 
-                new Dialog("Stage 3", testSkin,"dialog"){
+                new Dialog("Task 3", testSkin,"dialog"){
                     protected void result (Object object){
                         gObject = object;
                         System.out.println("Result: "+ object);
                     }
-                }.text("Are you sure you want to repeat the stage?").button(yesButton, true).button("No",false).
+                }.text("Are you sure you want to repeat the task?").button(yesButton, true).button("No",false).
                         key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
             }
         });
 
-        //when yes is clicked, it repeats the stage
+        //when yes is clicked, it repeats the task
         yesButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                stageOne(game);
+                stageThree(game);
             }
         });
 
-        //go to stage one screen when start is clicked
+        //go to task three screen when start is clicked
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                stageOne(game);
+                stageThree(game);
 
             }
         });
@@ -511,14 +499,14 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
     }
 
     private void stageOne(DungeonCoder g) {
-        g.setScreen(new StageOne(g));
+        g.setScreen(new TaskOne(g));
     }
 
     private void stageTwo(DungeonCoder g) {
-        g.setScreen(new StageTwo(g));
+        g.setScreen(new TaskTwo(g));
     }
 
     private void stageThree(DungeonCoder g) {
-        g.setScreen(new StageThree(g));
+        g.setScreen(new TaskThree(g));
     }
 }

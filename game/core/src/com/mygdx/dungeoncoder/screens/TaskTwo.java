@@ -22,16 +22,16 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
 
-public class StageThree implements Screen {
+public class TaskTwo implements Screen {
     private DungeonCoder game;
     private Stage stage;
 
-    public StageThree (DungeonCoder g) {
+    public TaskTwo(DungeonCoder g) {
         game = g;
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
         Gdx.input.setInputProcessor(stage);
-        createStageThree();
+        createStageTwo();
         createBack();
     }
 
@@ -55,7 +55,7 @@ public class StageThree implements Screen {
     }
     @Override
     public void show() {
-        System.out.println("you are in stage three");
+        System.out.println("you are in stage two");
     }
 
     @Override
@@ -92,14 +92,13 @@ public class StageThree implements Screen {
 
     }
 
-    private void createStageThree(){
-
-        Texture stage_Three = new Texture(Gdx.files.internal("UIElements/a6c.jpeg"));
-        TextureRegion stage_ThreeRegion = new TextureRegion(stage_Three);
-        TextureRegionDrawable stage_ThreeDrawable = new TextureRegionDrawable(stage_ThreeRegion);
-        Image stage_ThreeImage = new Image(stage_ThreeDrawable);
-        stage_ThreeImage.setSize(400,500);
-        stage_ThreeImage.setPosition(450,150);
-        stage.addActor(stage_ThreeImage);
+    private void createStageTwo(){
+        Texture stage_Two = new Texture(Gdx.files.internal("UIElements/a6c.jpeg"));
+        TextureRegion stage_TwoRegion = new TextureRegion(stage_Two);
+        TextureRegionDrawable stage_TwoDrawable = new TextureRegionDrawable(stage_TwoRegion);
+        Image stage_TwoImage = new Image(stage_TwoDrawable);
+        stage_TwoImage.setSize(400,500);
+        stage_TwoImage.setPosition(450,150);
+        stage.addActor(stage_TwoImage);
     }
 }
