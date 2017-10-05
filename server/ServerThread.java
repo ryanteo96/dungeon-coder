@@ -160,6 +160,15 @@ public class ServerThread extends Thread {
 		}
 	}
 
+	private void getUserLevelCode() {
+		String levelName = recieveString();
+		 
+	}
+
+	private void getLevelFile() {
+		String leveName = recieveString();
+	}
+
 	// Check if the user exists in the database.
 	private boolean userExists(String username) {
 		if (conn == null) {
@@ -199,9 +208,12 @@ public class ServerThread extends Thread {
 					//System.out.println("check hash is " + checkHash);
 					if (knownHash.equals(checkHash)) {
 						goodCheck = true;
+						System.out.println("password is good");
+						break;
 					}
 				}
 			}
+			System.out.println("User unknown");
 		}
 		catch (SQLException e) {
 			sendCode((byte)(0x60));
@@ -221,6 +233,10 @@ public class ServerThread extends Thread {
 		try {
 			username = incoming.readUTF();
 			password = incoming.readUTF();
+			System.out.println("attempted login with username: " + username + " | password : " + password);
+		}
+		catch(SocketTimeoutException e) {
+			shutdown(true);
 		}
 		catch (IOException e) {
 			shutdown(false);
@@ -232,6 +248,7 @@ public class ServerThread extends Thread {
 
 		if (checkAccount(username, password)) {
 			sendCode((byte)(0x10));
+			System.out.println("Attempted login successful.");
 			connectedUser = username;
 			return;
 		}
@@ -390,8 +407,25 @@ public class ServerThread extends Thread {
 	}
 
 	// To Be Implemented
-	private void sendFile(File file) {
-		
+	private void sendFile(File file, String fileName) {
+		try {
+			outgoing.writeUTF(fileName);
+			long length = file.length();
+			outgoing.writeLong(length);
+			byte[] buffer = new byte[16 * 1024];
+			FileInputStream in = new FileInputStream(file);
+	
+			int count;
+			while ((count = in.read(buffer)) > 0) {
+				outgoing.write(buffer, 0, count);
+			}
+			in.close();
+			sendCode((byte)(0x10));
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			sendCode((byte)(0x40));
+		}
 	}
 
 	// Recieve data for a file from the client and write it.
@@ -413,7 +447,7 @@ public class ServerThread extends Thread {
 		}
 		catch(IOException e) {
 			e.printStackTrace();
-			sendCode((byte)(0x60));
+			sendCode((byte)(0x40));
 		}
 	}
 
@@ -458,7 +492,7 @@ public class ServerThread extends Thread {
 		}
 		catch(IOException e) {
 		}
-		System.out.println("There was en error. Terminating connection.");
+		System.out.println("There was an error. Terminating connection.");
 		run = false;
 	}
 
@@ -519,10 +553,20 @@ public class ServerThread extends Thread {
 					sendCode((byte)(0x10));
 					updateProgress();	
 				break;
-				// SEND FILE
+				// RECIEVEFILE
 				case 0x07 :
 					sendCode((byte)(0x10));
 					recieveFile();
+				break;
+				// FETCHCODEFILE
+				case 0x08 :
+					sendCode((byte)(0x10));
+					getUserLevelCode();
+				break;
+				// FETCHLEVELFILE
+				case 0x09 :
+					sendCode((byte)(0x10));
+					getLevelFile();
 				break;
 				// INVALIDREQUEST
 				default:
