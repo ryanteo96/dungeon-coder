@@ -2,6 +2,7 @@ package com.mygdx.dungeoncoder.screens;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,16 +13,29 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.sun.org.apache.xpath.internal.SourceTree;
 
+import javax.swing.*;
 import javax.swing.plaf.basic.BasicOptionPaneUI;
+import javax.xml.soap.Text;
+
+import java.awt.*;
+import java.awt.font.TextAttribute;
+import java.text.AttributedString;
 
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
@@ -31,12 +45,15 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
     private DungeonCoder game;
     private Stage stage;
     private Skin skin;
+    private Skin testSkin;
+    private Window window;
+    TextButton yesButton;
+    Object gObject;
 
     public InstructionalMode (DungeonCoder g) {
         game = g;
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
-
         Gdx.input.setInputProcessor(stage);
         createStages();
         createBack();
@@ -73,7 +90,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
 
     @Override
     public void hide() {
-//        dispose();
+
     }
 
     @Override
@@ -112,7 +129,8 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         stage_OneImage.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stage_One(game);
+               // stage_One(game);
+                stage_One_Test(game);
             }
         });
 
@@ -146,6 +164,128 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
 
         stage.addActor(stage_ThreeImage);
     }
+
+
+    private void stage_One_Test(DungeonCoder g){
+        Object[] listEntries = {"Objective",
+                "In this challenge, we review some basic concepts that will get you started with this module.",
+                "===========================================================================================",
+                "Task",
+                "To complete this challenge, you must save a line of input from stdin to a variable,",
+                "print 'Hello, World.' and finally print the value of your variable on the next line.",
+                "===========================================================================================",
+                "Sample Input",
+                "Welcome to Dungeon Coding!",
+                "--------------------------------------------------------------------------------------------------------------------------------------------",
+                "Sample Output",
+                "Hello World",
+                "Welcome to Dungeon Coding!",
+                "===========================================================================================",
+                "Explanation",
+                "On the first line, we print the string literal 'Hello, World.' On the second line, we",
+                "print the contents of the variable which, for this sample case, happens to be 'Welcome to",
+                "Dungeon Coding!'. If you do not print the variable's contents to stdout, you will not",
+                "pass the hidden test case.",
+                "===========================================================================================",
+                "Difficulty: One Dungeon"};
+
+        skin = new Skin(Gdx.files.internal("dialogSkins/plain-james-ui.json"));
+        testSkin = new Skin(Gdx.files.internal("UIElements/test.json"));
+
+        Texture repeat = new Texture(Gdx.files.internal("UIElements/repeat.png"));
+        TextureRegion repeatRegion = new TextureRegion(repeat);
+
+        //create Text using lists and scrollpane
+        List list = new List(testSkin);
+        list.setItems(listEntries);
+        ScrollPane scrollPane = new ScrollPane(list, testSkin);
+        scrollPane.setSize(0,0);
+        scrollPane.setFlickScroll(false);
+        scrollPane.setScrollingDisabled(true,false);
+        Table table = new Table(testSkin);
+        table.add().growX().row();
+        table.add(scrollPane).grow();
+
+
+        //Repeat Button
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle(testSkin.get(Button.ButtonStyle.class));
+        style.imageUp = new TextureRegionDrawable(repeatRegion);
+        ImageButton repeatButton = new ImageButton(style);
+        table.add(repeatButton);
+        int i = 88;
+        char x = (char)i;
+        TextButton closeButton = new TextButton(String.valueOf(x), testSkin);
+        TextButton startButton = new TextButton("Start", skin, "default");
+        TextButton cancelButton = new TextButton("Cancel", skin, "default");
+        window = new Window("Stage 1", testSkin);
+        window.setDebug(false);
+        window.getTitleTable().add(closeButton).height(window.getPadTop());
+        window.setPosition(300,80);
+        //window.defaults().spaceBottom(10);//not sure what does this do
+        window.setSize(700,600);
+        window.add(scrollPane).colspan(3).left().expand().fillX();
+        window.row();
+        window.right().bottom();
+        window.add(repeatButton).size(50).left();
+        window.add(startButton).right().padLeft(465);
+        window.add(cancelButton).right();
+
+
+        yesButton = new TextButton("Yes", testSkin);
+
+        repeatButton.addListener(new ChangeListener(){
+            public void changed(ChangeEvent event, Actor actor) {
+
+                new Dialog("Stage 1", testSkin,"dialog"){
+                    protected void result (Object object){
+                        gObject = object;
+                        System.out.println("Result: "+ object);
+                        String textInBold = "Java_Prof_Level";
+                        System.out.print("\033[0;4m" + textInBold);
+
+                    }
+                }.text("Are you sure you want to repeat the stage?").button(yesButton, true).button("No",false).
+                        key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+            }
+        });
+
+        //when yes is clicked, it repeats the stage
+        yesButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                stageOne(game);
+            }
+        });
+
+        //go to stage one screen when start is clicked
+        startButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                stageOne(game);
+
+            }
+        });
+
+
+        //cancel button
+        cancelButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                window.remove();
+            }
+        });
+
+        //to close the window
+        closeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                window.remove();
+            }
+        });
+        stage.addActor(window);
+
+    }
+
 
     private void stage_One(DungeonCoder g) {
         /*stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
@@ -216,7 +356,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
 
         dialog.text(str);
 
-        //stage.addActor(dialog.button(startButton));
+
         dialog.show(stage);
     }
 

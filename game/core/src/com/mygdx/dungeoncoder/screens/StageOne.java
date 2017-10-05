@@ -46,9 +46,8 @@ public class StageOne implements Screen {
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
         Gdx.input.setInputProcessor(stage);
-        createStageOne();
-        createBack();
         create();
+        createBack();
        }
 
     private void createBack() {
@@ -121,10 +120,13 @@ public class StageOne implements Screen {
         selectBox.setSelected("Linux6");
         Image imageActor = new Image(image2);
         ScrollPane scrollPane = new ScrollPane(imageActor);
+
         List list = new List(skin);
         list.setItems(listEntries);
         list.getSelection().setMultiple(true);
         list.getSelection().setRequired(false);
+
+
         // list.getSelection().setToggle(true);
         ScrollPane scrollPane2 = new ScrollPane(list, skin);
         scrollPane2.setFlickScroll(false);
@@ -153,7 +155,7 @@ public class StageOne implements Screen {
         // window.debug();
         Window window = new Window("Dialog", skin);
         window.getTitleTable().add(new TextButton("X", skin)).height(window.getPadTop());
-        window.setPosition(0, 0);
+        window.setPosition(450, 150);
         window.defaults().spaceBottom(10);
         window.row().fill().expandX();
         window.add(iconButton);
@@ -162,10 +164,10 @@ public class StageOne implements Screen {
         window.add(imgToggleButton);
         window.row();
         window.add(checkBox);
-        window.add(slider).minWidth(100).fillX().colspan(3);
+        window.add(slider).minWidth(100).fillX().colspan(2);
         window.row();
         window.add(selectBox).maxWidth(100);
-        window.add(textfield).minWidth(100).expandX().fillX().colspan(3);
+        window.add(textfield).minWidth(100).expandX().fillX().colspan(5);
         window.row();
         window.add(splitPane).fill().expand().colspan(4).maxHeight(200);
         window.row();
@@ -174,7 +176,7 @@ public class StageOne implements Screen {
         window.row();
         window.add(fpsLabel).colspan(4);
         window.pack();
-
+        window.setDebug(false);
         // stage.addActor(new Button("Behind Window", skin));
         stage.addActor(window);
 
@@ -258,7 +260,4 @@ public class StageOne implements Screen {
         texture2.dispose();
     }
 
-    private void createStageOne(){
-
-    }
 }
