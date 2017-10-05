@@ -18,6 +18,8 @@ public class ServerThread extends Thread {
 
 	private boolean run = true;
 
+	private String connectedUser = "";
+
 	public ServerThread(Socket socket) {
 		this.socket = socket;		
 		try {
@@ -29,12 +31,43 @@ public class ServerThread extends Thread {
 		}
 	}
 
+	private void sendInt(int data) {
+		try {
+			outgoing.writeInt(data);
+		}
+		catch (SocketTimeoutException e) {
+			shutdown(true);
+		}
+		catch (IOException e) {
+			// IO failure shut down
+			shutdown(false);
+		}
+	}
+
+	private int recieveInt() {
+		int data = -1;
+		try {
+			data = incoming.readInt();
+		}
+		catch (SocketTimeoutException e) {
+			shutdown(true);
+		}
+		catch (IOException e) {
+			// IO failure. Shut down
+			shutdown(false);
+		}
+		return data;
+	}
+
 	// Send data in the form af a String to the client.
 	private void sendString(String data) {
 		try {
 			outgoing.writeUTF(data);	
 		}
-		catch(IOException e) {
+		catch (SocketTimeoutException e) {
+			shutdown(true);
+		}
+		catch (IOException e) {
 			// IO failure. Shut down
 			shutdown(false);
 		}
@@ -45,7 +78,10 @@ public class ServerThread extends Thread {
 		try {
 			data = incoming.readUTF();
 		}
-		catch(IOException e) {
+		catch (SocketTimeoutException e) {
+			shutdown(true);
+		}
+		catch (IOException e) {
 			// IO failure. Shut down
 			shutdown(false);
 		}
@@ -196,6 +232,7 @@ public class ServerThread extends Thread {
 
 		if (checkAccount(username, password)) {
 			sendCode((byte)(0x10));
+			connectedUser = username;
 			return;
 		}
 		sendCode((byte)(0x40));
@@ -217,6 +254,7 @@ public class ServerThread extends Thread {
 		byte[] salt = salt();
 		String hash = hash(password, salt);
 		String hexSalt = saltyString(salt);
+
 		if (conn == null) {
 			connectDB();
 		}
@@ -228,6 +266,7 @@ public class ServerThread extends Thread {
 			return;
 		}
 		sendCode((byte)(0x10));
+		connectedUser = username;
 	}
 	
 	// Convert the byte[] salt to a hex string for storage.
@@ -252,18 +291,18 @@ public class ServerThread extends Thread {
 		return salt;
 	}
 
+	// Allow users to update their account information.
 	private void updateAccount() {
 		boolean changeUsername = false;
 		boolean changePassword = false;
 		boolean changeEmail = false;
-		boolean changeClass = false;
+		
 		String list = recieveString();
 		String token = recieveString();
 		String[] updateList = parseList(list, token);
 		
 		String newUsername = "";
 		String newEmail = "";
-		String newClass = "";
 		String newPass = "";
 
       		if (Arrays.asList(updateList).contains("username")) {
@@ -274,15 +313,10 @@ public class ServerThread extends Thread {
 			changeEmail = true;
 			newEmail = recieveString();
 		}
-		if (Arrays.asList(updateList).contains("class")) {
-			changeClass = true;
-			newClass = recieveString();
-		}
 		if (Arrays.asList(updateList).contains("password")) {
 			changePassword = true;
 			newPass = recieveString();
 		}
-		sendCode((byte)(0x30));
 		String username = recieveString();
 		String password = recieveString();
 		boolean update = checkAccount(username, password);
@@ -298,9 +332,6 @@ public class ServerThread extends Thread {
 				if (changeEmail) {
 					stmt.executeUpdate("UPDATE UserAccounts SET email='" + newEmail + "' WHERE username='" + username + "'");
 				}
-				if (changeClass) {
-					stmt.executeUpdate("UPDATE UserAccounts SET class='" + newClass + "' WHERE username='" + username + "'");	
-				}
 				if (changePassword) {
 					byte[] salt = salt();
 					String hash = hash(newPass, salt);
@@ -310,7 +341,9 @@ public class ServerThread extends Thread {
 				}
 				if (changeUsername) {
 					stmt.executeUpdate("UPDATE UserAccounts SET username='" + newUsername + "' WHERE username='" + username + "'");
+					connectedUser = newUsername;
 				}
+				sendCode((byte)(0x10));
 			}
 			catch (SQLException e) {
 				e.printStackTrace();
@@ -324,9 +357,26 @@ public class ServerThread extends Thread {
 	}
 
 	private void updateProgress() {
-		sendString("y");
-		int module;
-		int percentage;
+		String module = recieveString();
+		int percentage = recieveInt();
+		if (conn == null) {
+			connectDB();
+		}
+		try {
+			rs = stmt.executeQuery("SELECT '" + module + "' FROM UserAccounts WHERE username='" + connectedUser + "'");
+			int currentProgress = rs.getInt(module);
+			if (currentProgress < percentage) {
+				stmt.executeUpdate("UPDATE UserAccounts SET " + module + "='" + percentage + "' WHERE username='" + connectedUser + "'");
+			}	
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			sendCode((byte)(0x60));
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			sendCode((byte)(0x60));
+		}
 	}
 
 	private String[] parseList(String list, String token) {
@@ -399,6 +449,7 @@ public class ServerThread extends Thread {
 		try {
 			if (timedout) {
 				outgoing.write((byte)(0x11));
+				System.out.println("timed out");
 			}
 			socket.close();
 			disconnectDB();
@@ -415,13 +466,14 @@ public class ServerThread extends Thread {
 		
 		// Wait a max of 1 second for login or account creation instruction
 		try {
-			socket.setSoTimeout(1000);
+			socket.setSoTimeout(5000);
 		}
 		catch (IOException e) {
 			// Shouldn't happen. Do Nothing
 		}
 		// Read the code sent by the client
-		//incoming.read(code);
+		//incoming.read(code)
+		
 		byte code = recieveCode();
 		// Recieved LOGIN code
 		if (code == 0x01) {
@@ -462,7 +514,8 @@ public class ServerThread extends Thread {
 				break;
 				// UPDATEMODULECOMPLETION
 				case 0x04 :
-					
+					sendCode((byte)(0x10));
+					updateProgress();	
 				break;
 				// SEND FILE
 				case 0x07 :
