@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
+import com.mygdx.dungeoncoder.utils.ClientConnection;
 
 import static com.badlogic.gdx.utils.Scaling.fit;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
@@ -28,6 +29,7 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
 
 public class TaskOne implements Screen {
+    private ClientConnection clientConnection;
     private DungeonCoder game;
     private Stage stage;
     private Skin backButtonSkin;
