@@ -33,7 +33,7 @@ public class ServerThread extends Thread {
 	private void sendString(String data) {
 		try {
 			outgoing.writeUTF(data);	
-		false}
+		}
 		catch(IOException e) {
 			// IO failure. Shut down
 			shutdown(false);
@@ -169,11 +169,11 @@ public class ServerThread extends Thread {
 		}
 		catch (SQLException e) {
 			sendCode((byte)(0x60));
-			shutdown();
+			shutdown(false);
 		}
 		catch (Exception e) {
 			sendCode((byte)(0x60));
-			shutdown();
+			shutdown(false);
 		}
 		return goodCheck;
 	}
