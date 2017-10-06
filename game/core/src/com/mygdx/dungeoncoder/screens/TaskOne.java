@@ -43,6 +43,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     TextArea textArea;
     ScrollPane scrollPane;
     TextButton quitButton;
+    TextButton hintButton;
 
     public TaskOne(DungeonCoder g) {
         game = g;
@@ -56,7 +57,31 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         createTextArea();
         createDemoImage();
         createPause();
+        createHint();
        }
+
+    private void createHint() {
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+        hintButton = new TextButton("Hint", skin);
+        hintButton.setPosition(50, 15);
+        hintButton.setSize(100, 30);
+        hintButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                new Dialog("Hint", skin,"dialog"){
+                    protected void result (Object object){
+                        System.out.println("Result: "+ object);
+                        System.out.println("CLICKED");
+                    }
+                }.text("Scanner scan = new Scanner(System.in);  \nscan.next(); //returns the next token of " +
+                        "input  \nscan.hasNext(); //returns true if there is another token of input  \nscan.nextLine();" +
+                        " //returns the next LINE of input  \nscan.hasNextLine(); //return true if there is another " +
+                        "line of input  ").button(" Ok ", true).
+                        key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+            }
+        });
+        stage.addActor(hintButton);
+    }
 
     private void createBack() {
         backButtonSkin = new Skin(Gdx.files.internal("comic-ui.json"));
@@ -173,7 +198,9 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     private void createTextArea(){
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
 
-        textArea = new TextArea("/*Enter your code here...*/\n", skin);
+        textArea = new TextArea(" public class Solution  {\n " +
+                "   public static void main(String[] args) " +
+                "  {\n      /*Enter your code here...*/\n   }\n }", skin);
         textArea.setX(50);
         textArea.setY(50);
         textArea.setWidth(500);

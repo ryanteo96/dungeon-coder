@@ -212,8 +212,8 @@ public class MainMenuScreen implements Screen {
         TextureRegionDrawable main1Drawable = new TextureRegionDrawable(main1Region);
         Image main1Image = new Image(main1Drawable);
         main1Image.setPosition(840,453);
-        cannotContinue = new TextButton("OK" ,dialogSkin);
-        continueButton = new TextButton("Continue" ,dialogSkin);
+        cannotContinue = new TextButton("   OK  " ,dialogSkin);
+        continueButton = new TextButton(" Continue " ,dialogSkin);
         main1Image.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -256,11 +256,45 @@ public class MainMenuScreen implements Screen {
                     });*/
 
                     } else if (mode == 2){
-                    freeBattleMode(game);
+                    finishedAssignment = false;
+                    if(finishedAssignment){
+                        new Dialog("Access Granted.", dialogSkin,"dialog"){
+                            protected void result (Object object){
+                                System.out.println("Result: "+ object);
+                                System.out.println("CLICKED");
+                            }
+                        }.text("    You have finished your assignment.    ").button(continueButton, true).button("Cancel",false).
+                                key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+
+                    }else{
+                        new Dialog("Access Denied!", dialogSkin,"dialog"){
+                            protected void result (Object object){
+                                System.out.println("Result: "+ object);
+                                System.out.println("CLICKED");
+                            }
+                        }.text("     You have not finished your assignment!     ").button(cannotContinue, false).
+                                key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                    }
+
+                    //continue to go to main story mode if assignment is finished.
+                    continueButton.addListener(new ClickListener(){
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            freeBattleMode(game);
+                        }
+                    });
+
+                    /*//stay at main menu if assignment is not finished
+                    cannotContinue.addListener(new ClickListener(){
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            game.setScreen(new MainMenuScreen(game));
+                        }
+                    });*/
                 }
             }
         });
-
+        finishedAssignment = true;
         stage.addActor(main1Image);
     }
     private void createMenu2(){
