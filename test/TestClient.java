@@ -44,24 +44,19 @@ public class TestClient {
 			System.out.println("Attempting to update acccount information");
 			outgoing.write((byte)(0x03));
 			if (incoming.read() == 0x10) {
-				outgoing.writeUTF("username,email,class,password");
+				outgoing.writeUTF("email");
 				outgoing.writeUTF(",");
+				//outgoing.writeUTF("TestUser");
+				outgoing.writeUTF("NEWEMAIL@gmail.com");
+				//outgoing.writeUTF("NewPass");
+				// -- Old account info
 				outgoing.writeUTF("TestUser");
-				outgoing.writeUTF("test@gmail.com");
-				outgoing.writeUTF("cs99");
 				outgoing.writeUTF("NewPass");
-				if (incoming.read() == 0x30) {
-					outgoing.writeUTF("TestUser");
-					outgoing.writeUTF("pass");
-					if (incoming.read() == 0x40) {
-						System.out.println("Account verification failed");
-					}
-					else {
-						System.out.println("Update complete");
-					}
+				if (incoming.read() == 0x40) {
+					System.out.println("Account verification failed");
 				}
 				else {
-					System.out.println("Something went wrong.");
+					System.out.println("Update complete");
 				}
 			}
 			else {
