@@ -216,7 +216,6 @@ public class ServerThread extends Thread {
 					}
 				}
 			}
-			System.out.println("User unknown");
 		}
 		catch (SQLException e) {
 			sendCode((byte)(0x60));
@@ -401,15 +400,16 @@ public class ServerThread extends Thread {
 	private void updateUserCode(String task) {
 		try {
 			String fileName = connectedUser + task;
-			recieveFile(fileName);
+			//recieveFile(fileName);
 			if (conn == null) {
 				connectDB();
 			}
 			rs = stmt.executeQuery("SELECT Attempts FROM " + task + " WHERE Student='" + connectedUser + "'");
+			rs.next();
 			int currentAttempts = rs.getInt("Attempts");
 			currentAttempts++;
 			stmt.executeUpdate("UPDATE " + task + " SET Attempts='" + currentAttempts + "' WHERE Student='" + connectedUser + "'");
-			stmt.executeUpdate("UPDAGE " + task + " Set Code='" + fileName + "' WHERE Student='" + connectedUser + "'");
+			stmt.executeUpdate("UPDATE " + task + " Set Code='" + fileName + "' WHERE Student='" + connectedUser + "'");
 			sendCode((byte)(0x10));
 		}
 		catch(SQLException e) {
@@ -426,7 +426,8 @@ public class ServerThread extends Thread {
 				connectDB();
 			}
 			rs = stmt.executeQuery("SELECT " + information + " FROM " + task + " WHERE Student='" + connectedUser + "'");
-			if (information.equals("Attempts") || information.equals("Point Value")) {
+			rs.next();
+			if (information.equals("Attempts") || information.equals("PointValue")) {
 				sendCode((byte)(0x10));
 				sendString(Integer.toString(rs.getInt(information)));
 				return;
