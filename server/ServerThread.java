@@ -359,6 +359,7 @@ public class ServerThread extends Thread {
 				}
 				if (changeUsername) {
 					stmt.executeUpdate("UPDATE Users SET username='" + newUsername + "' WHERE username='" + username + "'");
+					stmt.executeUpdate("UPDATE Task1 SET Student='" + newUsername + "' WHERE username='" + username + "'");
 					connectedUser = newUsername;
 				}
 				sendCode((byte)(0x10));
