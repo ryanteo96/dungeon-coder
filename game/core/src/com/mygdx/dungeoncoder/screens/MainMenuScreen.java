@@ -141,7 +141,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 mode = 0;
-                instructionalModeImage_Text.setPosition(200, 500);
+                instructionalModeImage_Text.setPosition(200, 550);
                 System.out.println("You are now in instructional mode");
                 stage.addActor(instructionalModeImage_Text);
                 instructionalModeImage_Text.setVisible(true);
@@ -164,7 +164,7 @@ public class MainMenuScreen implements Screen {
         mainStoryModeImage.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 mode = 1;
-                mainStoryModeImage_Text.setPosition(200, 500);
+                mainStoryModeImage_Text.setPosition(200, 550);
                 System.out.println("You are now in main story mode");
                 stage.addActor(mainStoryModeImage_Text);
                 instructionalModeImage_Text.setVisible(false);
@@ -190,7 +190,7 @@ public class MainMenuScreen implements Screen {
             @Override
              public void clicked(InputEvent event, float x, float y) {
                 mode = 2;
-                freeBattleModeImage_Text.setPosition(200, 500);
+                freeBattleModeImage_Text.setPosition(200, 550);
                 System.out.println("You are now in free battle mode");
                 stage.addActor(freeBattleModeImage_Text);
                 freeBattleModeImage_Text.setVisible(true);
@@ -212,7 +212,7 @@ public class MainMenuScreen implements Screen {
         TextureRegionDrawable main1Drawable = new TextureRegionDrawable(main1Region);
         Image main1Image = new Image(main1Drawable);
         main1Image.setPosition(840,453);
-        cannotContinue = new TextButton("   OK  " ,dialogSkin);
+        cannotContinue = new TextButton("  OK  " ,dialogSkin);
         continueButton = new TextButton(" Continue " ,dialogSkin);
         main1Image.addListener(new ClickListener(){
             @Override
@@ -353,11 +353,13 @@ public class MainMenuScreen implements Screen {
 
     private void createCharacter(){
         Texture chara = new Texture(Gdx.files.internal("UIElements/chara.png"));
+        instructionalModeImage_Text.setPosition(200, 550);
         TextureRegion charaRegion = new TextureRegion(chara);
         TextureRegionDrawable charaDrawable = new TextureRegionDrawable(charaRegion);
         Image charaImage = new Image(charaDrawable);
         charaImage.setPosition(200,200);
         stage.addActor(charaImage);
+        stage.addActor(instructionalModeImage_Text);
     }
 
 }
