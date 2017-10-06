@@ -27,6 +27,7 @@ public class LoginScreen implements Screen {
     private final TextField txfPassword;
     private ClientConnection clientConnection;
     private Skin skin;
+    private Skin textSkin;
 
     public LoginScreen(DungeonCoder g) {
         game = g;
@@ -53,13 +54,14 @@ public class LoginScreen implements Screen {
                 Gdx.net.openURI("http://18.221.243.28/CreateAccount.html");
             }
         });
+        textSkin = new Skin(Gdx.files.internal("UIElements/test.json"));
 
         // creating text fields
-        txfUsername = new TextField("", skin);
+        txfUsername = new TextField("", textSkin);
         txfUsername.setPosition(400, 360);
         txfUsername.setSize(450,40);
 
-        txfPassword = new TextField("", skin);
+        txfPassword = new TextField("", textSkin);
         txfPassword.setPasswordCharacter('*');
         txfPassword.setPasswordMode(true);
         txfPassword.setPosition(400, 280);
