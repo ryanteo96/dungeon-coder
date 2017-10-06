@@ -50,7 +50,7 @@ public class TaskOne implements Screen {
         createBack();
         createAttempts();
         createProgress();
-        createRequestAccountCreation();
+        createTextArea();
        }
 
     private void createBack() {
@@ -106,7 +106,7 @@ public class TaskOne implements Screen {
                 progress = progressText.getText();
                 System.out.println("Progress: " + progress);
                 int progress_Percent = Integer.parseInt(progress);
-                if(clientConnection.requestUpdateProgress(module,progress_Percent)){
+                if(clientConnection.requestUpdateProgress(module,progress_Percent) == true){
                     System.out.println("Connected");
                 }else{
                     System.out.println("Not Connected");
@@ -118,10 +118,9 @@ public class TaskOne implements Screen {
 
     }
 
-    private void createRequestAccountCreation(){
+    private void createTextArea(){
 
     }
-
 
     private void createAttempts(){
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
