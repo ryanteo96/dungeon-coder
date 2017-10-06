@@ -22,7 +22,7 @@ import java.util.Scanner;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
-public class AchievementPage implements Screen{
+public class AchievementPage implements Screen {
 
     private DungeonCoder game;
     private Stage stage;
@@ -30,8 +30,9 @@ public class AchievementPage implements Screen{
     public int InsC;
     public int MainC;
     public int FreeC;
+    public int autoSave;
 
-    public AchievementPage (DungeonCoder g) throws FileNotFoundException {
+    public AchievementPage(DungeonCoder g) throws FileNotFoundException {
         File tmp = new File("saveData/save.txt");
         boolean exists = tmp.exists();
         if (exists) {
@@ -40,12 +41,14 @@ public class AchievementPage implements Screen{
             InsC = scanner.nextInt();
             MainC = scanner.nextInt();
             FreeC = scanner.nextInt();
+            autoSave = scanner.nextInt();
             scanner.close();
         } else {
             stageC = 0;
             InsC = 0;
             MainC = 0;
             FreeC = 0;
+            autoSave = 0;
         }
         game = g;
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
@@ -57,6 +60,8 @@ public class AchievementPage implements Screen{
         createAC3();
         createSave();
         createTest();
+        createOn();
+        createOff();
         System.out.printf("Overall Stage completed: %d\n", stageC);
         System.out.printf("Instructional Stage completed: %d\n", InsC);
         System.out.printf("Main Story Completed: %d\n", MainC);
@@ -70,7 +75,7 @@ public class AchievementPage implements Screen{
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(240/255f, 240/255f, 240/255f, 1);
+        Gdx.gl.glClearColor(240 / 255f, 240 / 255f, 240 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.draw();
@@ -107,8 +112,8 @@ public class AchievementPage implements Screen{
         TextureRegion backRegion = new TextureRegion(back);
         TextureRegionDrawable backDrawable = new TextureRegionDrawable(backRegion);
         Image backImage = new Image(backDrawable);
-        backImage.setPosition(0,680);
-        backImage.addListener(new ClickListener(){
+        backImage.setPosition(0, 680);
+        backImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 back();
@@ -127,14 +132,14 @@ public class AchievementPage implements Screen{
         TextureRegion inProgressRegion = new TextureRegion(inProgress);
         TextureRegionDrawable inProgressDrawable = new TextureRegionDrawable(inProgressRegion);
         Image inProgressImage = new Image(inProgressDrawable);
-        inProgressImage.setPosition(400,300);
+        inProgressImage.setPosition(400, 300);
 
         stage.addActor(inProgressImage);
     }
 
     private void createAC1() {
         Texture AC1;
-        if (stageC >= 5){
+        if (stageC >= 5) {
             AC1 = new Texture(Gdx.files.internal("UIElements/AC130.png"));
         } else {
             AC1 = new Texture(Gdx.files.internal("UIElements/AC1.png"));
@@ -142,7 +147,7 @@ public class AchievementPage implements Screen{
         TextureRegion AC1Region = new TextureRegion(AC1);
         TextureRegionDrawable AC1Drawable = new TextureRegionDrawable(AC1Region);
         Image AC1Image = new Image(AC1Drawable);
-        AC1Image.setPosition(400,500);
+        AC1Image.setPosition(400, 500);
         stage.addActor(AC1Image);
     }
 
@@ -152,27 +157,27 @@ public class AchievementPage implements Screen{
         TextureRegion AC2Region = new TextureRegion(AC2);
         TextureRegionDrawable AC2Drawable = new TextureRegionDrawable(AC2Region);
         Image AC2Image = new Image(AC2Drawable);
-        AC2Image.setPosition(400,300);
+        AC2Image.setPosition(400, 300);
         stage.addActor(AC2Image);
     }
 
     private void createAC3() {
         Texture AC3;
-            AC3 = new Texture(Gdx.files.internal("UIElements/AC3.png"));
+        AC3 = new Texture(Gdx.files.internal("UIElements/AC3.png"));
         TextureRegion AC3Region = new TextureRegion(AC3);
         TextureRegionDrawable AC3Drawable = new TextureRegionDrawable(AC3Region);
         Image AC3Image = new Image(AC3Drawable);
-        AC3Image.setPosition(400,100);
+        AC3Image.setPosition(400, 100);
         stage.addActor(AC3Image);
     }
 
-    private void createSave(){
+    private void createSave() {
         Texture save = new Texture(Gdx.files.internal("UIElements/save.png"));
         TextureRegion saveRegion = new TextureRegion(save);
         TextureRegionDrawable saveDrawable = new TextureRegionDrawable(saveRegion);
         Image main4Image = new Image(saveDrawable);
-        main4Image.setPosition(1080,630);
-        main4Image.addListener(new ClickListener(){
+        main4Image.setPosition(1080, 630);
+        main4Image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
@@ -184,6 +189,7 @@ public class AchievementPage implements Screen{
         });
         stage.addActor(main4Image);
     }
+
     private void Save(DungeonCoder g) throws IOException {
         Writer w = new FileWriter("saveData/save.txt");
         w.write(stageC + "");
@@ -194,24 +200,65 @@ public class AchievementPage implements Screen{
         w.write("\n");
         w.write(FreeC + "");
         w.write("\n");
+        w.write(autoSave + "");
+        w.write("\n");
         w.close();
     }
 
-    private void createTest(){
+    private void createTest() {
         Texture save = new Texture(Gdx.files.internal("UIElements/freeWin.png"));
         TextureRegion saveRegion = new TextureRegion(save);
         TextureRegionDrawable saveDrawable = new TextureRegionDrawable(saveRegion);
         Image main4Image = new Image(saveDrawable);
-        main4Image.setPosition(1000,630);
-        main4Image.addListener(new ClickListener(){
+        main4Image.setPosition(1000, 630);
+        main4Image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                beat(game);
+                try {
+                    beat(game);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         stage.addActor(main4Image);
     }
-    private void beat(DungeonCoder g) {
+
+    private void beat(DungeonCoder g) throws IOException {
         stageC++;
+        if (autoSave == 1) {
+            Save(game);
+        }
     }
+
+    private void createOn() {
+        Texture back = new Texture(Gdx.files.internal("UIElements/On.png"));
+        TextureRegion backRegion = new TextureRegion(back);
+        TextureRegionDrawable backDrawable = new TextureRegionDrawable(backRegion);
+        Image backImage = new Image(backDrawable);
+        backImage.setPosition(1000, 500);
+        backImage.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                autoSave = 1;
+            }
+        });
+        stage.addActor(backImage);
+    }
+    private void createOff() {
+        Texture back = new Texture(Gdx.files.internal("UIElements/Off.png"));
+        TextureRegion backRegion = new TextureRegion(back);
+        TextureRegionDrawable backDrawable = new TextureRegionDrawable(backRegion);
+        Image backImage = new Image(backDrawable);
+        backImage.setPosition(1000, 440);
+        backImage.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                autoSave = 0;
+            }
+        });
+        stage.addActor(backImage);
+    }
+
+
 }
