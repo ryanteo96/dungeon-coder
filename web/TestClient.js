@@ -1,15 +1,16 @@
 //var ip = "ws://13.59.183.75:8080/";
 
 function body_onload() {
-    testBtn.onclick = testBtn_onclick();
+    testBtn.onclick = testBtn_onclick;
 }
 
 function testBtn_onclick() {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            var myObj = JSON.parse(this.responseText);
-            alert(myObj.name);
+            console.log(this.reponseText);
+            var myObj = this.reponseText;
+            alert(myObj);
         }
     };
     xmlhttp.open("GET", "demo.php", true);
