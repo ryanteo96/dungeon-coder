@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
@@ -31,7 +33,7 @@ public class AchievementPage implements Screen {
     public int MainC;
     public int FreeC;
     public int autoSave;
-
+    private Skin backButtonSkin;
     public AchievementPage(DungeonCoder g) throws FileNotFoundException {
         File tmp = new File("saveData/save.txt");
         boolean exists = tmp.exists();
@@ -108,20 +110,20 @@ public class AchievementPage implements Screen {
     }
 
     private void createBack() {
-        Texture back = new Texture(Gdx.files.internal("UIElements/back.png"));
-        TextureRegion backRegion = new TextureRegion(back);
-        TextureRegionDrawable backDrawable = new TextureRegionDrawable(backRegion);
-        Image backImage = new Image(backDrawable);
-        backImage.setPosition(0, 680);
-        backImage.addListener(new ClickListener() {
+        backButtonSkin = new Skin(Gdx.files.internal("comic-ui.json"));
+        TextButton btnBack = new TextButton("Back", backButtonSkin);
+        btnBack.setPosition(0, 600);
+        btnBack.setSize(100, 100);
+        btnBack.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void touchUp(InputEvent e, float x, float y, int point, int button) {
                 back();
+
             }
         });
-
-        stage.addActor(backImage);
+        stage.addActor(btnBack);
     }
+
 
     private void back() {
         game.setScreen(new SplashScreen(game));
