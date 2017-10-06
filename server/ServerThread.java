@@ -162,7 +162,10 @@ public class ServerThread extends Thread {
 
 	private void getUserLevelCode() {
 		String levelName = recieveString();
-		 
+		String fileName = connectedUser + levelName;
+		File file = new File(fileName);
+		sendFile(file, fileName);
+		sendCode((byte)(0x10));
 	}
 
 	private void getLevelFile() {
@@ -473,11 +476,11 @@ public class ServerThread extends Thread {
 	// Recieve data for a file from the client and write it.
 	private void recieveFile(String fileName) {
 		try {
-			String giveFileName = incoming.readUTF();
+			String givenFileName = incoming.readUTF();
 			if (fileName.equals("")) {
-				fileName = giveFileName;
+				fileName = givenFileName;
 			}
-			OutputStream out =  new FileOutputStream(fileName);
+			OutputStream out = new FileOutputStream(fileName);
 			
 			long fileSize = incoming.readLong();
 			byte[] buffer = new byte[16 * 1024];

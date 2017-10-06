@@ -211,6 +211,31 @@ public class ClientConnection {
 		return false;
 	}
 
+	private boolean recieveFile(String fileName) {
+		try {
+			String givenFileName = incoming.readUTF();
+			if (fileName.equals("")) {
+				fileName = givenFileName;
+			}
+			OutputStream out = new FileOutputStream(fileName);
+
+			long fileSize = incoming.readLong();
+			byte[] buffer = new byte[16 * 1024];
+			int count;
+
+			while (fileSize > 0 && (count = incoming.read(buffer, 0, (int)Math.min(buffer.length, fileSize))) != -1) {
+				out.write(buffer, 0, count);
+				fileSize -= count;
+			}
+			out.close();
+			sendCode((byte)(0x10));
+		}
+		catch(IOException e) {
+			// Do Nothing
+		}
+		return false;
+	}
+
 	// Request the specific information for the user on the specific task
 	private String requestTaskInformation(String task, String information) { 
 		sendCode((byte)(0x0A));
@@ -236,5 +261,24 @@ public class ClientConnection {
 			return "";
 		}
 		return "";
+	}
+
+	private boolean requestCodeFile(String levelName) {
+		sendCode((byte)(0x09));
+		if (recieveCode() == 0x10) {
+			try {
+				outgoing.writeUTF(levelName);
+				recieveFile("");
+				return true;
+			}
+			catch (IOException e) {
+				// Do Nothing
+			}
+		}
+		else {
+			// Server refused file request
+			return false;
+		}
+		return false;
 	}
 }
