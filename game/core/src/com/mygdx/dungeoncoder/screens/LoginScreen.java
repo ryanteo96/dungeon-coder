@@ -24,7 +24,7 @@ public class LoginScreen implements Screen {
     private Stage stage;
     private TextField txfUsername;
     private final TextField txfPassword;
-    private ClientConnection clientConnection;
+    public ClientConnection clientConnection;
     private Skin skin;
 
     public LoginScreen(DungeonCoder g) {
@@ -42,7 +42,7 @@ public class LoginScreen implements Screen {
         TextButton btnCreateAcc = new TextButton("Create Account", skin);
         btnCreateAcc.setPosition(350,200);
         btnCreateAcc.setSize(300,60);
-        clientConnection = new ClientConnection();
+        clientConnection = new ClientConnection("","");
         btnCreateAcc.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -154,7 +154,6 @@ public class LoginScreen implements Screen {
     }
 
     public void btnLoginClicked(DungeonCoder g) {
-        ClientConnection clientConnection = new ClientConnection();
         if (clientConnection.requestLogin(txfUsername.getText(), txfPassword.getText())) {
             g.setScreen(new MainMenuScreen(g));
         } else {
