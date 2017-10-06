@@ -60,22 +60,18 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         createPause();
         createHint();
         createTaskOneTextImage();
-        //Request the specific information for the suer on the specific task
-        //createRequesttaskInformation();
+        createDeadline();
        }
-   /* private void createRequesttaskInformation(){
+
+   private void createDeadline(){
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
-        taskInformation = new TextButton("Task Information", skin);
-        taskInformation.setPosition(50, 15);
-        taskInformation.setSize(150, 30);
-        taskInformation.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent e, float x, float y) {
-               if(clientConnection.re)
-            }
-        });
-        stage.addActor(taskInformation);
-    }*/
+        Label deadlineText = new Label("Deadline: "+
+                shareVariable.connect.requestTaskInformation("Task1","Deadline"),skin); //display deadline from the database
+       deadlineText.setFontScale(1f,1f);
+       deadlineText.setPosition(50, 555);
+        stage.addActor(deadlineText);
+   }
+
 
    private void createTaskOneTextImage(){
        Texture task1 = new Texture(Gdx.files.internal("UIElements/task1text.png"));
@@ -265,7 +261,9 @@ public class TaskOne extends ApplicationAdapter implements Screen {
             @Override
             public void clicked (InputEvent e, float x, float y){
                 attempt = attemptText.getText();
+                attemptText.setText(shareVariable.connect.requestTaskInformation("Task1","Attempts"));
                 System.out.println("Attempts: " + attempt);
+
             }
         });
         stage.addActor(btnGetAttempt);

@@ -25,8 +25,6 @@ public class LoginScreen implements Screen {
     private Stage stage;
     private TextField txfUsername;
     private final TextField txfPassword;
-    private ClientConnection clientConnection;
-    private Skin skin;
     private Skin textSkin;
 
     public LoginScreen(DungeonCoder g) {
@@ -45,12 +43,9 @@ public class LoginScreen implements Screen {
         btnCreateAcc.setPosition(350,200);
         btnCreateAcc.setSize(300,60);
 
-        //clientConnection = new ClientConnection();//instantiate client connection
-
         btnCreateAcc.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //Gdx.net.openURI("https://ryanteo96.github.io/dungeon-coder/web/CreateAccount.html");
                 Gdx.net.openURI("http://18.221.243.28/CreateAccount.html");
             }
         });
