@@ -175,7 +175,7 @@ public class ServerThread extends Thread {
 			connectDB();
 		}
 		try {
-			rs = stmt.executeQuery("SELECT USERNAME FROM UserAccounts");
+			rs = stmt.executeQuery("SELECT USERNAME FROM Users");
 			while(rs.next()) {
 				if (username.equals(rs.getString("USERNAME"))) {
 					return true;
@@ -197,7 +197,7 @@ public class ServerThread extends Thread {
 			connectDB();
 		}
 		try {
-			rs = stmt.executeQuery("SELECT USERNAME, hash, salt From UserAccounts");
+			rs = stmt.executeQuery("SELECT USERNAME, hash, salt From Users");
 			while (rs.next()) {
 				if (username.equals(rs.getString("username"))) {
 					String knownHash = rs.getString("hash");
@@ -228,19 +228,13 @@ public class ServerThread extends Thread {
 
 	// Attempt to log the client in with the given username and password.
 	private void login() {
+		
 		String username = "";
 		String password = "";
-		try {
-			username = incoming.readUTF();
-			password = incoming.readUTF();
-			System.out.println("attempted login with username: " + username + " | password : " + password);
-		}
-		catch(SocketTimeoutException e) {
-			shutdown(true);
-		}
-		catch (IOException e) {
-			shutdown(false);
-		}
+	
+		username = recieveString();
+		password = recieveString();
+		System.out.println("attempted login with username: " + username + " | password : " + password);
 
 		if (conn == null) {
 			connectDB();
@@ -262,8 +256,9 @@ public class ServerThread extends Thread {
 		
 		username = recieveString();
 		password = recieveString();
-		
+		System.out.println("Attempting to create account with " + username + " and " + password);	
 		if (userExists(username)) {
+			System.out.println("User exists");
 			sendCode((byte)(0x40));
 			return;
 		}
@@ -276,10 +271,13 @@ public class ServerThread extends Thread {
 			connectDB();
 		}
 		try {
-			stmt.executeUpdate("INSERT INTO UserAccounts (USERNAME, HASH, SALT)" + "VALUES ('" + username + "','" + hash + "','" + hexSalt + "')");
+			stmt.executeUpdate("INSERT INTO Users (Username, Hash, Salt)" + "VALUES ('" + username + "','" + hash + "','" + hexSalt + "')");
+			stmt.executeUpdate("INSERT INTO Task1 (Student)" + "VALUES ('" + username + "')");
 		}
 		catch (SQLException e) {
+			e.printStackTrace();
 			sendCode((byte)(0x60));
+			System.out.println("DB error");
 			return;
 		}
 		sendCode((byte)(0x10));
@@ -337,6 +335,7 @@ public class ServerThread extends Thread {
 		String username = recieveString();
 		String password = recieveString();
 		boolean update = checkAccount(username, password);
+		System.out.println(update);
 		if (update == false) {
 			sendCode((byte)(0x40));
 			return;
@@ -347,17 +346,17 @@ public class ServerThread extends Thread {
 			}
 			try {
 				if (changeEmail) {
-					stmt.executeUpdate("UPDATE UserAccounts SET email='" + newEmail + "' WHERE username='" + username + "'");
+					stmt.executeUpdate("UPDATE Users SET email='" + newEmail + "' WHERE username='" + username + "'");
 				}
 				if (changePassword) {
 					byte[] salt = salt();
 					String hash = hash(newPass, salt);
 					String hexSalt = saltyString(salt);
-					stmt.executeUpdate("UPDATE UserAccounts SET hash='" + hash + "' WHERE username='" + username + "'");
-					stmt.executeUpdate("UPDATE UserAccounts SET salt='" + hexSalt + "' WHERE username='" + username + "'");
+					stmt.executeUpdate("UPDATE Users SET hash='" + hash + "' WHERE username='" + username + "'");
+					stmt.executeUpdate("UPDATE Users SET salt='" + hexSalt + "' WHERE username='" + username + "'");
 				}
 				if (changeUsername) {
-					stmt.executeUpdate("UPDATE UserAccounts SET username='" + newUsername + "' WHERE username='" + username + "'");
+					stmt.executeUpdate("UPDATE Users SET username='" + newUsername + "' WHERE username='" + username + "'");
 					connectedUser = newUsername;
 				}
 				sendCode((byte)(0x10));
@@ -374,25 +373,40 @@ public class ServerThread extends Thread {
 	}
 
 	private void updateProgress() {
-		String module = recieveString();
+		String task = recieveString();
 		int percentage = recieveInt();
 		if (conn == null) {
 			connectDB();
 		}
 		try {
-			rs = stmt.executeQuery("SELECT '" + module + "' FROM UserAccounts WHERE username='" + connectedUser + "'");
-			int currentProgress = rs.getInt(module);
-			if (currentProgress < percentage) {
-				stmt.executeUpdate("UPDATE UserAccounts SET " + module + "='" + percentage + "' WHERE username='" + connectedUser + "'");
-				sendCode((byte)(0x10));
-				return;
-			}	
+			System.out.println("updating user progress");
+			stmt.executeUpdate("UPDATE " + task + " SET Completion='" + percentage + "' WHERE Student='" + connectedUser + "'");
+			sendCode((byte)(0x10));
+			return;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 			sendCode((byte)(0x60));
 		}
 		catch (Exception e) {
+			e.printStackTrace();
+			sendCode((byte)(0x60));
+		}
+	}
+
+	private void updateUserCode() {
+		try {
+			String task = recieveString();
+			String fileName = connectedUser + task;
+			recieveFile(fileName);
+			rs = stmt.executeQuery("SELECT Attempts FROM " + task + " WHERE Student='" + connectedUser + "'");
+			int currentAttempts = rs.getInt("Attempts");
+			currentAttempts++;
+			stmt.executeUpdate("UPDATE " + task + " SET Attempts='" + currentAttempts + "' WHERE Student='" + connectedUser + "'");
+			stmt.executeUpdate("UPDAGE " + task + " Set Code='" + fileName + "' WHERE Student='" + connectedUser + "'");
+			sendCode((byte)(0x10));
+		}
+		catch(SQLException e) {
 			e.printStackTrace();
 			sendCode((byte)(0x60));
 		}
@@ -429,9 +443,11 @@ public class ServerThread extends Thread {
 	}
 
 	// Recieve data for a file from the client and write it.
-	private void recieveFile() {
+	private void recieveFile(String fileName) {
 		try {
-			String fileName = incoming.readUTF();
+			if (fileName.equals("")) {
+				fileName = incoming.readUTF();
+			}
 			OutputStream out =  new FileOutputStream(fileName);
 			
 			long fileSize = incoming.readLong();
@@ -448,6 +464,7 @@ public class ServerThread extends Thread {
 		catch(IOException e) {
 			e.printStackTrace();
 			sendCode((byte)(0x40));
+			shutdown(false);
 		}
 	}
 
@@ -556,7 +573,7 @@ public class ServerThread extends Thread {
 				// RECIEVEFILE
 				case 0x07 :
 					sendCode((byte)(0x10));
-					recieveFile();
+					recieveFile("");
 				break;
 				// FETCHCODEFILE
 				case 0x08 :
