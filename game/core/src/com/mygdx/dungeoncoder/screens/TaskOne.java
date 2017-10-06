@@ -59,6 +59,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         createDemoImage();
         createPause();
         createHint();
+        createTaskOneTextImage();
         //Request the specific information for the suer on the specific task
         //createRequesttaskInformation();
        }
@@ -75,6 +76,17 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         });
         stage.addActor(taskInformation);
     }*/
+
+   private void createTaskOneTextImage(){
+       Texture task1 = new Texture(Gdx.files.internal("UIElements/task1text.png"));
+       TextureRegion task1Region = new TextureRegion(task1);
+       TextureRegionDrawable task1Drawable = new TextureRegionDrawable(task1Region);
+       Image task1Image = new Image(task1Drawable);
+       task1Image.setSize(300,55);
+       task1Image.setPosition(100,655);
+       stage.addActor(task1Image);
+       stage.setDebugAll(false);
+   }
 
     private void createHint() {
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
