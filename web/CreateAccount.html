@@ -2,6 +2,7 @@
     <head>
         <title>Create Account - Dungeon Coder</title>
         <script language="javascript" type="text/javascript" src="CreateAccount.js"></script>
+        <script language="javascript" type="text/javascript" src="Shared.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700" rel="stylesheet">
         <style type="text/css">
             #createAccountHdr {
@@ -106,16 +107,33 @@
                 font-family:'Open Sans', san-serif;
             }
 
+            #usernameLbl {
+                position:absolute;
+                top:40px;
+                left:20px;
+                font-family:'Open Sans', san-serif;
+            }
+
+            #usernameInput {
+                position:absolute;
+                top:70px;
+                left:20px;
+                width:400px;
+                height:30px;
+                font-size:15; 
+                font-family:'Open Sans', san-serif;
+            }
+
             #passwordLbl {
                 position:absolute;
-                top:360px;
+                top:120px;
                 left:20px;
                 font-family:'Open Sans', san-serif;
             }
 
             #passwordInput {
                 position:absolute;
-                top:390px;
+                top:150px;
                 left:20px;
                 width:400px;
                 height:30px;
@@ -125,14 +143,14 @@
 
             #confirmPasswordLbl {
                 position:absolute;
-                top:440px;
+                top:200px;
                 left:20px;
                 font-family:'Open Sans', san-serif;
             }
 
             #confirmPasswordInput {
                 position:absolute;
-                top:470px;
+                top:230px;
                 left:20px;
                 width:400px;
                 height:30px;
@@ -142,7 +160,7 @@
 
             #registerBtn {
                 position:absolute;
-                top:545px;
+                top:300px;
                 left:320px;
                 width:100px;
                 height:40px;
@@ -157,7 +175,7 @@
 
             #backLink {
                 position:absolute;
-                top:550px;
+                top:315px;
                 left:30px;
                 font-family:'Open Sans', san-serif;
             }
@@ -178,7 +196,7 @@
         <div id="createAccountForm">
             <label id="createAccountDesc">Please enter the following information to create your account.</label>
 
-            <label id="firstNameLbl">First Name</label>
+            <!--<label id="firstNameLbl">First Name</label>
             <input id="firstNameInput" type="text"/>
 
             <label id="middleNameLbl">Middle Name</label>
@@ -188,7 +206,10 @@
             <input id="lastNameInput" type="text"/>
 
             <label id="emailLbl">Email Address</label>
-            <input id="emailInput" type="text"/>
+            <input id="emailInput" type="text"/>-->
+
+            <label id="usernameLbl">Username</label>
+            <input id="usernameInput" type="text"/>
 
             <label id="passwordLbl">Password</label>
             <input id="passwordInput" type="password"/>
