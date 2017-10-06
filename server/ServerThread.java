@@ -381,6 +381,7 @@ public class ServerThread extends Thread {
 		try {
 			System.out.println("updating user progress");
 			stmt.executeUpdate("UPDATE " + task + " SET Completion='" + percentage + "' WHERE Student='" + connectedUser + "'");
+			updateUserCode(task);
 			sendCode((byte)(0x10));
 			return;
 		}
@@ -394,17 +395,44 @@ public class ServerThread extends Thread {
 		}
 	}
 
-	private void updateUserCode() {
+	private void updateUserCode(String task) {
 		try {
-			String task = recieveString();
 			String fileName = connectedUser + task;
 			recieveFile(fileName);
+			if (conn == null) {
+				connectDB();
+			}
 			rs = stmt.executeQuery("SELECT Attempts FROM " + task + " WHERE Student='" + connectedUser + "'");
 			int currentAttempts = rs.getInt("Attempts");
 			currentAttempts++;
 			stmt.executeUpdate("UPDATE " + task + " SET Attempts='" + currentAttempts + "' WHERE Student='" + connectedUser + "'");
 			stmt.executeUpdate("UPDAGE " + task + " Set Code='" + fileName + "' WHERE Student='" + connectedUser + "'");
 			sendCode((byte)(0x10));
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			sendCode((byte)(0x60));
+		}
+	}
+
+	private void getTaskInfo() {
+		try {
+			String task = recieveString();
+			String information = recieveString();
+			if (conn == null) {
+				connectDB();
+			}
+			rs = stmt.executeQuery("SELECT " + information + " FROM " + task + " WHERE Student='" + connectedUser + "'");
+			if (information.equals("Attempts") || information.equals("Point Value")) {
+				sendCode((byte)(0x10));
+				sendString(Integer.toString(rs.getInt(information)));
+				return;
+			}
+			else {
+				sendCode((byte)(0x10));
+				sendString(rs.getString(information));
+				return;
+			}
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
@@ -445,8 +473,9 @@ public class ServerThread extends Thread {
 	// Recieve data for a file from the client and write it.
 	private void recieveFile(String fileName) {
 		try {
+			String giveFileName = incoming.readUTF();
 			if (fileName.equals("")) {
-				fileName = incoming.readUTF();
+				fileName = giveFileName;
 			}
 			OutputStream out =  new FileOutputStream(fileName);
 			
@@ -584,6 +613,11 @@ public class ServerThread extends Thread {
 				case 0x09 :
 					sendCode((byte)(0x10));
 					getLevelFile();
+				break;
+				// FETCHTASKINFO
+				case 0x0A :
+					sendCode((byte)(0x10));
+					getTaskInfo();
 				break;
 				// INVALIDREQUEST
 				default:

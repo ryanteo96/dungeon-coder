@@ -149,12 +149,13 @@ public class ClientConnection {
 		return false;
 	}
 
-	public boolean requestUpdateProgress(String module, int percentage) {
+	public boolean requestUpdateProgress(File file, String task, int percentage) {
 		try {
 			sendCode((byte)(0x04));
 			if (recieveCode() == 0x10) {
-				outgoing.writeUTF(module);
+				outgoing.writeUTF(task);
 				outgoing.writeInt(percentage);
+				sendFile(file, "");
 				byte outcome = recieveCode();
 				if (outcome == 0x10) {
 					return true;
@@ -200,8 +201,7 @@ public class ClientConnection {
 				
 			}
 			catch (IOException e) {
-				// Server
-				return false;
+				// Do Nothing
 			}
 		}
 		else {
@@ -210,5 +210,31 @@ public class ClientConnection {
 		}
 		return false;
 	}
- 
+
+	// Request the specific information for the user on the specific task
+	private String requestTaskInformation(String task, String information) { 
+		sendCode((byte)(0x0A));
+		if (recieveCode() == 0x10) {
+			try {
+				outgoing.writeUTF(task);
+				outgoing.writeUTF(information);
+				byte outcome = recieveCode();
+				if (outcome == 0x10) {
+					return incoming.readUTF();
+				}
+				else if (outcome == 0x60) {
+					// Database error.
+					return "";
+				}
+			}
+			catch (IOException e) {
+				// Do Nothing
+			}
+		}
+		else {
+			// Server refused information request
+			return "";
+		}
+		return "";
+	}
 }
