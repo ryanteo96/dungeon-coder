@@ -19,6 +19,8 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 
+import java.io.FileNotFoundException;
+
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
@@ -85,12 +87,16 @@ public class SplashScreen implements Screen {
         main4Image.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                AchievementPage(game);
+                try {
+                    AchievementPage(game);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
         stage.addActor(main4Image);
     }
-    private void AchievementPage(DungeonCoder g) {
+    private void AchievementPage(DungeonCoder g) throws FileNotFoundException {
         g.setScreen(new AchievementPage(g));
     }
 
