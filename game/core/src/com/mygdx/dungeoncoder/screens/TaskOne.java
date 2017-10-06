@@ -82,7 +82,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         quitButton = new TextButton("Quit", skin);
         pauseImage.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y) {
-                new Dialog("Task 2", skin,"dialog"){
+                new Dialog("Paused", skin,"dialog"){
                     protected void result (Object object){
                         System.out.println("Result: "+ object);
                         System.out.println("CLICKED");

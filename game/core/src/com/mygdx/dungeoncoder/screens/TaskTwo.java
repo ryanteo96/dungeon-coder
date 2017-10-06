@@ -93,7 +93,7 @@ public class TaskTwo implements Screen {
     }
 
     private void createStageTwo(){
-        Texture stage_Two = new Texture(Gdx.files.internal("UIElements/a6c.jpeg"));
+        Texture stage_Two = new Texture(Gdx.files.internal("UIElements/inprogress.png"));
         TextureRegion stage_TwoRegion = new TextureRegion(stage_Two);
         TextureRegionDrawable stage_TwoDrawable = new TextureRegionDrawable(stage_TwoRegion);
         Image stage_TwoImage = new Image(stage_TwoDrawable);

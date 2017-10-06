@@ -94,7 +94,7 @@ public class TaskThree implements Screen {
 
     private void createStageThree(){
 
-        Texture stage_Three = new Texture(Gdx.files.internal("UIElements/a6c.jpeg"));
+        Texture stage_Three = new Texture(Gdx.files.internal("UIElements/inprogress.png"));
         TextureRegion stage_ThreeRegion = new TextureRegion(stage_Three);
         TextureRegionDrawable stage_ThreeDrawable = new TextureRegionDrawable(stage_ThreeRegion);
         Image stage_ThreeImage = new Image(stage_ThreeDrawable);
