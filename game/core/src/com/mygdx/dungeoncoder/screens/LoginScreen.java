@@ -42,7 +42,7 @@ public class LoginScreen implements Screen {
         TextButton btnCreateAcc = new TextButton("Create Account", skin);
         btnCreateAcc.setPosition(350,200);
         btnCreateAcc.setSize(300,60);
-        clientConnection = new ClientConnection("","");
+        clientConnection = new ClientConnection();
         btnCreateAcc.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {

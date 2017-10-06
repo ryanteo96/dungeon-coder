@@ -15,7 +15,7 @@ public class ClientConnection {
 	DataInputStream incoming;
 
 	// Initialize new Client Connection
-	public ClientConnection(String username, String password) {
+	public ClientConnection() {
 		try {
 			Socket client = new Socket(ip, port);
 			
