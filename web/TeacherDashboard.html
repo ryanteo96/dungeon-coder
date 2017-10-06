@@ -2,6 +2,7 @@
     <head>
         <title>Dashboard - Dungeon Coder</title>
         <script language="javascript" type="text/javascript" src="TeacherDashboard.js"></script>
+        <script language="javascript" type="text/javascript" src="Shared.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700" rel="stylesheet">
         <style type="text/css">
             #teacherDashBoardDiv {
@@ -368,6 +369,83 @@
                 left:850px;
             }
 
+            #studentListDivData {
+                position:absolute; 
+                top:432px;
+                right:0px;
+                left:0px;
+                width:1000px;
+                height:268px;
+                margin:auto;
+                overflow-y:scroll;
+                overflow-x:hidden;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
+
+            .divEntriesRow {
+                display:flex;
+                width:1000px;
+                height:30px;
+            }
+
+            .divEntriesRowCol1 {
+                position:absolute; 
+                width:200px;
+                left:10px; 
+                height:30px;
+                text-align:center;
+                z-index:1;
+                overflow-y:hidden;
+                overflow-x:hidden;
+            }
+
+            .divEntriesRowCol2 {
+                position:absolute; 
+                width:150px;
+                left:200px; 
+                height:30px;
+                text-align:center;
+                z-index:1;
+                overflow-y:hidden;
+                overflow-x:hidden;
+            }
+
+            .divEntriesRowCol3 {
+                position:absolute; 
+                width:350px;
+                left:350px; 
+                height:30px;
+                text-align:center;
+                z-index:1;
+                overflow-y:hidden;
+                overflow-x:hidden;
+            }
+
+            .divEntriesRowCol4 {
+                position:absolute; 
+                width:150px;
+                left:700px; 
+                height:30px;
+                text-align:center;
+                z-index:1;
+                overflow-y:hidden;
+                overflow-x:hidden;
+           }
+
+           .divEntriesRowCol5 {
+                position:absolute; 
+                width:150px;
+                left:850px; 
+                height:30px;
+                text-align:center;
+                z-index:1;
+                overflow-y:hidden;
+                overflow-x:hidden;
+           }
+
+           
+
         </style>
     </head>
 
@@ -410,9 +488,7 @@
                 <div id="col5"></div>
             </div>
             <!-- Div for Student List Data. -->
-            <div id="timeLogEntriesDivData"></div>
-
-            
+            <div id="studentListDivData"></div>   
         </div>
         
     </body>
