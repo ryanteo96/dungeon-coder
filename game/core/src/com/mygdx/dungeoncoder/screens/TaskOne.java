@@ -206,7 +206,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         progressText.setMessageText("Type in here!");
         progressText.setPosition(880,600);
         progressText.setSize(150,50);
-        progressText.setText("0");
+        progressText.setText(shareVariable.connect.requestTaskInformation("Task1","Completion"));
         progressText.setAlignment(Align.center);
         stage.addActor(progressText);
 
@@ -255,7 +255,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         attemptText.setMessageText("Type in here!");
         attemptText.setPosition(270,600);
         attemptText.setSize(150,50);
-        attemptText.setText("2");
+        attemptText.setText(shareVariable.connect.requestTaskInformation("Task1","Attempts"));
         attemptText.setAlignment(Align.center);
         stage.addActor(attemptText);
         TextButton btnGetAttempt = new TextButton("Attempts: ", skin);
