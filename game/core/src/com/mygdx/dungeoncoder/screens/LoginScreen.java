@@ -1,16 +1,14 @@
 package com.mygdx.dungeoncoder.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
@@ -27,6 +25,7 @@ public class LoginScreen implements Screen {
     private TextField txfUsername;
     private final TextField txfPassword;
     private ClientConnection clientConnection;
+    private Skin skin;
 
     public LoginScreen(DungeonCoder g) {
         game = g;
@@ -43,11 +42,12 @@ public class LoginScreen implements Screen {
         TextButton btnCreateAcc = new TextButton("Create Account", skin);
         btnCreateAcc.setPosition(350,200);
         btnCreateAcc.setSize(300,60);
-        //clientConnection = new ClientConnection();
+        clientConnection = new ClientConnection();
         btnCreateAcc.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.net.openURI("https://ryanteo96.github.io/dungeon-coder/web/CreateAccount.html");
+                //Gdx.net.openURI("https://ryanteo96.github.io/dungeon-coder/web/CreateAccount.html");
+                Gdx.net.openURI("http://18.221.243.28/CreateAccount.html");
             }
         });
 
@@ -154,11 +154,13 @@ public class LoginScreen implements Screen {
     }
 
     public void btnLoginClicked(DungeonCoder g) {
+        ClientConnection clientConnection = new ClientConnection();
         if (clientConnection.requestLogin(txfUsername.getText(), txfPassword.getText())) {
             g.setScreen(new MainMenuScreen(g));
         } else {
             System.out.println("Login Failed");
         }
+
     }
 
     public void btnBackClicked(DungeonCoder g){

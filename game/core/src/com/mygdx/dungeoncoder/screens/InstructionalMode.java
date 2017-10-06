@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
+import com.mygdx.dungeoncoder.utils.ClientConnection;
 
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
@@ -35,6 +36,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
     private Skin skin;
     private Skin testSkin;
     private Window window;
+    private ClientConnection clientConnection;
     TextButton yesButton;
     Object gObject;
 
@@ -116,6 +118,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         stage_OneImage.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+               // if()
                stage_One(game);
 
             }
