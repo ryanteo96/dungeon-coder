@@ -21,18 +21,27 @@ function body_onload() {
 }
 
 function signInBtn_onclick() {
-    username = usernameInput.value;
-    password = passwordInput.value;
-    localStorageSet("Remember", rememberChkBox.checked);
-    
-    if (rememberChkBox.checked === true) {
-        localStorageSet("Username", usernameInput.value);
+    if (usernameInput.value.length <= 0) {
+        alert("Username required.");
+        usernameInput.focus();
+    } else if (passwordInput.value.length <= 0) {
+        alert("Password required.");
+        passwordInput.focus();
     } else {
-        localStorageSet("Username", "");
-    }
+        username = usernameInput.value;
+        password = passwordInput.value;
 
-    sessionStorageSet("CurrentUser", usernameInput.value);
-    attemptLogin();
+        localStorageSet("Remember", rememberChkBox.checked);
+        
+        if (rememberChkBox.checked === true) {
+            localStorageSet("Username", usernameInput.value);
+        } else {
+            localStorageSet("Username", "");
+        }
+    
+        sessionStorageSet("CurrentUser", usernameInput.value);
+        attemptLogin();
+    }
 }
 
 function createAccountBtn_onclick() {

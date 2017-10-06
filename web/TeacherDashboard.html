@@ -443,7 +443,372 @@
                 overflow-x:hidden;
            }
 
+           #taskModal {
+               display:none;
+               position:fixed;
+               z-index:2;
+               left:0;
+               top:0;
+               width:100%;
+               height:100%;
+               overflow:auto;
+               background-color:rgb(0,0,0);
+               background-color: rgba(0,0,0,0.4);
+           }
+
+            #taskContent {
+                position:absolute;
+                background-color:#fefefe;
+                top:50px;
+                left:0px;
+                right:0px;
+                margin:auto;
+                padding:20px;
+                border:1px solid #888;
+                width:1000px;
+                height:600px;
+            }
+
+            #taskClose {
+               color:#aaa;
+               float:right;
+               font-size:28px;
+               font-weight:bold;
+           }
+
+            #taskClose:hover,
+            #taskClose:focus {
+                color:black;
+                text-decoration:none;
+                cursor:pointer;
+            }
            
+            #taskHdrDiv {
+                top:50px;
+                right: 0px;
+                left: 0px;
+                position:absolute;
+                width:900px;
+                height:50px;
+                margin:auto;
+            }
+
+            #taskHdr {
+                position:absolute;
+                width:200px;
+                top:0px;
+                left:10px;
+                margin:auto;
+                font-size:30;
+                font-family:'Open Sans', san-serif;
+            }
+
+            #taskInfoDiv {
+                top:100px;
+                right: 0px;
+                left: 0px;
+                position:absolute;
+                width:900px;
+                height:100px;
+                margin:auto;
+                font-size:15;
+                font-family:'Open Sans', san-serif;
+            }
+
+            #taskDeadlineLbl {
+                position:absolute;
+                width:200px;
+                top:0px;
+                left:10px;
+                margin:auto;
+            }
+
+            #taskDeadline {
+                position:absolute;
+                width:200px;
+                top:0px;
+                left:150px;
+                margin:auto;
+            }
+
+            #changeDeadline {
+                position:absolute;
+                width:200px;
+                top:30px;
+                left:10px;
+                margin:auto;
+            }
+
+            #currentStudentLbl {
+                position:absolute;
+                width:200px;
+                top:60px;
+                left:10px;
+                margin:auto;
+            }
+
+            #currentStudent {
+                position:absolute;
+                width:200px;
+                top:60px;
+                left:150px;
+                margin:auto;
+            }
+
+            #changeDeadlineInput {
+                position:absolute;
+                width:150px;
+                top:30px;
+                left:150px;
+                margin:auto;
+            }
+
+            #changeDeadlineBtn {
+                position:absolute;
+                width:100px;
+                height:30px;
+                top:32px;
+                left:350px;
+                margin:auto;
+            }
+
+            #changePointValueLbl {
+                position:absolute;
+                width:200px;
+                top:60px;
+                left:250px;
+                margin:auto;
+            }
+
+            #changePointValueInput{
+                position:absolute;
+                width:150px;
+                top:60px;
+                left:350px;
+                margin:auto;
+            }
+
+            #changePointValueBtn {
+                position:absolute;
+                width:100px;
+                height:30px;
+                top:62px;
+                left:550px;
+                margin:auto;
+            }
+
+            #studentTaskListDiv {
+                top:200px;
+                right: 0px;
+                left: 0px;
+                position:absolute;
+                width:1000px;
+                height:300px;
+                margin:auto;
+                border-style:solid;
+                border-width:1px;
+            }
+
+            #taskColHeadings {
+                position:absolute;
+                background-color: rgb(226, 226, 226);
+                content: "";
+                height:30px;
+                width:1000px;
+                border-bottom:solid;
+                border-width:1px;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
+
+            #taskStudentHeading {
+                position:absolute;
+                z-index:1;
+                top:2px;
+                width:200px;
+                height:30px;
+                text-align:center;
+            }
+
+            #taskDeadlineHeading {
+                position:absolute;
+                z-index:1;
+                top:2px;
+                left:200px;
+                width:100px;
+                height:30px;
+                text-align:center;
+            }
+
+            #taskCompletionHeading {
+                position:absolute;
+                z-index:1;
+                top:2px;
+                left:300px;
+                width:100px;
+                height:30px;
+                text-align:center;
+            }
+
+            #taskAttemptsHeading {
+                position:absolute;
+                z-index:1;
+                top:2px;
+                left:400px;
+                width:100px;
+                height:30px;
+                text-align:center;
+            }
+
+            #taskCodeHeading {
+                position:absolute;
+                z-index:1;
+                top:2px;
+                left:500px;
+                width:400px;
+                height:30px;
+                text-align:center;
+            }
+
+            #taskPointValueHeading {
+                position:absolute;
+                z-index:1;
+                top:2px;
+                left:900px;
+                width:100px;
+                height:30px;
+                text-align:center;
+            }
+
+            #taskCol1 {
+                position:absolute;
+                border-right:solid;
+                border-width:1px;
+                width:200px;
+                height:300px;
+            }
+
+            #taskCol2 {
+                position:absolute;
+                border-right:solid;
+                border-width:1px;
+                width:100px;
+                height:300px;
+                left:200px;
+            }
+            
+            #taskCol3 {
+                position:absolute;
+                border-right:solid;
+                border-width:1px;
+                width:100px;
+                height:300px;
+                left:300px;
+            }
+
+            #taskCol4 {
+                position:absolute;
+                border-right:solid;
+                border-width:1px;
+                width:100px;
+                height:300px;
+                left:400px;
+            }
+
+            #taskCol5 {
+                position:absolute;
+                border-right:solid;
+                border-width:1px;
+                width:400px;
+                height:300px;
+                left:500px;
+            }
+
+            #taskListDivData {
+                position:absolute; 
+                top:232px;
+                right:0px;
+                left:0px;
+                width:1000px;
+                height:268px;
+                margin:auto;
+                overflow-y:scroll;
+                overflow-x:hidden;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
+
+            .divTaskEntriesRow {
+                display:flex;
+                width:1000px;
+                height:30px;
+            }
+
+            .divTaskEntriesRowCol1 {
+                position:absolute; 
+                width:200px;
+                height:30px;
+                text-align:center;
+                z-index:1;
+                overflow-y:hidden;
+                overflow-x:hidden;
+            }
+
+            .divTaskEntriesRowCol2 {
+                position:absolute; 
+                width:100px;
+                left:200px; 
+                height:30px;
+                text-align:center;
+                z-index:1;
+                overflow-y:hidden;
+                overflow-x:hidden;
+            }
+
+            .divTaskEntriesRowCol3 {
+                position:absolute; 
+                width:100px;
+                left:300px; 
+                height:30px;
+                text-align:center;
+                z-index:1;
+                overflow-y:hidden;
+                overflow-x:hidden;
+            }
+
+            .divTaskEntriesRowCol4 {
+                position:absolute; 
+                width:100px;
+                left:400px; 
+                height:30px;
+                text-align:center;
+                z-index:1;
+                overflow-y:hidden;
+                overflow-x:hidden;
+           }
+
+           .divTaskEntriesRowCol5 {
+                position:absolute; 
+                width:400px;
+                left:500px; 
+                height:30px;
+                text-align:center;
+                z-index:1;
+                overflow-y:hidden;
+                overflow-x:hidden;
+           }
+
+           .divTaskEntriesRowCol6 {
+                position:absolute; 
+                width:100px;
+                left:900px; 
+                height:30px;
+                text-align:center;
+                z-index:1;
+                overflow-y:hidden;
+                overflow-x:hidden;
+           }
+
 
         </style>
     </head>
@@ -487,8 +852,52 @@
                 <div id="col5"></div>
             </div>
             <!-- Div for Student List Data. -->
-            <div id="studentListDivData"></div>   
-        </div>
-        
+            <div id="studentListDivData"></div>
+            
+            <!-- Task Modal -->
+            <div id="taskModal">
+                <div id="taskContent">
+                    <span id="taskClose">&times;</span>
+                    <div id="taskForm">
+                        <div id=taskHdrDiv>
+                            <label id="taskHdr"></label>
+                        </div>
+
+                        <div id="taskInfoDiv">
+                            <label id="taskDeadlineLbl">Current Deadline:</label>
+                            <label id="taskDeadline"></label>
+                            <label id="changeDeadline">Change Deadline:</label>
+                            <input id="changeDeadlineInput" type="date"></input>
+                            <input id="changeDeadlineBtn" type="button" value="Change"></input>
+                            <label id="currentStudentLbl">Selected Student:</label>
+                            <label id="currentStudent">None</label>
+                            <label id="changePointValueLbl">Point Value:</label>
+                            <input id="changePointValueInput" type="number"></input>
+                            <input id="changePointValueBtn" type="button" value="Change"></input>
+                        </div>
+
+                        <div id="studentTaskListDiv">
+                            <div id="taskColHeadings">
+                                <div id="taskStudentHeading">Student</div>
+                                <div id="taskCompletionHeading">Completion</div>
+                                <div id="taskDeadlineHeading">Deadline</div>
+                                <div id="taskAttemptsHeading">Attempts</div>
+                                <div id="taskCodeHeading">Code</div>
+                                <div id="taskPointValueHeading">Point Value</div>
+                            </div>
+                            <div id="taskCol1"></div>
+                            <div id="taskCol2"></div>
+                            <div id="taskCol3"></div>
+                            <div id="taskCol4"></div>
+                            <div id="taskCol5"></div>
+                        </div>
+
+                        <!-- Div for Student List Data. -->
+                        <div id="taskListDivData"></div>    
+
+                    </div>
+                </div>
+            </div>
+        </div>    
     </body>
 </html>
