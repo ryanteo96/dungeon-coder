@@ -231,6 +231,9 @@ public class AchievementPage implements Screen {
         if (autoSave == 1) {
             Save(game);
         }
+        if (stageC == 5){
+            System.out.println("Achievement 1 completed!!!");
+        }
     }
 
     private void createOn() {
