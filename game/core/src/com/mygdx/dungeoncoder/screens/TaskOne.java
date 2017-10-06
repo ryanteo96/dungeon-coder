@@ -105,6 +105,12 @@ public class TaskOne implements Screen {
             public void clicked (InputEvent e, float x, float y){
                 progress = progressText.getText();
                 System.out.println("Progress: " + progress);
+                int progress_Percent = Integer.parseInt(progress);
+                if(clientConnection.requestUpdateProgress(module,progress_Percent)){
+                    System.out.println("Connected");
+                }else{
+                    System.out.println("Not Connected");
+                }
             }
         });
 
