@@ -98,8 +98,8 @@ public class TaskThree implements Screen {
         TextureRegion stage_ThreeRegion = new TextureRegion(stage_Three);
         TextureRegionDrawable stage_ThreeDrawable = new TextureRegionDrawable(stage_ThreeRegion);
         Image stage_ThreeImage = new Image(stage_ThreeDrawable);
-        stage_ThreeImage.setSize(400,500);
-        stage_ThreeImage.setPosition(450,150);
+        stage_ThreeImage.setSize(600,100);
+        stage_ThreeImage.setPosition(380,400);
         stage.addActor(stage_ThreeImage);
     }
 }

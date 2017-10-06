@@ -97,8 +97,8 @@ public class TaskTwo implements Screen {
         TextureRegion stage_TwoRegion = new TextureRegion(stage_Two);
         TextureRegionDrawable stage_TwoDrawable = new TextureRegionDrawable(stage_TwoRegion);
         Image stage_TwoImage = new Image(stage_TwoDrawable);
-        stage_TwoImage.setSize(400,500);
-        stage_TwoImage.setPosition(450,150);
+        stage_TwoImage.setSize(600,100);
+        stage_TwoImage.setPosition(380,400);
         stage.addActor(stage_TwoImage);
     }
 }

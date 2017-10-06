@@ -33,7 +33,7 @@ public class MainMenuScreen implements Screen {
     private int mode = 0;
     private Skin backButtonSkin;
     private Skin dialogSkin;
-    private boolean finishedAssignment = false;
+    private boolean finishedAssignment = true;
     TextButton oKButton;
     TextButton cannotContinue;
     TextButton continueButton;
@@ -221,7 +221,7 @@ public class MainMenuScreen implements Screen {
                     instructionalMode(game);
                 } else if (mode == 1){
                     if(finishedAssignment){
-                        new Dialog("Attention", dialogSkin,"dialog"){
+                        new Dialog("Access Granted.", dialogSkin,"dialog"){
                             protected void result (Object object){
                                 System.out.println("Result: "+ object);
                                 System.out.println("CLICKED");
