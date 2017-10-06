@@ -36,7 +36,6 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
     private Skin skin;
     private Skin testSkin;
     private Window window;
-    private ClientConnection clientConnection;
     TextButton yesButton;
     Object gObject;
 

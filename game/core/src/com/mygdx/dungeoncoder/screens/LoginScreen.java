@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.ClientConnection;
+import com.sun.deploy.util.SessionState;
 
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
@@ -24,7 +25,7 @@ public class LoginScreen implements Screen {
     private Stage stage;
     private TextField txfUsername;
     private final TextField txfPassword;
-    public ClientConnection clientConnection;
+    private ClientConnection clientConnection;
     private Skin skin;
 
     public LoginScreen(DungeonCoder g) {
@@ -42,7 +43,9 @@ public class LoginScreen implements Screen {
         TextButton btnCreateAcc = new TextButton("Create Account", skin);
         btnCreateAcc.setPosition(350,200);
         btnCreateAcc.setSize(300,60);
-        clientConnection = new ClientConnection();
+
+        //clientConnection = new ClientConnection();//instantiate client connection
+
         btnCreateAcc.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -154,7 +157,8 @@ public class LoginScreen implements Screen {
     }
 
     public void btnLoginClicked(DungeonCoder g) {
-        if (clientConnection.requestLogin(txfUsername.getText(), txfPassword.getText())) {
+        shareVariable.connect = new ClientConnection();
+        if (shareVariable.connect.requestLogin(txfUsername.getText(), txfPassword.getText())) {
             g.setScreen(new MainMenuScreen(g));
         } else {
             System.out.println("Login Failed");

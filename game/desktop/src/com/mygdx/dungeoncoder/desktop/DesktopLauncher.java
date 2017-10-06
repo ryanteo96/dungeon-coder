@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.GameInputProcessor;
+import com.mygdx.dungeoncoder.utils.ClientConnection;
 
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
@@ -18,6 +19,9 @@ public class DesktopLauncher {
 		config.width = VIRTUAL_WIDTH;
 		config.height = VIRTUAL_HEIGHT;
 		new LwjglApplication(new DungeonCoder(), config);
+
+        ClientConnection clientConnection = new ClientConnection();
+
 
 		GameInputProcessor inputProcessor = new GameInputProcessor();
 		Gdx.input.setInputProcessor(inputProcessor);

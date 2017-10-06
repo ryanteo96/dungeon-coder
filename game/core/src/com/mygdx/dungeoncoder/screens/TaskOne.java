@@ -172,7 +172,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         moduleText.setPosition(580, 600);
         moduleText.setAlignment(Align.center);
         moduleText.setMessageText("Type in here!");
-        moduleText.setText("Task 1");
+        moduleText.setText("Task1");
         stage.addActor(moduleText);
 
         TextButton btnModule = new TextButton("Module: ", skin);
@@ -224,7 +224,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
                 }catch(NumberFormatException ex){
 
                 }
-                if(clientConnection.requestUpdateProgress(file,module,progress_Percent)){
+                if(shareVariable.connect.requestUpdateProgress(file,module,progress_Percent)){
                     System.out.println("Connected");
                 }else{
                     System.out.println("Not Connected");

@@ -155,7 +155,7 @@ public class ClientConnection {
 			if (recieveCode() == 0x10) {
 				outgoing.writeUTF(task);
 				outgoing.writeInt(percentage);
-				sendFile(file, "");
+				//sendFile(file, "");
 				byte outcome = recieveCode();
 				if (outcome == 0x10) {
 					return true;
