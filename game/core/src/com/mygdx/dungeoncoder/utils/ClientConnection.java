@@ -237,7 +237,7 @@ public class ClientConnection {
 	}
 
 	// Request the specific information for the user on the specific task
-	private String requestTaskInformation(String task, String information) { 
+	public String requestTaskInformation(String task, String information) { 
 		sendCode((byte)(0x0A));
 		if (recieveCode() == 0x10) {
 			try {
