@@ -1,9 +1,8 @@
 package com.mygdx.dungeoncoder.screens;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -23,12 +23,14 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.ClientConnection;
 
+import java.io.File;
+
 import static com.badlogic.gdx.utils.Scaling.fit;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
 
-public class TaskOne implements Screen {
+public class TaskOne extends ApplicationAdapter implements Screen {
     private ClientConnection clientConnection;
     private DungeonCoder game;
     private Stage stage;
@@ -40,6 +42,9 @@ public class TaskOne implements Screen {
     String progress;
     TextField moduleText;
     String module;
+    TextArea textArea;
+    ScrollPane scrollPane;
+    TextButton quitButton;
 
     public TaskOne(DungeonCoder g) {
         game = g;
@@ -51,6 +56,8 @@ public class TaskOne implements Screen {
         createAttempts();
         createProgress();
         createTextArea();
+        createDemoImage();
+        createPause();
        }
 
     private void createBack() {
@@ -67,24 +74,64 @@ public class TaskOne implements Screen {
         stage.addActor(btnBack);
     }
 
+    private void createPause(){
+        Texture pause = new Texture(Gdx.files.internal("UIElements/pause.png"));
+        TextureRegion pauseRegion = new TextureRegion(pause);
+        TextureRegionDrawable pauseDrawable = new TextureRegionDrawable(pauseRegion);
+        Image pauseImage = new Image(pauseDrawable);
+        pauseImage.setSize(50,50);
+        pauseImage.setPosition(1180,500);
+        quitButton = new TextButton("Quit", skin);
+        pauseImage.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+                new Dialog("Task 2", skin,"dialog"){
+                    protected void result (Object object){
+                        System.out.println("Result: "+ object);
+                        System.out.println("CLICKED");
+                    }
+                }.text("    The game is paused.    ").button("Continue", true).button(quitButton,false).
+                        key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+            }
+        });
+
+        quitButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                btnBackClicked(game);
+            }
+        });
+        stage.addActor(pauseImage);
+    }
+
+    private void createDemoImage(){
+        Texture demo = new Texture(Gdx.files.internal("UIElements/demo.png"));
+        TextureRegion demoRegion = new TextureRegion(demo);
+        TextureRegionDrawable demoDrawable = new TextureRegionDrawable(demoRegion);
+        Image demoImage = new Image(demoDrawable);
+        demoImage.setSize(650,500);
+        demoImage.setPosition(580,50);
+        stage.addActor(demoImage);
+    }
+
     private void createProgress(){
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
 
         moduleText = new TextField("",skin);
         moduleText.setSize(150,50);
-        moduleText.setPosition(270, 500);
+        moduleText.setPosition(580, 600);
         moduleText.setAlignment(Align.center);
         moduleText.setMessageText("Type in here!");
         stage.addActor(moduleText);
 
         TextButton btnModule = new TextButton("Module: ", skin);
-        btnModule.setPosition(150, 500);
+        btnModule.setPosition(450, 600);
         btnModule.setSize(100,50);
         btnModule.addListener(new ClickListener(){
            @Override
            public void clicked (InputEvent e, float x, float y){
                module = moduleText.getText();
                System.out.println("Module: " + module);
+
            }
         });
 
@@ -92,34 +139,48 @@ public class TaskOne implements Screen {
 
         progressText = new TextField("", skin);
         progressText.setMessageText("Type in here!");
-        progressText.setPosition(270,400);
+        progressText.setPosition(900,600);
         progressText.setSize(150,50);
         progressText.setAlignment(Align.center);
         stage.addActor(progressText);
 
         TextButton btnGetProgress = new TextButton("Progress: ", skin);
-        btnGetProgress.setPosition(150,400);
+        btnGetProgress.setPosition(760,600);
         btnGetProgress.setSize(100,50);
         btnGetProgress.addListener(new ClickListener(){
             @Override
             public void clicked (InputEvent e, float x, float y){
+                File file = new File("values/file.txt");
                 progress = progressText.getText();
                 System.out.println("Progress: " + progress);
-                int progress_Percent = Integer.parseInt(progress);
-                if(clientConnection.requestUpdateProgress(module,progress_Percent) == true){
+               /* int progress_Percent = 0;
+                try{
+                  progress_Percent = Integer.parseInt(progress);
+                }catch(NumberFormatException ex){
+
+                }
+                if(clientConnection.requestUpdateProgress(file,module,progress_Percent)){
                     System.out.println("Connected");
                 }else{
                     System.out.println("Not Connected");
-                }
+                }*/
             }
         });
+
 
         stage.addActor(btnGetProgress);
 
     }
 
     private void createTextArea(){
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
 
+        textArea = new TextArea("/*Enter your code here...*/\n", skin);
+        textArea.setX(50);
+        textArea.setY(50);
+        textArea.setWidth(500);
+        textArea.setHeight(500);
+        stage.addActor(textArea);
     }
 
     private void createAttempts(){
@@ -187,5 +248,6 @@ public class TaskOne implements Screen {
     public void dispose() {
         stage.dispose();
     }
+
 
 }
