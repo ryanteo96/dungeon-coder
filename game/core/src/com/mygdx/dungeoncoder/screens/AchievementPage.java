@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
+import com.mygdx.dungeoncoder.utils.SaveProcessor;
 import sun.applet.Main;
 
 import java.io.*;
@@ -25,7 +26,7 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
 public class AchievementPage implements Screen {
-
+    SaveProcessor s = new SaveProcessor();
     private DungeonCoder game;
     private Stage stage;
     public int stageC;
@@ -34,24 +35,12 @@ public class AchievementPage implements Screen {
     public int FreeC;
     public int autoSave;
     private Skin backButtonSkin;
+
     public AchievementPage(DungeonCoder g) throws FileNotFoundException {
-        File tmp = new File("saveData/save.txt");
-        boolean exists = tmp.exists();
-        if (exists) {
-            Scanner scanner = new Scanner(new File("saveData/save.txt"));
-            stageC = scanner.nextInt();
-            InsC = scanner.nextInt();
-            MainC = scanner.nextInt();
-            FreeC = scanner.nextInt();
-            autoSave = scanner.nextInt();
-            scanner.close();
-        } else {
-            stageC = 0;
-            InsC = 0;
-            MainC = 0;
-            FreeC = 0;
-            autoSave = 0;
-        }
+        InsC = s.getInsCleared();
+        MainC = s.getMainCleared();
+        FreeC = s.getFreeCleared();
+        stageC = InsC + MainC + FreeC;
         game = g;
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
@@ -129,16 +118,6 @@ public class AchievementPage implements Screen {
         game.setScreen(new SplashScreen(game));
     }
 
-    private void createInProgress() {
-        Texture inProgress = new Texture(Gdx.files.internal("UIElements/inProgress7.png"));
-        TextureRegion inProgressRegion = new TextureRegion(inProgress);
-        TextureRegionDrawable inProgressDrawable = new TextureRegionDrawable(inProgressRegion);
-        Image inProgressImage = new Image(inProgressDrawable);
-        inProgressImage.setPosition(400, 300);
-
-        stage.addActor(inProgressImage);
-    }
-
     private void createAC1() {
         Texture AC1;
         if (stageC >= 5) {
@@ -193,18 +172,7 @@ public class AchievementPage implements Screen {
     }
 
     private void Save(DungeonCoder g) throws IOException {
-        Writer w = new FileWriter("saveData/save.txt");
-        w.write(stageC + "");
-        w.write("\n");
-        w.write(InsC + "");
-        w.write("\n");
-        w.write(MainC + "");
-        w.write("\n");
-        w.write(FreeC + "");
-        w.write("\n");
-        w.write(autoSave + "");
-        w.write("\n");
-        w.close();
+        s.Save();
     }
 
     private void createTest() {
@@ -227,8 +195,8 @@ public class AchievementPage implements Screen {
     }
 
     private void beat(DungeonCoder g) throws IOException {
-        stageC++;
-        if (autoSave == 1) {
+        s.insClear();
+        if (s.autoSave()) {
             Save(game);
         }
         if (stageC == 5){
@@ -245,7 +213,7 @@ public class AchievementPage implements Screen {
         backImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                autoSave = 1;
+                s.setAutoSave(1);
             }
         });
         stage.addActor(backImage);
@@ -259,7 +227,7 @@ public class AchievementPage implements Screen {
         backImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                autoSave = 0;
+                s.setAutoSave(0);
             }
         });
         stage.addActor(backImage);
