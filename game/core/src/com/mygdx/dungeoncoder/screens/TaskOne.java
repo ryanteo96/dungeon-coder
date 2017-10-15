@@ -46,6 +46,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     TextButton quitButton;
     TextButton hintButton;
     TextButton taskInformation;
+    private Window window;
 
     public TaskOne(DungeonCoder g) {
         game = g;
@@ -56,11 +57,13 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         createAttempts();
         createProgress();
         createTextArea();
-        createDemoImage();
-        createPause();
+        //createDemoImage();
+
         createHint();
         createTaskOneTextImage();
         createDeadline();
+        createGame();
+        createPause();
        }
 
    private void createDeadline(){
@@ -72,6 +75,14 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         stage.addActor(deadlineText);
    }
 
+   private void createGame(){
+       skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+       window = new Window("", skin);
+       window.setPosition(580,50);
+       window.setSize(650,500);
+       window.setMovable(false);
+       stage.addActor(window);
+   }
 
    private void createTaskOneTextImage(){
        Texture task1 = new Texture(Gdx.files.internal("UIElements/task1text.png"));
