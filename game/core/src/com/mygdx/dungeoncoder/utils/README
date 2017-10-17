@@ -1,0 +1,38 @@
+=====CLIENT CONNECTION API=====
+
+ClientConnection()
+	-Creates a new instance of client connection and automatically creates a socket connection to the server.
+
+
+requestLogin(String username, String password)
+	-Takes two strings (username and password).
+	-Automatically attempts to login to the server using username and password.
+	-returns boolean (true for success, false for failure).
+
+
+requestAccountCreation(String username, String password)
+	-Takes two strings (username and password)
+	-Automatically attempts to create a new account.
+	-Automatically logs user in if account is created.
+	-returns boolean (true for success, false for failure).
+
+
+requestAccountUpdate(String username, String password, String updateFields, String token, String[] newInfo)
+	-Takes four strings (username, password, updateFields, token) and one String[] new Info that contains the new information to be updated.
+	-Automatically attempts to update the user's account with the given information
+	-updateFields is in the format "field<token>field<token>field<token" ie. (username,password,email)
+	-token denotes the char that seperates the fields in update fields. ie ","
+	-newInfo should contain the information that is to be updated in the order [username][email][password]
+	-returns boolean (true for success, false for failure).
+
+
+requestUpdateProgress(File file, String task, int percentage) 
+	-Takes a file containing the users code for the given task, a String that denotes the given task, and an int representing the percentage completion
+	-Automatically attempts to update the user's progress and saved code file
+	-returns boolean (true for success, false for failure
+
+
+requestTaskInformation(String task, String information) 
+	-Takes two strings(task, information)
+	-Automatically querys the server for the clients specific information for the task
+	-returns the requested information
