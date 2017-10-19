@@ -33,8 +33,6 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
 
 public class TaskOne extends ApplicationAdapter implements Screen {
-    Animation animation;
-    float elapsedTime;
     private DungeonCoder game;
     private Stage stage;
     private Skin backButtonSkin;
@@ -50,12 +48,11 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     TextButton continueButton;
     TextButton hintButton;
     boolean paused = false;
+    Label fpslabel;
 
     private TextureAtlas walkingAtlas, ninjaAtlas;
     private float timePassed = 0;
     Animation<TextureRegion> walkAnimation, ninjaAnimation;
-    //TextureRegion[] walkFrames;
-    //Texture walksheet;
     private SpriteBatch walkingBatch, ninjaBatch;
 
     private Window window;
@@ -69,7 +66,6 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         createAttempts();
         createProgress();
         createTextArea();
-        //createDemoImage();
         createHint();
         createTaskOneTextImage();
         createDeadline();
@@ -96,8 +92,10 @@ public class TaskOne extends ApplicationAdapter implements Screen {
                walkFrames[index++] = tmpFrames[i][j];
            }
        }
-
        walkAnimation = new Animation(1f/16f,walkFrames); //4 frames per second can also do 0.25*/
+
+       skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+       fpslabel = new Label("fps: ", skin);
        walkingBatch = new SpriteBatch();
        walkingAtlas = new TextureAtlas(Gdx.files.internal("walking.atlas"));
        walkAnimation = new Animation<TextureRegion>(1/5f,walkingAtlas.getRegions()); //getRegions get all the location for you
@@ -109,8 +107,10 @@ public class TaskOne extends ApplicationAdapter implements Screen {
        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
        window = new Window("", skin);
        window.setPosition(580,50);
-       window.setSize(580,500);
+       window.setSize(650,500);
        window.setMovable(false);
+       window.add(fpslabel).padRight(600).padBottom(455);
+       window.setDebug(false);
        stage.addActor(window);
    }
 
@@ -199,16 +199,6 @@ public class TaskOne extends ApplicationAdapter implements Screen {
             }
         });
         stage.addActor(pauseImage);
-    }
-
-    private void createDemoImage(){
-        Texture demo = new Texture(Gdx.files.internal("UIElements/demo.png"));
-        TextureRegion demoRegion = new TextureRegion(demo);
-        TextureRegionDrawable demoDrawable = new TextureRegionDrawable(demoRegion);
-        Image demoImage = new Image(demoDrawable);
-        demoImage.setSize(650,500);
-        demoImage.setPosition(580,50);
-        stage.addActor(demoImage);
     }
 
     private void createProgress(){
@@ -331,6 +321,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     @Override
     public void render(float delta) {
         //elapsedTime += Gdx.graphics.getDeltaTime(); //if wna make use of pause can stop the time here
+        fpslabel.setText("fps: " + Gdx.graphics.getFramesPerSecond());
         Gdx.gl.glClearColor(172/255f, 115/255f, 57/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
