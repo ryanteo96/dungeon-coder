@@ -50,12 +50,12 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     boolean paused = false;
     Label fpslabel;
     Image pauseImage;
-    Texture bg;
+
     private TextureAtlas walkingAtlas, ninjaAtlas;
     private float timePassed = 0;
     Animation<TextureRegion> walkAnimation, ninjaAnimation;
     private SpriteBatch walkingBatch, ninjaBatch, backgroundBatch;
-
+    private Texture bg;
     private Window window;
 
     public TaskOne(DungeonCoder g) {
@@ -76,9 +76,10 @@ public class TaskOne extends ApplicationAdapter implements Screen {
 
    private void createDeadline(){
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
-        Label deadlineText = new Label("Deadline: "+ shareVariable.connect.requestTaskInformation("Task1","Deadline"),skin); //display deadline from the database
-        deadlineText.setFontScale(1f,1f);
-        deadlineText.setPosition(50, 555);
+        Label deadlineText = new Label("Deadline: "+
+                shareVariable.connect.requestTaskInformation("Task1","Deadline"),skin); //display deadline from the database
+       deadlineText.setFontScale(1f,1f);
+       deadlineText.setPosition(50, 555);
         stage.addActor(deadlineText);
    }
 
@@ -93,7 +94,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
            }
        }
        walkAnimation = new Animation(1f/16f,walkFrames); //4 frames per second can also do 0.25*/
-       bg = new Texture("gamebackground.png");
+
        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
        fpslabel = new Label("fps: ", skin);
        walkingBatch = new SpriteBatch();
@@ -102,8 +103,6 @@ public class TaskOne extends ApplicationAdapter implements Screen {
        ninjaBatch = new SpriteBatch();
        ninjaAtlas = new TextureAtlas(Gdx.files.internal("ninja.atlas"));
        ninjaAnimation = new Animation<TextureRegion>(1/5f,ninjaAtlas.getRegions());
-
-
        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
        window = new Window("", skin);
        window.setPosition(580,50);
@@ -318,12 +317,16 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     @Override
     public void render(float delta) {
         //elapsedTime += Gdx.graphics.getDeltaTime(); //if wna make use of pause can stop the time here
-        backgroundBatch.begin();
-        backgroundBatch.draw(bg,0,0);
-        backgroundBatch.end();
-        fpslabel.setText("fps: " + Gdx.graphics.getFramesPerSecond());
         Gdx.gl.glClearColor(172/255f, 115/255f, 57/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        bg = new Texture("gamebackground.png");
+        backgroundBatch = new SpriteBatch();
+        backgroundBatch.begin();
+        backgroundBatch.draw(bg,700,0,500,500);
+        backgroundBatch.end();
+
+        fpslabel.setText("fps: " + Gdx.graphics.getFramesPerSecond());
+
         stage.draw();
         stage.act(delta);
         //begin walk
