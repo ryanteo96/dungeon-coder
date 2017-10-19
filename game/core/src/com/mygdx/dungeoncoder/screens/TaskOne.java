@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.ClientConnection;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import javax.xml.soap.Text;
 import java.io.File;
@@ -34,7 +35,6 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 public class TaskOne extends ApplicationAdapter implements Screen {
     Animation animation;
     float elapsedTime;
-    private ClientConnection clientConnection;
     private DungeonCoder game;
     private Stage stage;
     private Skin backButtonSkin;
@@ -46,15 +46,17 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     TextField moduleText;
     String module;
     TextArea textArea;
-    ScrollPane scrollPane;
     TextButton quitButton;
+    TextButton continueButton;
     TextButton hintButton;
-    TextButton taskInformation;
+    boolean paused = false;
 
-    Animation<TextureRegion> walkAnimation;
-    TextureRegion[] walkFrames;
-    Texture walksheet;
-    private SpriteBatch batch;
+    private TextureAtlas walkingAtlas, ninjaAtlas;
+    private float timePassed = 0;
+    Animation<TextureRegion> walkAnimation, ninjaAnimation;
+    //TextureRegion[] walkFrames;
+    //Texture walksheet;
+    private SpriteBatch walkingBatch, ninjaBatch;
 
     private Window window;
 
@@ -85,19 +87,24 @@ public class TaskOne extends ApplicationAdapter implements Screen {
    }
 
    private void createGame(){
-
-       walksheet = new Texture("UIElements/ninja_full.png");
+       /*walksheet = new Texture("UIElements/george.png");
        TextureRegion[][] tmpFrames = TextureRegion.split(walksheet,walksheet.getWidth(),walksheet.getHeight()); //image and pixels
-       walkFrames = new TextureRegion[60];
+       walkFrames = new TextureRegion[16];
        int index = 0;
-       for(int i = 0; i < 6; i++){ //rows
-           for(int j = 0; j < 10; j++){ //columns
+       for(int i = 0; i < 4; i++){ //rows
+           for(int j = 0; j < 4; j++){ //columns
                walkFrames[index++] = tmpFrames[i][j];
            }
        }
 
-       walkAnimation = new Animation(0.025f,walkFrames); //4 frames per second can also do 0.25
-       batch = new SpriteBatch();
+       walkAnimation = new Animation(1f/16f,walkFrames); //4 frames per second can also do 0.25*/
+       walkingBatch = new SpriteBatch();
+       walkingAtlas = new TextureAtlas(Gdx.files.internal("walking.atlas"));
+       walkAnimation = new Animation<TextureRegion>(1/5f,walkingAtlas.getRegions()); //getRegions get all the location for you
+       ninjaBatch = new SpriteBatch();
+       ninjaAtlas = new TextureAtlas(Gdx.files.internal("ninja.atlas"));
+       ninjaAnimation = new Animation<TextureRegion>(1/5f,ninjaAtlas.getRegions());
+
 
        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
        window = new Window("", skin);
@@ -163,15 +170,25 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         pauseImage.setSize(50,50);
         pauseImage.setPosition(1180,500);
         quitButton = new TextButton("Quit", skin);
+        continueButton = new TextButton("Continue", skin);
         pauseImage.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y) {
+                paused = true;
+                Gdx.app.getApplicationListener().pause();
                 new Dialog("Paused", skin,"dialog"){
                     protected void result (Object object){
                         System.out.println("Result: "+ object);
                         System.out.println("CLICKED");
                     }
-                }.text("    The game is paused.    ").button("Continue", true).button(quitButton,false).
+                }.text("    The game is paused.    ").button(continueButton, true).button(quitButton,false).
                         key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+            }
+        });
+
+        continueButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+             paused = false;
             }
         });
 
@@ -313,14 +330,27 @@ public class TaskOne extends ApplicationAdapter implements Screen {
 
     @Override
     public void render(float delta) {
-        elapsedTime += Gdx.graphics.getDeltaTime(); //if wna make use of pause can stop the time here
+        //elapsedTime += Gdx.graphics.getDeltaTime(); //if wna make use of pause can stop the time here
         Gdx.gl.glClearColor(172/255f, 115/255f, 57/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
         stage.act(delta);
-        batch.begin();
-        batch.draw((TextureRegion) animation.getKeyFrame(elapsedTime,true),0,0);
-        batch.end();
+        //begin walk
+        if(paused){
+            walkingBatch.begin();
+            walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),750,100,100,100);
+            walkingBatch.end();
+        }else{
+            walkingBatch.begin();
+            timePassed += Gdx.graphics.getDeltaTime();
+            walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),750,100,100,100);
+            walkingBatch.end();
+        }
+
+        //begin ninja
+        ninjaBatch.begin();
+        ninjaBatch.draw(ninjaAnimation.getKeyFrame(timePassed,true),590,100,100,150);
+        ninjaBatch.end();
     }
 
     @Override
@@ -346,6 +376,8 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        ninjaAtlas.dispose();
+        walkingAtlas.dispose();
     }
 
 
