@@ -12,9 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.dungeoncoder.screens.LoginScreen;
 import com.mygdx.dungeoncoder.screens.MainMenuScreen;
 import com.mygdx.dungeoncoder.screens.SplashScreen;
+import com.mygdx.dungeoncoder.screens.TaskOne;
 
 public class DungeonCoder extends Game {
-
 
 
     @Override
@@ -33,7 +33,6 @@ public class DungeonCoder extends Game {
 	public void dispose() {
 		super.dispose();
 	}
-
 
 // testing testing
 

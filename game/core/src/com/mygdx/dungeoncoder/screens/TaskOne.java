@@ -50,11 +50,11 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     boolean paused = false;
     Label fpslabel;
     Image pauseImage;
-
+    Texture bg;
     private TextureAtlas walkingAtlas, ninjaAtlas;
     private float timePassed = 0;
     Animation<TextureRegion> walkAnimation, ninjaAnimation;
-    private SpriteBatch walkingBatch, ninjaBatch;
+    private SpriteBatch walkingBatch, ninjaBatch, backgroundBatch;
 
     private Window window;
 
@@ -93,7 +93,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
            }
        }
        walkAnimation = new Animation(1f/16f,walkFrames); //4 frames per second can also do 0.25*/
-
+       bg = new Texture("gamebackground.png");
        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
        fpslabel = new Label("fps: ", skin);
        walkingBatch = new SpriteBatch();
@@ -110,7 +110,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
        window.setSize(650,500);
        window.setMovable(false);
        window.add(fpslabel).padRight(600).padBottom(455);
-       stage.addActor(window);
+       //stage.addActor(window);
    }
 
    private void createTaskOneTextImage(){
@@ -318,6 +318,9 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     @Override
     public void render(float delta) {
         //elapsedTime += Gdx.graphics.getDeltaTime(); //if wna make use of pause can stop the time here
+        backgroundBatch.begin();
+        backgroundBatch.draw(bg,0,0);
+        backgroundBatch.end();
         fpslabel.setText("fps: " + Gdx.graphics.getFramesPerSecond());
         Gdx.gl.glClearColor(172/255f, 115/255f, 57/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
