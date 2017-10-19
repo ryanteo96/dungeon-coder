@@ -155,7 +155,7 @@ public class ClientConnection {
 			if (recieveCode() == 0x10) {
 				outgoing.writeUTF(task);
 				outgoing.writeInt(percentage);
-				//sendFile(file, "");
+				sendFile(file, "");
 				byte outcome = recieveCode();
 				if (outcome == 0x10) {
 					return true;
@@ -177,36 +177,28 @@ public class ClientConnection {
 	}
 
 	private boolean sendFile(File file, String fileName) {
-		sendCode((byte)(0x07));
-		if (recieveCode() == 0x10) {
-			try {
-				outgoing.writeUTF(fileName);
-				long length = file.length();
-				outgoing.writeLong(length);
-				byte[] buffer = new byte[16 * 1024];
-				FileInputStream in = new FileInputStream(file);
-				int count;
-				while ((count = in.read(buffer)) > 0) {
-					outgoing.write(buffer, 0, count);
-				}
-				in.close();
-				byte outcome = recieveCode();
-				if (outcome == 0x10) {
-					return true;
-				}
-				else if (outcome == 0x40) {
-					// Something failed (probably io)
-					return false;
-				}
-				
+		try {
+			outgoing.writeUTF(fileName);
+			long length = file.length();
+			outgoing.writeLong(length);
+			byte[] buffer = new byte[16 * 1024];
+			FileInputStream in = new FileInputStream(file);
+			int count;
+			while ((count = in.read(buffer)) > 0) {
+				outgoing.write(buffer, 0, count);
 			}
-			catch (IOException e) {
-				// Do Nothing
+			in.close();
+			byte outcome = recieveCode();
+			if (outcome == 0x10) {
+				return true;
 			}
+			else if (outcome == 0x40) {
+				// Something failed (probably io)
+				return false;
+			}				
 		}
-		else {
-			// Server refused file transfer
-			return false;
+		catch (IOException e) {
+			// Do Nothing
 		}
 		return false;
 	}
