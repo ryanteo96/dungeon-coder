@@ -76,10 +76,9 @@ public class TaskOne extends ApplicationAdapter implements Screen {
 
    private void createDeadline(){
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
-        Label deadlineText = new Label("Deadline: "+
-                shareVariable.connect.requestTaskInformation("Task1","Deadline"),skin); //display deadline from the database
-       deadlineText.setFontScale(1f,1f);
-       deadlineText.setPosition(50, 555);
+        Label deadlineText = new Label("Deadline: "+ shareVariable.connect.requestTaskInformation("Task1","Deadline"),skin); //display deadline from the database
+        deadlineText.setFontScale(1f,1f);
+        deadlineText.setPosition(50, 555);
         stage.addActor(deadlineText);
    }
 

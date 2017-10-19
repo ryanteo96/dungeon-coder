@@ -9,4 +9,6 @@ public class shareVariable {
         this.connect = connect;
 
     }*/
+
+    public static boolean connected = false;
 }

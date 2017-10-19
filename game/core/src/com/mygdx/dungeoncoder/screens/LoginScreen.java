@@ -156,9 +156,12 @@ public class LoginScreen implements Screen {
     public void btnLoginClicked(DungeonCoder g) {
         shareVariable.connect = new ClientConnection();
         if (shareVariable.connect.requestLogin(txfUsername.getText(), txfPassword.getText())) {
+            shareVariable.connected = true;
             g.setScreen(new MainMenuScreen(g));
+            //System.out.println(shareVariable.connect);
         } else {
             System.out.println("Login Failed");
+            shareVariable.connected = false;
         }
 
     }

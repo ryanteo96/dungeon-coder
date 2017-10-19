@@ -1,23 +1,26 @@
 package com.mygdx.dungeoncoder.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
+import com.mygdx.dungeoncoder.utils.ClientConnection;
+
 
 import java.io.FileNotFoundException;
 
@@ -27,6 +30,8 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 public class SplashScreen implements Screen {
     private DungeonCoder game;
     private Stage stage;
+    private Skin skin;
+    private TextButton okButton;
 
     public SplashScreen(DungeonCoder g) {
         game = g;
@@ -119,17 +124,40 @@ public class SplashScreen implements Screen {
     }
 
     private void createBackground(){
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
         Texture main4 = new Texture(Gdx.files.internal("UIElements/Splash.png"));
         TextureRegion main4Region = new TextureRegion(main4);
         TextureRegionDrawable main4Drawable = new TextureRegionDrawable(main4Region);
+        okButton = new TextButton("  Ok  ", skin);
+
         Image main4Image = new Image(main4Drawable);
         main4Image.setPosition(0,0);
         main4Image.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Mainmenu(game);
+                if(shareVariable.connected == true){
+                    Mainmenu(game);
+                }else{
+                    skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+                    new Dialog("Dungeon Coder", skin,"dialog"){
+                        protected void result (Object object){
+                            System.out.println("Result: "+ object);
+                            System.out.println("Try to go to main menu page");
+                        }
+                    }.text("\n          You are not logged in!          \n").button( okButton, true).button("  Cancel  ",false).
+                            key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                }
             }
         });
+
+
+        okButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new LoginScreen(game));
+            }
+        });
+
+
         stage.addActor(main4Image);
     }
     private void Mainmenu(DungeonCoder g) {
