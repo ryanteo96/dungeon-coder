@@ -4,7 +4,9 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -30,6 +32,8 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
 
 public class TaskOne extends ApplicationAdapter implements Screen {
+    Animation animation;
+    float elapsedTime;
     private ClientConnection clientConnection;
     private DungeonCoder game;
     private Stage stage;
@@ -46,6 +50,12 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     TextButton quitButton;
     TextButton hintButton;
     TextButton taskInformation;
+
+    Animation<TextureRegion> walkAnimation;
+    TextureRegion[] walkFrames;
+    Texture walksheet;
+    private SpriteBatch batch;
+
     private Window window;
 
     public TaskOne(DungeonCoder g) {
@@ -58,7 +68,6 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         createProgress();
         createTextArea();
         //createDemoImage();
-
         createHint();
         createTaskOneTextImage();
         createDeadline();
@@ -76,10 +85,24 @@ public class TaskOne extends ApplicationAdapter implements Screen {
    }
 
    private void createGame(){
+
+       walksheet = new Texture("UIElements/ninja_full.png");
+       TextureRegion[][] tmpFrames = TextureRegion.split(walksheet,walksheet.getWidth(),walksheet.getHeight()); //image and pixels
+       walkFrames = new TextureRegion[60];
+       int index = 0;
+       for(int i = 0; i < 6; i++){ //rows
+           for(int j = 0; j < 10; j++){ //columns
+               walkFrames[index++] = tmpFrames[i][j];
+           }
+       }
+
+       walkAnimation = new Animation(0.025f,walkFrames); //4 frames per second can also do 0.25
+       batch = new SpriteBatch();
+
        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
        window = new Window("", skin);
        window.setPosition(580,50);
-       window.setSize(650,500);
+       window.setSize(580,500);
        window.setMovable(false);
        stage.addActor(window);
    }
@@ -290,10 +313,14 @@ public class TaskOne extends ApplicationAdapter implements Screen {
 
     @Override
     public void render(float delta) {
+        elapsedTime += Gdx.graphics.getDeltaTime(); //if wna make use of pause can stop the time here
         Gdx.gl.glClearColor(172/255f, 115/255f, 57/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
         stage.act(delta);
+        batch.begin();
+        batch.draw((TextureRegion) animation.getKeyFrame(elapsedTime,true),0,0);
+        batch.end();
     }
 
     @Override
