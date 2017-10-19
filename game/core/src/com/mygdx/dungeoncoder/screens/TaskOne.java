@@ -49,6 +49,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     TextButton hintButton;
     boolean paused = false;
     Label fpslabel;
+    Image pauseImage;
 
     private TextureAtlas walkingAtlas, ninjaAtlas;
     private float timePassed = 0;
@@ -71,7 +72,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         createDeadline();
         createGame();
         createPause();
-       }
+    }
 
    private void createDeadline(){
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
@@ -110,7 +111,6 @@ public class TaskOne extends ApplicationAdapter implements Screen {
        window.setSize(650,500);
        window.setMovable(false);
        window.add(fpslabel).padRight(600).padBottom(455);
-       window.setDebug(false);
        stage.addActor(window);
    }
 
@@ -166,9 +166,9 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         Texture pause = new Texture(Gdx.files.internal("UIElements/pause.png"));
         TextureRegion pauseRegion = new TextureRegion(pause);
         TextureRegionDrawable pauseDrawable = new TextureRegionDrawable(pauseRegion);
-        Image pauseImage = new Image(pauseDrawable);
+        pauseImage = new Image(pauseDrawable);
         pauseImage.setSize(50,50);
-        pauseImage.setPosition(1180,500);
+        pauseImage.setPosition(1180,550);
         quitButton = new TextButton("Quit", skin);
         continueButton = new TextButton("Continue", skin);
         pauseImage.addListener(new ClickListener(){
@@ -186,14 +186,12 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         });
 
         continueButton.addListener(new ChangeListener() {
-            @Override
             public void changed(ChangeEvent event, Actor actor) {
              paused = false;
             }
         });
 
         quitButton.addListener(new ChangeListener() {
-            @Override
             public void changed(ChangeEvent event, Actor actor) {
                 btnBackClicked(game);
             }
