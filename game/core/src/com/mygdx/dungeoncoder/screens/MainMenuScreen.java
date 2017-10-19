@@ -33,6 +33,8 @@ public class MainMenuScreen implements Screen {
     private int mode = 0;
     private Skin backButtonSkin;
     private Skin dialogSkin;
+    private Skin skin;
+    TextButton logoutButton;
     private boolean finishedAssignment = true;
     TextButton oKButton;
     TextButton cannotContinue;
@@ -68,6 +70,7 @@ public class MainMenuScreen implements Screen {
         createMenu3();
         createMenu4();
         createCharacter();
+        createLogout();
     }
     public void btnBackClicked(DungeonCoder g) {
         g.setScreen(new SplashScreen(g));
@@ -130,6 +133,17 @@ public class MainMenuScreen implements Screen {
         });
         stage.addActor(btnBack);
     }
+
+
+    private void createLogout(){
+        skin = new Skin(Gdx.files.internal("comic-ui.json"));
+        logoutButton = new TextButton("Log Out",skin);
+        logoutButton.setSize(200,55);
+        logoutButton.setPosition(1000,650);
+        stage.addActor(logoutButton);
+    }
+
+
 
     private void createInstructional() {
         Texture instructionalMode = new Texture(Gdx.files.internal("UIElements/instructional.png"));
