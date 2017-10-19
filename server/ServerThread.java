@@ -384,8 +384,7 @@ public class ServerThread extends Thread {
 		try {
 			System.out.println("updating user progress");
 			stmt.executeUpdate("UPDATE " + task + " SET Completion='" + percentage + "' WHERE Student='" + connectedUser + "'");
-			updateUserCode(task);
-			sendCode((byte)(0x10));
+			sendCode(updateUserCode(task));
 			return;
 		}
 		catch (SQLException e) {
@@ -398,10 +397,10 @@ public class ServerThread extends Thread {
 		}
 	}
 
-	private void updateUserCode(String task) {
+	private byte updateUserCode(String task) {
 		try {
 			String fileName = connectedUser + task;
-			//recieveFile(fileName);
+			recieveFile(fileName);
 			if (conn == null) {
 				connectDB();
 			}
@@ -411,11 +410,11 @@ public class ServerThread extends Thread {
 			currentAttempts++;
 			stmt.executeUpdate("UPDATE " + task + " SET Attempts='" + currentAttempts + "' WHERE Student='" + connectedUser + "'");
 			stmt.executeUpdate("UPDATE " + task + " Set Code='" + fileName + "' WHERE Student='" + connectedUser + "'");
-			sendCode((byte)(0x10));
+			return((byte)(0x10));
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
-			sendCode((byte)(0x60));
+			return((byte)(0x60));
 		}
 	}
 
@@ -482,7 +481,7 @@ public class ServerThread extends Thread {
 			if (fileName.equals("")) {
 				fileName = givenFileName;
 			}
-			OutputStream out = new FileOutputStream(fileName);
+			OutputStream out = new FileOutputStream("~/efs/" + fileName);
 			
 			long fileSize = incoming.readLong();
 			byte[] buffer = new byte[16 * 1024];
@@ -603,11 +602,6 @@ public class ServerThread extends Thread {
 				case 0x04 :
 					sendCode((byte)(0x10));
 					updateProgress();	
-				break;
-				// RECIEVEFILE
-				case 0x07 :
-					sendCode((byte)(0x10));
-					recieveFile("");
 				break;
 				// FETCHCODEFILE
 				case 0x08 :
