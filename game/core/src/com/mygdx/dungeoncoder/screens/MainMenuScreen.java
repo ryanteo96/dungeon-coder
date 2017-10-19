@@ -39,6 +39,7 @@ public class MainMenuScreen implements Screen {
     TextButton oKButton;
     TextButton cannotContinue;
     TextButton continueButton;
+    TextButton yesButton;
 
     Texture instructionalMode_Text = new Texture(Gdx.files.internal("UIElements/instructionalmode.png"));
     TextureRegion instructionalModeRegion_Text = new TextureRegion(instructionalMode_Text);
@@ -137,9 +138,32 @@ public class MainMenuScreen implements Screen {
 
     private void createLogout(){
         skin = new Skin(Gdx.files.internal("comic-ui.json"));
+        dialogSkin = new Skin(Gdx.files.internal("UIElements/test.json"));
+        yesButton = new TextButton("   Yes   ",dialogSkin);
         logoutButton = new TextButton("Log Out",skin);
         logoutButton.setSize(200,55);
         logoutButton.setPosition(1000,650);
+        logoutButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+               shareVariable.connected = false;
+                new Dialog("Logging out", dialogSkin,"dialog"){
+                    protected void result (Object object){
+                        System.out.println("Result: "+ object);
+                        System.out.println("Log out");
+                    }
+                }.text("    Are you sure you want to log out?    ").button(yesButton, true).button("Cancel",false).
+                        key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+
+            }
+        });
+
+        yesButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new SplashScreen(game));
+            }
+        });
         stage.addActor(logoutButton);
     }
 

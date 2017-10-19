@@ -322,7 +322,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         bg = new Texture("gamebackground.png");
         backgroundBatch = new SpriteBatch();
         backgroundBatch.begin();
-        backgroundBatch.draw(bg,700,0,500,500);
+        backgroundBatch.draw(bg,580,50,650,500);
         backgroundBatch.end();
 
         fpslabel.setText("fps: " + Gdx.graphics.getFramesPerSecond());
@@ -332,18 +332,18 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         //begin walk
         if(paused){
             walkingBatch.begin();
-            walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),750,100,100,100);
+            walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),750,130,60,60);
             walkingBatch.end();
         }else{
             walkingBatch.begin();
             timePassed += Gdx.graphics.getDeltaTime();
-            walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),750,100,100,100);
+            walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),750,130,60,60);
             walkingBatch.end();
         }
 
         //begin ninja
         ninjaBatch.begin();
-        ninjaBatch.draw(ninjaAnimation.getKeyFrame(timePassed,true),590,100,100,150);
+        ninjaBatch.draw(ninjaAnimation.getKeyFrame(timePassed,true),590,130,70,70);
         ninjaBatch.end();
     }
 
