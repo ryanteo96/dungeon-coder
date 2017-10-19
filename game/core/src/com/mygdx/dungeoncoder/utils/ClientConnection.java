@@ -8,7 +8,7 @@ import java.io.*;
  * Handles all requests and responses to and from the server.
  */
 public class ClientConnection {
-	public String ip = "13.59.183.75";
+	public String ip = "13.59.159.206";
 	int port = 37536;
 	Socket client;
 	DataOutputStream outgoing;

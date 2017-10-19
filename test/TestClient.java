@@ -3,7 +3,7 @@ import java.io.*;
 
 public class TestClient {
 	public static void main(String[] args) {
-		String ip = "13.59.183.75";
+		String ip = "13.59.159.206";
 		int port = 37536;
 		int numPings = 0;
 		double avgResponseTime=0;	
