@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.ClientConnection;
 import com.mygdx.dungeoncoder.values.DefaultValues;
@@ -66,17 +67,18 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         game = g;
         box2DCamera = new OrthographicCamera();
         box2DCamera.setToOrtho(false,VIRTUAL_WIDTH/shareVariable.PPM,VIRTUAL_HEIGHT/shareVariable.PPM);
-        box2DCamera.position.set(560,130,0);
+        box2DCamera.position.set(0,0,0);
 
         debugRenderer = new Box2DDebugRenderer();
 
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
+
         Gdx.input.setInputProcessor(stage);
         //set the gravity, true to let the body inside to sleep so its
         // more efficient, only calculate when the body move so wont stress the processor
         world = new World(new Vector2(0,-9.8f),true);
-        player = new Player(world,"stationaryninja.png", 580,130);
+        player = new Player(world,"stationaryninja.png",VIRTUAL_WIDTH/2,VIRTUAL_HEIGHT/2);
         player.setSize(70,120);
         createBack();
         //createAttempts();
@@ -339,13 +341,12 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         bg = new Texture("gamebackground.png");
 
+        //player.setPosition(player.getX(),player.getY());
 
-
-        player.setPosition(player.getX(),player.getY());
         backgroundBatch = new SpriteBatch();
         backgroundBatch.begin();
         backgroundBatch.draw(bg,0,0, DefaultValues.VIRTUAL_WIDTH,VIRTUAL_HEIGHT);
-        backgroundBatch.draw(player,player.getX(),player.getY(),player.getWidth(),player.getHeight());
+        backgroundBatch.draw(player,player.getX(),player.getY());
         backgroundBatch.end();
         debugRenderer.render(world,box2DCamera.combined);//return proj matrix of the camera, what we see from the camera
         world.step(Gdx.graphics.getDeltaTime(),6,2); //delta time the time between each frame
@@ -358,12 +359,12 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         //begin walk
         if(paused){
             walkingBatch.begin();
-            walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),750,130,60,60);
+            walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),VIRTUAL_WIDTH/2-60/2,VIRTUAL_HEIGHT/2-60/2,60,60);
             walkingBatch.end();
         }else{
             walkingBatch.begin();
             timePassed += Gdx.graphics.getDeltaTime();
-            walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),750,130,60,60);
+            walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),VIRTUAL_WIDTH/2-60/2,VIRTUAL_HEIGHT/2-60/2,60,60);
             walkingBatch.end();
         }
 

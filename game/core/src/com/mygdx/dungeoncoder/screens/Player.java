@@ -11,7 +11,7 @@ public class Player extends Sprite {
     public Player(World world, String name, float x, float y){
         super(new Texture(name));
         this.world = world;
-        setPosition(x,y);
+        setPosition(x - getWidth()/2,y-getHeight()/2);
         createBody();
     }
 
@@ -20,12 +20,12 @@ public class Player extends Sprite {
         //staticbody not affected by gravity or other forces
         //Kinematicbody not affected by gravity but other forces
         //Dynamic body is affected by gravity and other forces
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(580/shareVariable.PPM,130/shareVariable.PPM); //must use the same position as the player
         body = world.createBody(bodyDef);//this will create the body in the world with the dynamic body definition
 
         PolygonShape shape = new PolygonShape(); //collider
-        shape.setAsBox((getWidth())/shareVariable.PPM,(getHeight())/shareVariable.PPM);
+        shape.setAsBox((getWidth()/2)/shareVariable.PPM,(getHeight()/2)/shareVariable.PPM);
 
         FixtureDef fixtureDef = new FixtureDef(); //define the shape gravity mass of the body
         fixtureDef.shape = shape;
