@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.ClientConnection;
+import com.mygdx.dungeoncoder.values.DefaultValues;
 
 import javax.xml.soap.Text;
 import java.io.File;
@@ -64,7 +65,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     public TaskOne(DungeonCoder g) {
         game = g;
         box2DCamera = new OrthographicCamera();
-        box2DCamera.setToOrtho(false,1000/shareVariable.PPM,300/shareVariable.PPM);
+        box2DCamera.setToOrtho(false,VIRTUAL_WIDTH/shareVariable.PPM,VIRTUAL_HEIGHT/shareVariable.PPM);
         box2DCamera.position.set(560,130,0);
 
         debugRenderer = new Box2DDebugRenderer();
@@ -78,12 +79,12 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         player = new Player(world,"stationaryninja.png", 580,130);
         player.setSize(70,120);
         createBack();
-        createAttempts();
-        createProgress();
-        createTextArea();
-        createHint();
-        createTaskOneTextImage();
-        createDeadline();
+        //createAttempts();
+        //createProgress();
+        //createTextArea();
+        //createHint();
+        //createTaskOneTextImage();
+        //createDeadline();
         createGame();
         createPause();
     }
@@ -337,10 +338,13 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         Gdx.gl.glClearColor(172/255f, 115/255f, 57/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         bg = new Texture("gamebackground.png");
+
+
+
         player.setPosition(player.getX(),player.getY());
         backgroundBatch = new SpriteBatch();
         backgroundBatch.begin();
-        backgroundBatch.draw(bg,580,50,650,500);
+        backgroundBatch.draw(bg,0,0, DefaultValues.VIRTUAL_WIDTH,VIRTUAL_HEIGHT);
         backgroundBatch.draw(player,player.getX(),player.getY(),player.getWidth(),player.getHeight());
         backgroundBatch.end();
         debugRenderer.render(world,box2DCamera.combined);//return proj matrix of the camera, what we see from the camera
@@ -397,7 +401,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         backButtonSkin.dispose();
         backgroundBatch.dispose();
         walkingBatch.dispose();
-        skin.dispose();
+        //skin.dispose();
         bg.dispose();
         world.dispose();
         player.getTexture().dispose();

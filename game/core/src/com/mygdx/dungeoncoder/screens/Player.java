@@ -20,7 +20,7 @@ public class Player extends Sprite {
         //staticbody not affected by gravity or other forces
         //Kinematicbody not affected by gravity but other forces
         //Dynamic body is affected by gravity and other forces
-        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(580/shareVariable.PPM,130/shareVariable.PPM); //must use the same position as the player
         body = world.createBody(bodyDef);//this will create the body in the world with the dynamic body definition
 
