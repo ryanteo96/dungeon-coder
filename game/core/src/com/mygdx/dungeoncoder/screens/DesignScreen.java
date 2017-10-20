@@ -68,7 +68,7 @@ public class DesignScreen implements Screen{
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 
     private void createBack() {

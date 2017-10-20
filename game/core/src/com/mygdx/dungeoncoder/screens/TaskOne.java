@@ -372,6 +372,8 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         stage.dispose();
         ninjaAtlas.dispose();
         walkingAtlas.dispose();
+        backButtonSkin.dispose();
+        skin.dispose();
     }
 
 

@@ -68,7 +68,7 @@ public class OptionScreen implements Screen{
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 
     private void createBack() {

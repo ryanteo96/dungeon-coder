@@ -68,7 +68,7 @@ public class CostumeScreen implements Screen{
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 
     private void createBack() {

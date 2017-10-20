@@ -71,7 +71,7 @@ public class MainStoryMode implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 
     private void createBack() {

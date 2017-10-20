@@ -113,7 +113,10 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
         backButtonSkin.dispose();
+        skin.dispose();
+        dialogSkin.dispose();
         stage.dispose();
+
     }
 
     private void instructionalMode(DungeonCoder g) {
