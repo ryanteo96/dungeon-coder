@@ -4,10 +4,11 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -22,7 +23,6 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.ClientConnection;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import javax.xml.soap.Text;
 import java.io.File;
@@ -37,32 +37,46 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     private Stage stage;
     private Skin backButtonSkin;
     private Skin skin;
-    TextField attemptText;
-    String attempt;
-    TextField progressText;
-    String progress;
-    TextField moduleText;
-    String module;
-    TextArea textArea;
-    TextButton quitButton;
-    TextButton continueButton;
-    TextButton hintButton;
-    boolean paused = false;
-    Label fpslabel;
-    Image pauseImage;
-
+    private TextField attemptText;
+    private String attempt;
+    private TextField progressText;
+    private String progress;
+    private TextField moduleText;
+    private String module;
+    private TextArea textArea;
+    private TextButton quitButton;
+    private TextButton continueButton;
+    private TextButton hintButton;
+    private boolean paused = false;
+    private Label fpslabel;
+    private Image pauseImage;
+    private Player player;
     private TextureAtlas walkingAtlas, ninjaAtlas;
     private float timePassed = 0;
-    Animation<TextureRegion> walkAnimation, ninjaAnimation;
+    private Animation<TextureRegion> walkAnimation, ninjaAnimation;
     private SpriteBatch walkingBatch, ninjaBatch, backgroundBatch;
     private Texture bg;
     private Window window;
+    private World world;
+    private OrthographicCamera box2DCamera;
+    private Box2DDebugRenderer debugRenderer;
 
     public TaskOne(DungeonCoder g) {
         game = g;
+        box2DCamera = new OrthographicCamera();
+        box2DCamera.setToOrtho(false,1000/shareVariable.PPM,300/shareVariable.PPM);
+        box2DCamera.position.set(560,130,0);
+
+        debugRenderer = new Box2DDebugRenderer();
+
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
         Gdx.input.setInputProcessor(stage);
+        //set the gravity, true to let the body inside to sleep so its
+        // more efficient, only calculate when the body move so wont stress the processor
+        world = new World(new Vector2(0,-9.8f),true);
+        player = new Player(world,"stationaryninja.png", 580,130);
+        player.setSize(70,120);
         createBack();
         createAttempts();
         createProgress();
@@ -95,6 +109,8 @@ public class TaskOne extends ApplicationAdapter implements Screen {
        }
        walkAnimation = new Animation(1f/16f,walkFrames); //4 frames per second can also do 0.25*/
 
+
+       //player.setPosition((GameInfo.WIDTH));
        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
        fpslabel = new Label("fps: ", skin);
        walkingBatch = new SpriteBatch();
@@ -317,13 +333,19 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     @Override
     public void render(float delta) {
         //elapsedTime += Gdx.graphics.getDeltaTime(); //if wna make use of pause can stop the time here
+        player.updatePlayer();
         Gdx.gl.glClearColor(172/255f, 115/255f, 57/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         bg = new Texture("gamebackground.png");
+        player.setPosition(player.getX(),player.getY());
         backgroundBatch = new SpriteBatch();
         backgroundBatch.begin();
         backgroundBatch.draw(bg,580,50,650,500);
+        backgroundBatch.draw(player,player.getX(),player.getY(),player.getWidth(),player.getHeight());
         backgroundBatch.end();
+        debugRenderer.render(world,box2DCamera.combined);//return proj matrix of the camera, what we see from the camera
+        world.step(Gdx.graphics.getDeltaTime(),6,2); //delta time the time between each frame
+        //velocityiterations and positioniterations calculate how the bodies collide with each other
 
         fpslabel.setText("fps: " + Gdx.graphics.getFramesPerSecond());
 
@@ -342,9 +364,9 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         }
 
         //begin ninja
-        ninjaBatch.begin();
-        ninjaBatch.draw(ninjaAnimation.getKeyFrame(timePassed,true),590,130,70,70);
-        ninjaBatch.end();
+        //ninjaBatch.begin();
+        //ninjaBatch.draw(ninjaAnimation.getKeyFrame(timePassed,true),590,130,70,70);
+        //ninjaBatch.end();
     }
 
     @Override
@@ -370,10 +392,15 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        ninjaAtlas.dispose();
+        //ninjaAtlas.dispose();
         walkingAtlas.dispose();
         backButtonSkin.dispose();
+        backgroundBatch.dispose();
+        walkingBatch.dispose();
         skin.dispose();
+        bg.dispose();
+        world.dispose();
+        player.getTexture().dispose();
     }
 
 

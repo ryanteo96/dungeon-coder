@@ -52,11 +52,11 @@ public class LoginScreen implements Screen {
         textSkin = new Skin(Gdx.files.internal("UIElements/test.json"));
 
         // creating text fields
-        txfUsername = new TextField("", textSkin);
+        txfUsername = new TextField("TestUser", textSkin);
         txfUsername.setPosition(400, 360);
         txfUsername.setSize(450,40);
 
-        txfPassword = new TextField("", textSkin);
+        txfPassword = new TextField("NewPass", textSkin);
         txfPassword.setPasswordCharacter('*');
         txfPassword.setPasswordMode(true);
         txfPassword.setPosition(400, 280);
