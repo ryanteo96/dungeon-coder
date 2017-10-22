@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.ClientConnection;
 import com.mygdx.dungeoncoder.values.DefaultValues;
+import com.badlogic.gdx.ApplicationAdapter;
 
 import javax.xml.soap.Text;
 import java.io.File;
@@ -62,8 +63,14 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     private World world;
     private OrthographicCamera box2DCamera;
     private Box2DDebugRenderer debugRenderer;
+    private int posX = 0;
+    private int posY = 0;
+    SpriteBatch p1;
+    Texture pic1;
 
     public TaskOne(DungeonCoder g) {
+        p1 = new SpriteBatch();
+        pic1 = new Texture("stationaryninja.png");
         game = g;
         box2DCamera = new OrthographicCamera();
         box2DCamera.setToOrtho(false,VIRTUAL_WIDTH/shareVariable.PPM,VIRTUAL_HEIGHT/shareVariable.PPM);
@@ -357,6 +364,19 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         stage.draw();
         stage.act(delta);
         //begin walk
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)){
+            posY = posY + 4;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+            posY = posY - 4;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+            posX = posX - 4;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            posX = posX + 4;
+        }
+        p1.begin();
+        p1.draw(pic1, posX, posY);
+        p1.end();
+
         if(paused){
             walkingBatch.begin();
             walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),VIRTUAL_WIDTH/2-60/2,VIRTUAL_HEIGHT/2-60/2,60,60);
