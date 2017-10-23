@@ -86,15 +86,15 @@ function parseEntries(array) {
 }
 
 function task1_onclick() {
-    showModal("task1", null);
-    currentTask = "task1";
-    restoreState("task1");
+    showModal("Task1", null);
+    currentTask = "Task1";
+    restoreState(currentTask);
 }
 
 function restoreState(task) {
-    if (task === "task1") {
+    if (task === "Task1") {
         taskHdr.innerHTML = "TASK 1";
-        attemptRetrieveTask("Task1");
+        attemptRetrieveTask(task);
         updateDeadline();
     }
 }
@@ -102,9 +102,9 @@ function restoreState(task) {
 function changeDeadlineBtn_onclick() {
     var deadline = changeDeadlineInput.value;
 
-    if (currentTask === "task1") {
+    if (currentTask === "Task1") {
         if (validDate(deadline)) {
-            attemptChangeDeadline("Task1", deadline);
+            attemptChangeDeadline(currentTask, deadline);
         } else {
             alert("Valid date required.");
         }
@@ -124,7 +124,6 @@ function attemptChangeDeadline(task, deadline) {
     };
     xmlhttp.open("GET", "UpdateDeadline.php?task=" + task + "&deadline=" + deadline, true);
     xmlhttp.send();
-    
 }
 
 function attemptRetrieveTask(task) {
@@ -152,7 +151,6 @@ function attemptRetrieveTask(task) {
     xmlhttp.send();
     
 }
-
 
 function displayTaskStudents() {
     taskListDivData.innerHTML = "";
@@ -221,9 +219,6 @@ function changePointValueBtn_onclick() {
 }
 
 function attemptChangePointValue(task, user, pointValue) {
-    if (task === "task1") {
-        task = "Task1";
-    }
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {

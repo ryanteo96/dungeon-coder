@@ -49,7 +49,13 @@ function attemptCreateAccount() {
 function checkResponse(response) {
     if (response === "True") {
         alert("Account successfully created.");
-        location.href = "TeacherDashboard.html";
+        if (userType === "teacher") {
+            location.href = "TeacherDashboard.html";
+            sessionStorageSet("CurrentUser", username);
+        } else if (userType === "student") {
+            location.href = "StudentDashboard.html";
+            sessionStorageSet("CurrentUser", username);
+        }
     }
 
     if (response === "False") {

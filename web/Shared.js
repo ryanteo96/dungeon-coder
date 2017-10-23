@@ -29,7 +29,7 @@ function showModal(type, previousModal) {
     var modal;  
     var span;
 
-    if (type === "task1") {
+    if (type === "Task1") {
         modal = document.getElementById("taskModal");
         span = document.getElementById("taskClose");
     } else if (type === "manageAccount") {
