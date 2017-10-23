@@ -32,6 +32,9 @@ function showModal(type, previousModal) {
     if (type === "task1") {
         modal = document.getElementById("taskModal");
         span = document.getElementById("taskClose");
+    } else if (type === "manageAccount") {
+        modal = document.getElementById("manageAccountModal");
+        span = document.getElementById("manageAccountClose");
     }
 
     /*

@@ -39,8 +39,11 @@ if ($result->num_rows > 0) {
 exec($param . $pass . " " . $salt , $return);
 $sql = "INSERT INTO Users (Username, Hash, Salt, Type) VALUES ('" . $user . "','" . $return[0] . "','" . $salt . "','" . $type . "')";
 $conn->query($sql);
-$sql = "INSERT INTO Task1 (Student) VALUES ('" . $user . "')";
-$conn->query($sql);
+
+if ($type == "student") {
+    $sql = "INSERT INTO Task1 (Student) VALUES ('" . $user . "')";
+    $conn->query($sql);
+}
 
 $sql = "SELECT Username FROM Users";
 $result = $conn->query($sql);
