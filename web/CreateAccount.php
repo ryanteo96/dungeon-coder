@@ -8,6 +8,7 @@ $dbname = "userAccounts";
 $conn = new mysqli($servername, $username, $password, $dbname);
 $user = $_GET["username"];
 $pass = $_GET["password"];
+$type = $_GET["userType"];
 $salt = "E6F455FCCF52E1F9EC295EE052682AC8";
 
 
@@ -36,7 +37,9 @@ if ($result->num_rows > 0) {
 }
 
 exec($param . $pass . " " . $salt , $return);
-$sql = "INSERT INTO Users (Username, Hash, Salt) VALUES ('" . $user . "','" . $return[0] . "','" . $salt . "')";
+$sql = "INSERT INTO Users (Username, Hash, Salt, Type) VALUES ('" . $user . "','" . $return[0] . "','" . $salt . "','" . $type . "')";
+$conn->query($sql);
+$sql = "INSERT INTO Task1 (Student) VALUES ('" . $user . "')";
 $conn->query($sql);
 
 $sql = "SELECT Username FROM Users";

@@ -62,8 +62,12 @@ function attemptLogin() {
 }
 
 function checkResponse(response) {
-    if (response === "True") {
+    if (response === "True, Teacher") {
         location.href = "TeacherDashboard.html";
+    }
+
+    if (response === "True, Student") {
+        location.href = "StudentDashboard.html";
     }
 
     if (response === "False") {

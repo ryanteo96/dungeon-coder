@@ -17,7 +17,7 @@ if ($conn->connect_error) {
 } 
 
 
-$sql = "SELECT Username , Hash, Salt FROM Users";
+$sql = "SELECT Username , Hash, Salt, Type FROM Users";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -26,10 +26,16 @@ if ($result->num_rows > 0) {
         if ($user == $row["Username"]) {
             $salt = $row["Salt"];
             $hash = $row["Hash"];
+            $type = $row["Type"];
             exec($param . $pass . " " . $salt , $hashed);
-            if ($hashed[0] == $hash)
-                $return = "True";
-            else 
+            if ($hashed[0] == $hash) {
+                if ($type == "student")
+                    $return = "True, Student";
+                else if ($type == "teacher")
+                    $return = "True, Teacher";
+                else
+                    $return = "False";
+            } else 
                 $return = "False";
         }
     }

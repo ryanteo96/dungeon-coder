@@ -1,6 +1,7 @@
 var username;
 var password;
 var confirmPassword;
+var userType;
 
 function body_onload() {
     registerBtn.onclick = registerBtn_onclick;
@@ -21,6 +22,9 @@ function registerBtn_onclick() {
         password = passwordInput.value;
         confirmPassword = confirmPasswordInput.value;
 
+        var userTypeSelect = document.getElementById("userTypeSelect");
+        userType = userTypeSelect.options[userTypeSelect.selectedIndex].value;
+
         if (password !== confirmPassword) {
             alert("Confirm Password incorrect.");
         } else {
@@ -38,7 +42,7 @@ function attemptCreateAccount() {
             checkResponse(response);
         }
     };
-    xmlhttp.open("GET", "CreateAccount.php?username=" + username + "&password=" + password, true);
+    xmlhttp.open("GET", "CreateAccount.php?username=" + username + "&password=" + password + "&userType=" + userType, true);
     xmlhttp.send();
 }
 
