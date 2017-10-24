@@ -3,6 +3,9 @@
         <title>Teacher Dashboard - Dungeon Coder</title>
         <script language="javascript" type="text/javascript" src="TeacherDashboard.js"></script>
         <script language="javascript" type="text/javascript" src="Shared.js"></script>
+        <script language="javascript" type="text/javascript" src="ManageAccount.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="ManageAccount.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700" rel="stylesheet">
         <style type="text/css">
             #teacherDashBoardDiv {
@@ -29,6 +32,16 @@
                 left:10px;
                 margin:auto;
                 font-size:30;
+                font-family:'Open Sans', san-serif;
+            }
+
+            #manageAccountBtn {
+                position:absolute;
+                width:190px;
+                top:0px;
+                left:800px;
+                margin:auto;
+                font-size:20;
                 font-family:'Open Sans', san-serif;
             }
 
@@ -818,7 +831,36 @@
             <!-- Div for Dashboard Header Div. -->
             <div id=teacherDashboardHdrDiv>
                 <label id="teacherDashboardHdr">DASHBOARD</label>  
+
+                <input id="manageAccountBtn" type=button value="Manage Account"></input>
             </div>    
+
+            <!-- Manage Account Modal -->
+            <div id="manageAccountModal">
+                <div id="manageAccountContent">
+                    <span id="manageAccountClose">&times;</span>
+                    <div id=manageAccountDiv>
+                        <label id="manageAccountHdr">Manage Account</label>
+
+                        <label id="manageAccountDesc">Please enter the following information to change or save your account information.</label>
+
+                        <label id="usernameLbl">Username</label>
+                        <input id="usernameInput" type="text"/>
+            
+                        <label id="passwordLbl">Password</label>
+                        <input id="passwordInput" type="password"/>
+            
+                        <label id="confirmPasswordLbl">Confirm Password</label>
+                        <input id="confirmPasswordInput" type="password"/>
+
+                        <label id="emailLbl">Email</label>
+                        <input id="emailInput" type="text"/>
+
+                        <button id="saveBtn">Save</button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Div for Class Task. -->
             <div id="classTasks">
                 <input id="task1" type=button value="TASK 1"></input>

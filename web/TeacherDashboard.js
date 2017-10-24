@@ -1,3 +1,4 @@
+var currentUser;
 var entries;
 var currentTask;
 var currentDeadline;
@@ -6,9 +7,19 @@ var allStudentTask;
 var temp;
 
 function body_onload() {
+    if (!checkLoggedIn() || checkLoggedIn() === "null") {
+        alert("Sign in required.");
+        location.href = "SignIn.html";
+    }
+
+    currentUser = sessionStorageGet("CurrentUser", null);
+
     retrieveStudentList();
     task1.onclick = task1_onclick;
     changeDeadlineBtn.onclick = changeDeadlineBtn_onclick;
+    manageAccountBtn.onclick = manageAccountBtn_onclick;
+    saveBtn.onclick = saveBtn_onclick;
+    
 }
 
 function displayStudents() {

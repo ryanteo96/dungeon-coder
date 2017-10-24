@@ -18,9 +18,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-$sql = "SELECT Hash FROM Users";
-$result = $conn->query($sql);
-
 $sql = "SELECT Username FROM Users";
 $result = $conn->query($sql);
 
@@ -32,8 +29,6 @@ if ($result->num_rows > 0) {
             $conn->close();
         } 
     }
-} else {
-    echo "False";
 }
 
 exec($param . $pass . " " . $salt , $return);

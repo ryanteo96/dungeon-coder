@@ -18,7 +18,7 @@ $task = $_GET["task"];
 $return;
 $returnJSON;
 
-$sql = "SELECT Completion, Deadline, Attempts, Code, PointValue FROM " . $task .  " WHERE Student='" . $user . "'";
+$sql = "SELECT Completion, Deadline, Attempts, Code, PointValue, Comments FROM " . $task .  " WHERE Student='" . $user . "'";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -29,6 +29,7 @@ if ($result->num_rows > 0) {
         $return -> attempts = $row["Attempts"];
         $return -> code = $row["Code"];
         $return -> points = $row["PointValue"];
+        $return -> comments = $row["Comments"];
         
         if ($returnJSON === null)
             $returnJSON = json_encode($return);

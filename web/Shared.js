@@ -92,3 +92,10 @@ function validDate(dateString) {
 }
 
 
+function checkLoggedIn() {
+    return sessionStorageGet("CurrentUser", null);
+}
+
+function signOut() {
+    location.href = "SignIn.html";
+}
