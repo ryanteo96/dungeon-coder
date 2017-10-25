@@ -18,7 +18,7 @@ public class ClientConnection {
 	public ClientConnection() {
 		try {
 			Socket client = new Socket(ip, port);
-			
+			client.setSoTimeout(1000);	
 			OutputStream toServer = client.getOutputStream();
 			outgoing = new DataOutputStream(toServer);
 			
@@ -43,6 +43,9 @@ public class ClientConnection {
 		byte code = (byte)(0xEE);
 		try {
 			code = (byte)(incoming.read());
+		}
+		catch (SocketTimeoutException e) {
+			// Close Connection
 		}
 		catch (IOException e) {
 			// Do Something
@@ -272,5 +275,10 @@ public class ClientConnection {
 			return false;
 		}
 		return false;
+	}
+
+	private void ping() {
+		sendCode((byte)(0xFF));
+		recieveCode();
 	}
 }

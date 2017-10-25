@@ -546,6 +546,10 @@ public class ServerThread extends Thread {
 		run = false;
 	}
 
+	private void pong() {
+		sendCode((byte)(0xFF));
+	}
+
 	public void run() {
 		// Set socket to timeout after a second if no login/account creation request
 		//byte[] code = new byte[1];
@@ -617,6 +621,9 @@ public class ServerThread extends Thread {
 				case 0x0A :
 					sendCode((byte)(0x10));
 					getTaskInfo();
+				break;
+				case (byte)(0xFF) :
+					pong();
 				break;
 				// INVALIDREQUEST
 				default:

@@ -8,7 +8,7 @@ Binary:		Hex:		Operation:
 00000000  ----	0x00	----	CLOSECONNECTION
 00010001  ----	0x11	----	CONNECTION TIMEDOUT
 11101110  ---- 	0xEE	----	INVALIDREQUEST
-11111111  ----  0xFF	----	NOP
+11111111  ----  0xFF	----	PING/PONG
 
 CLIENT TO SERVER OPCODES:
 Binary:		Hex:		Operation/Message:
