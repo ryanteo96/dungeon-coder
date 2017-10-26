@@ -67,6 +67,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     private int posY = 0;
     SpriteBatch p1;
     Texture pic1;
+    Sprite test;
 
     public TaskOne(DungeonCoder g) {
         p1 = new SpriteBatch();
@@ -283,11 +284,11 @@ public class TaskOne extends ApplicationAdapter implements Screen {
                 }catch(NumberFormatException ex){
 
                 }
-                if(shareVariable.connect.requestUpdateProgress(file,module,progress_Percent)){
+                /*if(shareVariable.connect.requestUpdateProgress(file,module,progress_Percent)){
                     System.out.println("Connected");
                 }else{
                     System.out.println("Not Connected");
-                }
+                }*/
             }
         });
 
@@ -347,14 +348,18 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         Gdx.gl.glClearColor(172/255f, 115/255f, 57/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         bg = new Texture("gamebackground.png");
-
-        //player.setPosition(player.getX(),player.getY());
-
+                //player.setPosition(player.getX(),player.getY());
+        float x = Gdx.graphics.getWidth();
+        float y = Gdx.graphics.getHeight();
+        test = new Sprite(bg);
+        test.setPosition(0,0);
+        test.setSize(x ,y);
         backgroundBatch = new SpriteBatch();
         backgroundBatch.begin();
-        backgroundBatch.draw(bg,0,0, DefaultValues.VIRTUAL_WIDTH,VIRTUAL_HEIGHT);
-        backgroundBatch.draw(player,player.getX(),player.getY());
+        test.draw(backgroundBatch);
+        //backgroundBatch.draw(player,player.getX(),player.getY());
         backgroundBatch.end();
+
         debugRenderer.render(world,box2DCamera.combined);//return proj matrix of the camera, what we see from the camera
         world.step(Gdx.graphics.getDeltaTime(),6,2); //delta time the time between each frame
         //velocityiterations and positioniterations calculate how the bodies collide with each other
