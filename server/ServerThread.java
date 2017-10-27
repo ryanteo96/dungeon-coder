@@ -531,6 +531,64 @@ public class ServerThread extends Thread {
 		return hash;
 	}
 
+	private void DeadlinePassed(String task, String date) {
+		String dueDate = getDeadline(task);
+		int passed = compareDates(date, dueDate);
+		if (passed == 1) {
+			sendCode((byte)(0x20));
+		}
+		sendCode((byte)(0x10));
+	}
+
+	private String getDeadline(String task) {
+		if (conn == null) {
+			connectDB();
+		}
+		String Deadline = null;
+		try {
+			rs = stmt.executeQuery("SELECT Deadline FROM " + task + " WHERE Student = '" + connectedUser + "'");
+			rs.next();
+			Deadline = rs.getString("Deadline");
+		}
+		catch (SQLException e) {
+		}
+		return Deadline;
+	}
+
+	private int compareDates(String date1, String date2) {
+		String[] temp1 = date1.split("/");
+		String[] temp2 = date2.split("/");
+		int[] decomposedDate1 = new int[3];
+		int[] decomposedDate2 = new int[3];
+		for (int i = 0; i < 3; i++) {
+			decomposedDate1[i] = Integer.parseInt(temp1[i]);
+			decomposedDate2[i] = Integer.parseInt(temp2[i]);
+		}
+		if (decomposedDate1[2] < decomposedDate2[2]) {
+			return -1;
+		}
+		else if (decomposedDate1[2] > decomposedDate2[2]) {
+			return 1;
+		}
+		else {
+			if (decomposedDate1[1] < decomposedDate2[1]) {
+				return -1;
+			}
+			else if (decomposedDate1[1] > decomposedDate2[1]) {
+				return 1;
+			}
+			else {
+				if (decomposedDate1[0] < decomposedDate2[0]) {
+					return -1;
+				}
+				else if (decomposedDate1[0] > decomposedDate2[0]) {
+					return 1;
+				}
+			}
+		}
+		return 0;
+	}
+
 	private void shutdown(boolean timedout) {
 		try {
 			if (timedout) {
