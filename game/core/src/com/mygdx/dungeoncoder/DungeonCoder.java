@@ -17,7 +17,7 @@ import com.mygdx.dungeoncoder.screens.TaskOne;
 public class DungeonCoder extends Game {
 	public SpriteBatch batch;
 	public static final int V_WIDTH = 400;
-	public static final int V_HEIGHT = 220;
+	public static final int V_HEIGHT = 211;
 
 	@Override
 	public void create() {

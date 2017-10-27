@@ -1,14 +1,17 @@
 package com.mygdx.dungeoncoder.screens;
 
 import Scenes.Hud;
+import Sprites.Mario;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -29,6 +32,8 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
+import com.mygdx.dungeoncoder.utils.B2WorldCreator;
+import com.mygdx.dungeoncoder.values.DefaultValues;
 import org.w3c.dom.css.Rect;
 
 import static com.badlogic.gdx.utils.Scaling.fit;
@@ -39,12 +44,15 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
 
 public class TaskThree implements Screen {
+    //reference to our game, use to set screens
     private DungeonCoder game;
     private Stage stage;
     private Skin backButtonSkin;
+    private TextureAtlas atlas;
+
+    //basic playscreen variables
     private OrthographicCamera gamecam;
     private Viewport gamePort;
-    Texture texture;
     private Hud hud;
 
     //Tiled map variables
@@ -56,17 +64,22 @@ public class TaskThree implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
 
+    //sprites
+    private Mario player;
+
     public TaskThree(DungeonCoder g) {
         game = g;
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
         Gdx.input.setInputProcessor(stage);
 
+        atlas = new TextureAtlas("Mario/Mario_and_Enemies.pack");
+
         //create cam to follow mario through cam world
         gamecam = new OrthographicCamera();
 
         //create a FitViewport to maintain virtual aspect ratio despite screen size
-        gamePort = new FitViewport(V_WIDTH , V_HEIGHT, gamecam);
+        gamePort = new FitViewport(V_WIDTH/DefaultValues.PPM, V_HEIGHT/DefaultValues.PPM, gamecam);
 
         //create our game HUD for scores/timers/level info
         hud = new Hud(game.batch);
@@ -74,66 +87,26 @@ public class TaskThree implements Screen {
         //Load our map and setup our map renderer
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("level1.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map);
+        renderer = new OrthogonalTiledMapRenderer(map, 1/DefaultValues.PPM);
 
         //set camera at center at the start of the map
         gamecam.position.set(gamePort.getWorldWidth()/2, gamePort.getWorldHeight()/2,0);
 
         //create our Box2D world, setting no gravity in X, -10 gravity in Y, and allow bodies to sleep
-        world = new World(new Vector2(0,0),true);
+        world = new World(new Vector2(0,-10),true);
         b2dr = new Box2DDebugRenderer();
 
-        BodyDef bdef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fdef = new FixtureDef();
-        Body body;
-
-        //create ground bodies/fixtures
-        for(MapObject object: map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject)object).getRectangle();
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set(rect.getX() + rect.getWidth()/2 , rect.getY() + rect.getHeight()/2);
-            body = world.createBody(bdef);
-            shape.setAsBox(rect.getWidth()/2,rect.getHeight()/2);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
-
-        //create pipe bodies/fixtures
-        for(MapObject object: map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject)object).getRectangle();
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set(rect.getX() + rect.getWidth()/2 , rect.getY() + rect.getHeight()/2);
-            body = world.createBody(bdef);
-            shape.setAsBox(rect.getWidth()/2,rect.getHeight()/2);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
-
-        //create brick bodies/fixtures
-        for(MapObject object: map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject)object).getRectangle();
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set(rect.getX() + rect.getWidth()/2 , rect.getY() + rect.getHeight()/2);
-            body = world.createBody(bdef);
-            shape.setAsBox(rect.getWidth()/2,rect.getHeight()/2);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
-
-        //create coin bodies/fixtures
-        for(MapObject object: map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)){ // look into the Tiled
-            Rectangle rect = ((RectangleMapObject)object).getRectangle();
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set(rect.getX() + rect.getWidth()/2 , rect.getY() + rect.getHeight()/2);
-            body = world.createBody(bdef);
-            shape.setAsBox(rect.getWidth()/2,rect.getHeight()/2);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
+        //pass the world and map to B2WorldCreator.java
+        new B2WorldCreator(world,map);
+        //create mario in our world
+        player = new Mario(world, this);
 
         //back button
         createBack();
+    }
+
+    public TextureAtlas getAtlas(){
+        return atlas;
     }
 
     private void createBack() {
@@ -158,16 +131,37 @@ public class TaskThree implements Screen {
         System.out.println("you are in stage three");
     }
 
-    public void handleInput(float dt){
-        if(Gdx.input.isTouched()){
-            gamecam.position.x += 100 * dt;
+    public void handleInput(float dt) {
+        //control player using immediate impulses, use world center so the torque wont make the character fly around
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
+            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
+            player.currentState = Mario.State.JUMPING;
+            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.previousState == Mario.State.JUMPING){
+                player.b2body.applyLinearImpulse(new Vector2(0, -4f), player.b2body.getWorldCenter(), true);
+            }
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2) { //isKeyPressed for holding down keys
+            player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)  {
+            player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
         }
     }
 
     public void update(float dt){
+        //handle user input first
         handleInput(dt);
+
+        //takes 1 step in the physics simulation 60 times per second
+        world.step(1/60f, 6,2);
+
+
+        player.update(dt);
+
+        //attach our gamecam to our player's x coordinate
+        gamecam.position.x = player.b2body.getPosition().x;
+
         //update gamecam with correct corrdinates after changes
         gamecam.update();
+
         //tell renderer to draw only what our camera can see in our game world
         renderer.setView(gamecam);
     }
@@ -188,6 +182,11 @@ public class TaskThree implements Screen {
         b2dr.render(world,gamecam.combined);
 
         //set batch to draw what the Hud camera sees.
+        game.batch.setProjectionMatrix(gamecam.combined);
+        game.batch.begin();
+        player.draw(game.batch);
+        game.batch.end();
+
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
 
@@ -218,6 +217,10 @@ public class TaskThree implements Screen {
 
     @Override
     public void dispose() {
+        map.dispose();
+        world.dispose();
+        b2dr.dispose();
+        hud.dispose();
         stage.dispose();
         renderer.dispose();
 
