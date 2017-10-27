@@ -1,9 +1,8 @@
 package com.mygdx.dungeoncoder.screens;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -28,7 +27,7 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
 
-public class TaskTwo implements Screen, ContactListener{
+public class TaskTwo extends ApplicationAdapter implements Screen, ContactListener {
     private DungeonCoder game;
     private Stage stage;
     Skin backButtonSkin;
@@ -42,6 +41,8 @@ public class TaskTwo implements Screen, ContactListener{
     Land land;
     private OrthographicCamera box2DCamera;
     private Box2DDebugRenderer debugRenderer;
+    Sound sound;
+    Music song;
 
     public TaskTwo(DungeonCoder g) {
         game = g;
@@ -60,11 +61,14 @@ public class TaskTwo implements Screen, ContactListener{
         player = new Player(world,"stationaryninja.png",VIRTUAL_WIDTH/2,VIRTUAL_HEIGHT/2 + 250);
         box = new Boxes(world);
         land = new Land(world);
+        sound = Gdx.audio.newSound(Gdx.files.internal("footstep1.ogg"));
+        song =  Gdx.audio.newMusic(Gdx.files.internal("spongebob.mp3"));
         createGame();
         createBack();
     }
 
     public void createGame(){
+        song.play();
         batch = new SpriteBatch();
         bg = new Texture("gamebackground.png");
     }
@@ -85,20 +89,26 @@ public class TaskTwo implements Screen, ContactListener{
 
 
     private void backToInstructionalMode(DungeonCoder g) {
+        song.stop();
         g.setScreen(new InstructionalMode(g));
     }
     @Override
     public void show() {
         System.out.println("you are in stage two");
     }
+
     void update(float dt){
+       // long id = sound.play();
+        //sound.setVolume(id, 1.0f);
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
             //player.getBody().applyLinearImpulse(new Vector2(-0.05f,0),player.getBody().getWorldCenter(),true);
             player.getBody().applyForce(new Vector2(-5f,0),player.getBody().getWorldCenter(),true);
-        }else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+            //sound.play();
+        } else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
             //player.getBody().applyLinearImpulse(new Vector2(0.05f,0),player.getBody().getWorldCenter(),true);
             //first parameter, apply force, second parameter, apply the force from where, last param, wake the body
             player.getBody().applyForce(new Vector2(5f,0),player.getBody().getWorldCenter(),true);
+
         }else if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
             player.getBody().applyForce(new Vector2(0,10f),player.getBody().getWorldCenter(),true);
         }
@@ -148,6 +158,8 @@ public class TaskTwo implements Screen, ContactListener{
         player.getTexture().dispose();
         stage.dispose();
         batch.dispose();
+        sound.dispose();
+        song.dispose();
     }
 
     private void createStageTwo(){

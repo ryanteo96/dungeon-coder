@@ -85,9 +85,9 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         Gdx.input.setInputProcessor(stage);
         //set the gravity, true to let the body inside to sleep so its
         // more efficient, only calculate when the body move so wont stress the processor
-        world = new World(new Vector2(0,-9.8f),true);
-        player = new Player(world,"stationaryninja.png",VIRTUAL_WIDTH/2,VIRTUAL_HEIGHT/2);
-        player.setSize(70,120);
+        //world = new World(new Vector2(0,-9.8f),true);
+        //player = new Player(world,"stationaryninja.png",VIRTUAL_WIDTH/2,VIRTUAL_HEIGHT/2);
+        //player.setSize(70,120);
         createBack();
         //createAttempts();
         //createProgress();
@@ -344,7 +344,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     @Override
     public void render(float delta) {
         //elapsedTime += Gdx.graphics.getDeltaTime(); //if wna make use of pause can stop the time here
-        player.updatePlayer();
+        //player.updatePlayer();
         Gdx.gl.glClearColor(172/255f, 115/255f, 57/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         bg = new Texture("gamebackground.png");
@@ -360,8 +360,8 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         //backgroundBatch.draw(player,player.getX(),player.getY());
         backgroundBatch.end();
 
-        debugRenderer.render(world,box2DCamera.combined);//return proj matrix of the camera, what we see from the camera
-        world.step(Gdx.graphics.getDeltaTime(),6,2); //delta time the time between each frame
+        //debugRenderer.render(world,box2DCamera.combined);//return proj matrix of the camera, what we see from the camera
+        //world.step(Gdx.graphics.getDeltaTime(),6,2); //delta time the time between each frame
         //velocityiterations and positioniterations calculate how the bodies collide with each other
 
         fpslabel.setText("fps: " + Gdx.graphics.getFramesPerSecond());
@@ -384,12 +384,12 @@ public class TaskOne extends ApplicationAdapter implements Screen {
 
         if(paused){
             walkingBatch.begin();
-           // walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),VIRTUAL_WIDTH/2-60/2,VIRTUAL_HEIGHT/2-60/2,60,60);
+            walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),VIRTUAL_WIDTH/2-60/2,VIRTUAL_HEIGHT/2-60/2,60,60);
             walkingBatch.end();
         }else{
             walkingBatch.begin();
             timePassed += Gdx.graphics.getDeltaTime();
-           // walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),VIRTUAL_WIDTH/2-60/2,VIRTUAL_HEIGHT/2-60/2,60,60);
+            walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),VIRTUAL_WIDTH/2-60/2,VIRTUAL_HEIGHT/2-60/2,60,60);
             walkingBatch.end();
         }
 
