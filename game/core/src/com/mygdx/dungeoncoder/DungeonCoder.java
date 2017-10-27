@@ -15,10 +15,13 @@ import com.mygdx.dungeoncoder.screens.SplashScreen;
 import com.mygdx.dungeoncoder.screens.TaskOne;
 
 public class DungeonCoder extends Game {
+	public SpriteBatch batch;
+	public static final int V_WIDTH = 400;
+	public static final int V_HEIGHT = 220;
 
-
-    @Override
+	@Override
 	public void create() {
+    	batch = new SpriteBatch();
 		this.setScreen(new SplashScreen(this));
 	}
 
@@ -32,6 +35,7 @@ public class DungeonCoder extends Game {
 	@Override
 	public void dispose() {
 		super.dispose();
+		batch.dispose();
 	}
 
 // testing testing

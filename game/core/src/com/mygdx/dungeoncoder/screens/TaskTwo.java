@@ -135,7 +135,7 @@ public class TaskTwo extends ApplicationAdapter implements Screen, ContactListen
 
     @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
