@@ -4,6 +4,10 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.backends.lwjgl.audio.Ogg;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -19,9 +23,19 @@ public class DungeonCoder extends Game {
 	public static final int V_WIDTH = 400;
 	public static final int V_HEIGHT = 211;
 
+	/* WARNING Using AssetManager in a static way can cause issues, especially on Android.
+    Instead you may want to pass around Assetmanager to those the classes that need it.*/
+	public static AssetManager manager;
+
 	@Override
 	public void create() {
     	batch = new SpriteBatch();
+		manager = new AssetManager();
+		manager.load("Mario/music/mario_music.ogg",Music.class);
+		manager.load("Mario/sounds/coin.wav",Sound.class);
+		manager.load("Mario/sounds/bump.wav",Sound.class);
+		manager.load("Mario/sounds/breakblock.wav",Sound.class);
+		manager.finishLoading(); //Asynchronous loading, blocks everything and ask every assets to load first
 		this.setScreen(new SplashScreen(this));
 	}
 
@@ -36,6 +50,7 @@ public class DungeonCoder extends Game {
 	public void dispose() {
 		super.dispose();
 		batch.dispose();
+		manager.dispose();
 	}
 
 // testing testing

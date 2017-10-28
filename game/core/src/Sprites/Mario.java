@@ -1,15 +1,13 @@
 package Sprites;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.dungeoncoder.screens.TaskThree;
 import com.mygdx.dungeoncoder.values.DefaultValues;
-
-import javax.swing.*;
 
 public class Mario extends Sprite {
     public World world;
@@ -23,9 +21,9 @@ public class Mario extends Sprite {
     private float stateTimer;
     private boolean runningRight;
 
-    public Mario(World world, TaskThree screen){
+    public Mario(TaskThree screen){
         super(screen.getAtlas().findRegion("little_mario"));
-        this.world = world;
+        this.world = screen.getWorld();
         currentState = State.STANDING;
         previousState = State.STANDING;
         stateTimer = 0;
@@ -104,10 +102,29 @@ public class Mario extends Sprite {
         bdef.position.set(32/DefaultValues.PPM,32/DefaultValues.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
+
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(6.1f/ DefaultValues.PPM);
+        shape.setRadius(6/ DefaultValues.PPM);
+        fdef.filter.categoryBits = DefaultValues.MARIO_BIT;
+        //what can mario collide with
+        fdef.filter.maskBits = DefaultValues.GROUND_BIT |
+                DefaultValues.COIN_BIT |
+                DefaultValues.BRICK_BIT |
+                DefaultValues.ENEMY_BIT |
+                DefaultValues.OBJECT_BIT|
+                DefaultValues.ENEMY_HEAD_BIT; // | is or
+
         fdef.shape = shape;
         b2body.createFixture(fdef);
+
+        //create sensor on mario head
+        //edgeshape line between 2 diff points
+        EdgeShape head = new EdgeShape();
+        head.set(new Vector2(-2 / DefaultValues.PPM, 7 /DefaultValues.PPM), new Vector2(2 / DefaultValues.PPM, 7 /DefaultValues.PPM));
+        fdef.shape = head;
+        fdef.isSensor = true;
+
+        b2body.createFixture(fdef).setUserData("head");
     }
 }

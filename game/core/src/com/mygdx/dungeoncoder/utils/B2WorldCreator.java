@@ -2,16 +2,26 @@ package com.mygdx.dungeoncoder.utils;
 
 import Sprites.Brick;
 import Sprites.Coin;
+import Sprites.Goomba;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
+import com.mygdx.dungeoncoder.screens.TaskThree;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 
 public class B2WorldCreator {
-    public B2WorldCreator(World world, TiledMap map){
-//create body and fixture variables
+    public Array<Goomba> getGoombas() {
+        return goombas;
+    }
+
+    private Array<Goomba> goombas;
+    public B2WorldCreator(TaskThree screen){
+        World world = screen.getWorld();
+        TiledMap map = screen.getMap();
+        //create body and fixture variables
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
@@ -36,19 +46,26 @@ public class B2WorldCreator {
             body = world.createBody(bdef);
             shape.setAsBox((rect.getWidth()/2)/DefaultValues.PPM,(rect.getHeight()/2)/DefaultValues.PPM);
             fdef.shape = shape;
+            fdef.filter.categoryBits = DefaultValues.OBJECT_BIT; //when enemy collide pipe, it will turn around
             body.createFixture(fdef);
         }
 
         //create brick bodies/fixtures
         for(MapObject object: map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject)object).getRectangle();
-           new Brick(world, map ,rect);
+           new Brick(screen ,rect);
         }
 
         //create coin bodies/fixtures
         for(MapObject object: map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)){ // look into the Tiled
             Rectangle rect = ((RectangleMapObject)object).getRectangle();
-            new Coin(world, map, rect);
+            new Coin(screen, rect);
+        }
+        //create all goombas
+        goombas = new Array<Goomba>();
+        for(MapObject object: map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)){ // look into the Tiled
+            Rectangle rect = ((RectangleMapObject)object).getRectangle();
+            goombas.add(new Goomba(screen, rect.getX()/DefaultValues.PPM, rect.getY() /DefaultValues.PPM));
         }
     }
 

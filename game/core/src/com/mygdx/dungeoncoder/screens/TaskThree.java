@@ -1,11 +1,14 @@
 package com.mygdx.dungeoncoder.screens;
 
 import Scenes.Hud;
+import Sprites.Enemy;
+import Sprites.Goomba;
 import Sprites.Mario;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -33,6 +36,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.B2WorldCreator;
+import com.mygdx.dungeoncoder.utils.WorldContactListener;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 import org.w3c.dom.css.Rect;
 
@@ -63,9 +67,13 @@ public class TaskThree implements Screen {
     //Box2d variables
     private World world;
     private Box2DDebugRenderer b2dr;
+    private B2WorldCreator creator;
 
     //sprites
     private Mario player;
+
+    //music
+    private Music music;
 
     public TaskThree(DungeonCoder g) {
         game = g;
@@ -97,11 +105,18 @@ public class TaskThree implements Screen {
         b2dr = new Box2DDebugRenderer();
 
         //pass the world and map to B2WorldCreator.java
-        new B2WorldCreator(world,map);
-        //create mario in our world
-        player = new Mario(world, this);
+        creator = new B2WorldCreator(this);
 
+        //create mario in our world
+        player = new Mario(this);
+
+        world.setContactListener(new WorldContactListener());
         //back button
+
+        music = DungeonCoder.manager.get("Mario/music/mario_music.ogg", Music.class);
+        music.setLooping(true);
+        music.play();
+
         createBack();
     }
 
@@ -125,6 +140,7 @@ public class TaskThree implements Screen {
 
     private void backToInstructionalMode(DungeonCoder g) {
         g.setScreen(new InstructionalMode(g));
+        music.stop();
     }
     @Override
     public void show() {
@@ -153,9 +169,14 @@ public class TaskThree implements Screen {
         //takes 1 step in the physics simulation 60 times per second
         world.step(1/60f, 6,2);
 
-
         player.update(dt);
-
+        for(Enemy enemy : creator.getGoombas()){
+            enemy.update(dt);
+            if(enemy.getX() < player.getX() + 220/DefaultValues.PPM){
+                enemy.b2body.setActive(true);//activate goomba
+            }
+        }
+        hud.update(dt);
         //attach our gamecam to our player's x coordinate
         gamecam.position.x = player.b2body.getPosition().x;
 
@@ -185,6 +206,9 @@ public class TaskThree implements Screen {
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
         player.draw(game.batch);
+        for(Enemy enemy : creator.getGoombas()){
+            enemy.draw(game.batch);
+        }
         game.batch.end();
 
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
@@ -198,6 +222,14 @@ public class TaskThree implements Screen {
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
         gamePort.update(width,height);
+    }
+
+    public TiledMap getMap(){
+        return map;
+    }
+
+    public World getWorld(){
+        return world;
     }
 
     @Override
@@ -223,7 +255,6 @@ public class TaskThree implements Screen {
         hud.dispose();
         stage.dispose();
         renderer.dispose();
-
     }
 
 
