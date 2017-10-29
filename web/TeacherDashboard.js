@@ -19,7 +19,7 @@ function body_onload() {
     changeDeadlineBtn.onclick = changeDeadlineBtn_onclick;
     manageAccountBtn.onclick = manageAccountBtn_onclick;
     saveBtn.onclick = saveBtn_onclick;
-    
+    signOutBtn.onclick = signOutBtn_onclick;
 }
 
 function displayStudents() {
@@ -240,4 +240,8 @@ function attemptChangePointValue(task, user, pointValue) {
     xmlhttp.open("GET", "PointValue.php?task=" + task + "&user=" + user + "&pointValue=" + pointValue, true);
     xmlhttp.send();
     
+}
+
+function signOutBtn_onclick() {
+    signOut();
 }

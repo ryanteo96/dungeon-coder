@@ -16,6 +16,7 @@ function body_onload() {
         task_onclick("Task1");
     }
     saveBtn.onclick = saveBtn_onclick;
+    signOutBtn.onclick = signOutBtn_onclick;
 }
 
 function task_onclick(task) {
@@ -49,4 +50,8 @@ function getUserTaskInformation(task) {
     };
     xmlhttp.open("GET", "GetUserTaskInformation.php?user=" + currentUser + "&task=" + task, true);
     xmlhttp.send();
+}
+
+function signOutBtn_onclick() {
+    signOut();
 }
