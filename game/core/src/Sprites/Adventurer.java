@@ -32,32 +32,39 @@ public class Adventurer extends Sprite {
         runningRight = true;
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
-        for(int i = 1; i < 2; i++){
-            frames.add(new TextureRegion(getTexture(), 1 , 0,45,45));
-        }
+
+        frames.add(new TextureRegion(getTexture(), 1 , 50,64,45));
+        frames.add(new TextureRegion(getTexture(), 27 , 50,64,44));
+        frames.add(new TextureRegion(getTexture(), 50 , 50,64,45));
+        frames.add(new TextureRegion(getTexture(), 66 , 50,64,44));
+        frames.add(new TextureRegion(getTexture(), 84 , 50,64,43));
+        frames.add(new TextureRegion(getTexture(), 110 , 50,64,44));
+        frames.add(new TextureRegion(getTexture(), 129 , 50,64,45));
+        frames.add(new TextureRegion(getTexture(), 148 , 50,64,44));
+
         //running animation
         adventurerRun = new Animation(0.1f, frames);
         frames.clear();
 
         for(int i = 1; i < 2; i++){
-            frames.add(new TextureRegion(getTexture(), 1 , 0,45,45));
+            frames.add(new TextureRegion(getTexture(), 1 , 0,100,45));
         }
         adventurerJump = new Animation(0.1f, frames);
         frames.clear();
 
         defineAdventurer();
 
-        adventurerStand = new TextureRegion(getTexture(),1,0,45,45);
-        setBounds(0,0,45/DefaultValues.PPM,45/DefaultValues.PPM);
+        adventurerStand = new TextureRegion(getTexture(),1,0,64,52);
+        setBounds(0,0,20/DefaultValues.PPM,20/DefaultValues.PPM);
         setRegion(adventurerStand);
 
     }
 
     public void update(float dt){
         if(runningRight){
-            setPosition(b2body.getPosition().x - getWidth() / 2 + 10/DefaultValues.PPM, b2body.getPosition().y - getHeight() / 2);
+            setPosition(b2body.getPosition().x - getWidth() / 2 + 5/DefaultValues.PPM, b2body.getPosition().y - getHeight() / 2);
         }else{
-            setPosition(b2body.getPosition().x - getWidth() / 2 - 10/DefaultValues.PPM, b2body.getPosition().y - getHeight() / 2);
+            setPosition(b2body.getPosition().x - getWidth() / 2 - 5/DefaultValues.PPM, b2body.getPosition().y - getHeight() / 2);
         }
 
         setRegion(getFrame(dt));
