@@ -1,6 +1,8 @@
 package com.mygdx.dungeoncoder.screens;
 
 import Scenes.Hud;
+import Sprites.Adventurer;
+import Sprites.Enemy;
 import Sprites.Mario;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
@@ -43,6 +45,7 @@ public class TaskTwo implements Screen {
     private DungeonCoder game;
     private Stage stage;
     Skin backButtonSkin;
+    private TextureAtlas atlas;
 
     //basic playscreen variables
     private OrthographicCamera gamecam;
@@ -58,11 +61,17 @@ public class TaskTwo implements Screen {
     private Box2DDebugRenderer b2dr;
     private B2WorldCreator creator;
 
+    //sprites
+    private Adventurer player;
+
+
     public TaskTwo(DungeonCoder g) {
         game = g;
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
         Gdx.input.setInputProcessor(stage);
+
+        atlas = new TextureAtlas("Dungeon/Adventurer.pack");
 
         //create cam to follow mario through cam world
         gamecam = new OrthographicCamera();
@@ -86,11 +95,10 @@ public class TaskTwo implements Screen {
         //pass the world and map to B2WorldCreator.java
         creator = new B2WorldCreator(this);
 
+        //create adventurer in our world
+        player = new Adventurer(this);
+
         world.setContactListener(new WorldContactListener());
-
-
-
-
 
         //back button
         createBack();
@@ -110,6 +118,9 @@ public class TaskTwo implements Screen {
         stage.addActor(btnBack);
     }
 
+    public TextureAtlas getAtlas(){
+        return atlas;
+    }
 
     private void backToInstructionalMode(DungeonCoder g) {
         g.setScreen(new InstructionalMode(g));
@@ -119,9 +130,28 @@ public class TaskTwo implements Screen {
         System.out.println("you are in stage two");
     }
 
-    void update(float dt){
+    public void handleinput(float dt){
+        //control player using immediate impulses, use world center so the torque wont make the character fly around
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
+            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
+            player.currentState = Adventurer.State.JUMPING;
+            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.previousState == Adventurer.State.JUMPING){
+                player.b2body.applyLinearImpulse(new Vector2(0, -4f), player.b2body.getWorldCenter(), true);
+            }
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2) { //isKeyPressed for holding down keys
+            player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)  {
+            player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
+        }
+    }
+
+    public void update(float dt){
+        handleinput(dt);
         //takes 1 step in the physics simulation 60 times per second
         world.step(1/60f, 6,2);
+        player.update(dt);
+        //attach our gamecam to our player's x coordinate
+        gamecam.position.x = player.b2body.getPosition().x;
 
         //update gamecam with correct corrdinates after changes
         gamecam.update();
@@ -150,6 +180,12 @@ public class TaskTwo implements Screen {
 
         //render our Box2Ddebuglines
         b2dr.render(world,gamecam.combined);
+
+        //set batch to draw what the Hud camera sees.
+        game.batch.setProjectionMatrix(gamecam.combined);
+        game.batch.begin();
+        player.draw(game.batch);
+        game.batch.end();
 
         stage.act(delta);
         stage.draw();

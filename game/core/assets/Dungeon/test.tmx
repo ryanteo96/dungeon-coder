@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" nextobjectid="22">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" nextobjectid="38">
  <tileset firstgid="1" name="PlayStation - Castlevania Symphony of the Night - Abandoned Mine Entrance" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="38957" columns="239">
   <image source="test.png" width="4317" height="2949"/>
  </tileset>
- <layer name="Tile Layer 1" width="240" height="13" offsetx="443.394" offsety="-107.091">
+ <layer name="Graphic Layer" width="240" height="13" offsetx="443.394" offsety="-107.091">
   <data encoding="base64" compression="zlib">
    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
   </data>
@@ -20,13 +20,18 @@
   <object id="11" x="1173.33" y="118.667" width="242" height="19.3333"/>
   <object id="13" x="-0.666667" y="-0.666667" width="32" height="75.3333"/>
   <object id="14" x="30" y="-1.33333" width="418.667" height="30.6667"/>
-  <object id="16" x="372.667" y="30" width="74.6667" height="46.6667"/>
-  <object id="17" x="450" y="-0.666667" width="582.667" height="19.3333"/>
-  <object id="20" x="847.333" y="19.3333">
-   <polygon points="0,0 0,55.3333 111.333,57.3333 108.667,46.6667 111.333,38 116.667,38.6667 120,30 128,28 128,24 134,18.6667 146,14 338.667,13.3333 356,29.3333 354,39.3333 355.333,41.3333 576,43.3333 581.333,40.6667 580.667,28 584.667,23.3333 591.333,16.6667 600.667,13.3333 837.333,12.6667 847.333,18 850,26.6667 858,30 865.333,37.3333 866,44 866,53.3333 865.333,56 877.333,56.6667 900.667,58 910,57.3333 910.667,57.3333 912,-20.6667 186.667,-19.3333 0,-18.6667 -0.666667,-1.33333"/>
+  <object id="24" x="533" y="76" width="28.5" height="100"/>
+  <object id="25" x="632" y="90.5" width="30" height="86"/>
+  <object id="26" x="732" y="75" width="30" height="102"/>
+  <object id="28" x="372" y="-0.5" width="75" height="76.5"/>
+  <object id="30" x="446.5" y="-1" width="421" height="19"/>
+  <object id="31" x="847" y="0" width="112" height="75.5"/>
+  <object id="32" x="959" y="61">
+   <polygon points="0,0 30,-29 0.5,-28"/>
   </object>
-  <object id="21" x="534" y="174.5">
-   <polygon points="0,0 -0.5,-81.5 -2.5,-86 0,-86.5 -0.5,-96 -1,-98.5 28.5,-97.5 27,-95.5 26,-87 30.5,-84 26.5,-81 29.5,-56.5 28,-43.5 27.5,-0.5 100,1 99,-32 96.5,-33 96,-39.5 99,-42 99.5,-66.5 97,-70 100,-72 100,-79 99.5,-83 127,-83.5 127,-75 127,-71 130,-68 128.5,-42 129,-36 128.5,-27.5 128.5,-0.5 200,-0.5 199.5,-97.5 229,-97.5 231,1"/>
-  </object>
+  <object id="34" x="960" y="0" width="256" height="32"/>
+  <object id="35" x="1202.5" y="0.5" width="227" height="59.5"/>
+  <object id="36" x="1430.5" y="-1" width="328" height="30.5"/>
+  <object id="37" x="1716" y="28.5" width="44" height="48"/>
  </objectgroup>
 </map>

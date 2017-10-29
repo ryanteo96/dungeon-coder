@@ -1,0 +1,19 @@
+
+Adventurer.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+walk
+  rotate: false
+  xy: 1, 48
+  size: 256, 64
+  orig: 256, 64
+  offset: 0, 0
+  index: -1
+stand
+  rotate: false
+  xy: 1, 1
+  size: 23, 45
+  orig: 23, 45
+  offset: 0, 0
+  index: -1
