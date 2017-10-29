@@ -1,5 +1,7 @@
 package com.mygdx.dungeoncoder.screens;
 
+import Scenes.Hud;
+import Sprites.Mario;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -8,41 +10,53 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.backgroundElements.Boxes;
 import com.mygdx.dungeoncoder.backgroundElements.Land;
+import com.mygdx.dungeoncoder.utils.B2WorldCreator;
+import com.mygdx.dungeoncoder.utils.WorldContactListener;
+import com.mygdx.dungeoncoder.values.DefaultValues;
 
 import static com.badlogic.gdx.utils.Scaling.fit;
+import static com.mygdx.dungeoncoder.DungeonCoder.V_HEIGHT;
+import static com.mygdx.dungeoncoder.DungeonCoder.V_WIDTH;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
 
-public class TaskTwo extends ApplicationAdapter implements Screen, ContactListener {
+public class TaskTwo implements Screen {
     private DungeonCoder game;
     private Stage stage;
     Skin backButtonSkin;
-    SpriteBatch batch;
-    Texture bg;
-    World world;
-    Player player;
-    float x;
-    float y;
-    Boxes box;
-    Land land;
-    private OrthographicCamera box2DCamera;
-    private Box2DDebugRenderer debugRenderer;
-    Sound sound;
-    Music song;
+
+    //basic playscreen variables
+    private OrthographicCamera gamecam;
+    private Viewport gamePort;
+
+    //Tiled map variables
+    private TmxMapLoader mapLoader;
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer renderer;
+
+    //Box2d variables
+    private World world;
+    private Box2DDebugRenderer b2dr;
+    private B2WorldCreator creator;
 
     public TaskTwo(DungeonCoder g) {
         game = g;
@@ -50,27 +64,36 @@ public class TaskTwo extends ApplicationAdapter implements Screen, ContactListen
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
         Gdx.input.setInputProcessor(stage);
 
-        box2DCamera = new OrthographicCamera();
-        box2DCamera.setToOrtho(false,VIRTUAL_WIDTH/shareVariable.PPM,VIRTUAL_HEIGHT/shareVariable.PPM);
-        box2DCamera.position.set(VIRTUAL_WIDTH/2f,VIRTUAL_HEIGHT/2f,0);
-        debugRenderer = new Box2DDebugRenderer();
-        x = Gdx.graphics.getWidth();
-        y = Gdx.graphics.getHeight();
-        world = new World(new Vector2(0,-9.8f),true);
-        world.setContactListener(this);
-        player = new Player(world,"stationaryninja.png",VIRTUAL_WIDTH/2,VIRTUAL_HEIGHT/2 + 250);
-        box = new Boxes(world);
-        land = new Land(world);
-        sound = Gdx.audio.newSound(Gdx.files.internal("footstep1.ogg"));
-        song =  Gdx.audio.newMusic(Gdx.files.internal("spongebob.mp3"));
-        createGame();
-        createBack();
-    }
+        //create cam to follow mario through cam world
+        gamecam = new OrthographicCamera();
 
-    public void createGame(){
-        song.play();
-        batch = new SpriteBatch();
-        bg = new Texture("gamebackground.png");
+        //create a FitViewport to maintain virtual aspect ratio despite screen size
+        gamePort = new FitViewport(V_WIDTH/ DefaultValues.PPM, V_HEIGHT/DefaultValues.PPM, gamecam);
+
+
+        //Load our map and setup our map renderer
+        mapLoader = new TmxMapLoader();
+        map = mapLoader.load("Dungeon/test.tmx");
+        renderer = new OrthogonalTiledMapRenderer(map, 1/DefaultValues.PPM);
+
+        //set camera at center at the start of the map
+        gamecam.position.set(gamePort.getWorldWidth()/2, gamePort.getWorldHeight()/2,0);
+
+        //create our Box2D world, setting no gravity in X, -10 gravity in Y, and allow bodies to sleep
+        world = new World(new Vector2(0,-10),true);
+        b2dr = new Box2DDebugRenderer();
+
+        //pass the world and map to B2WorldCreator.java
+        creator = new B2WorldCreator(this);
+
+        world.setContactListener(new WorldContactListener());
+
+
+
+
+
+        //back button
+        createBack();
     }
 
     private void createBack() {
@@ -89,7 +112,6 @@ public class TaskTwo extends ApplicationAdapter implements Screen, ContactListen
 
 
     private void backToInstructionalMode(DungeonCoder g) {
-        song.stop();
         g.setScreen(new InstructionalMode(g));
     }
     @Override
@@ -98,35 +120,37 @@ public class TaskTwo extends ApplicationAdapter implements Screen, ContactListen
     }
 
     void update(float dt){
-       // long id = sound.play();
-        //sound.setVolume(id, 1.0f);
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-            //player.getBody().applyLinearImpulse(new Vector2(-0.05f,0),player.getBody().getWorldCenter(),true);
-            player.getBody().applyForce(new Vector2(-5f,0),player.getBody().getWorldCenter(),true);
-            //sound.play();
-        } else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-            //player.getBody().applyLinearImpulse(new Vector2(0.05f,0),player.getBody().getWorldCenter(),true);
-            //first parameter, apply force, second parameter, apply the force from where, last param, wake the body
-            player.getBody().applyForce(new Vector2(5f,0),player.getBody().getWorldCenter(),true);
+        //takes 1 step in the physics simulation 60 times per second
+        world.step(1/60f, 6,2);
 
-        }else if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-            player.getBody().applyForce(new Vector2(0,10f),player.getBody().getWorldCenter(),true);
-        }
+        //update gamecam with correct corrdinates after changes
+        gamecam.update();
+
+        //tell renderer to draw only what our camera can see in our game world
+        renderer.setView(gamecam);
 
     }
+
+    public TiledMap getMap(){
+        return map;
+    }
+
+    public World getWorld(){
+        return world;
+    }
+
     @Override
     public void render(float delta) {
         update(delta);
-        player.updatePlayer();
         Gdx.gl.glClearColor(172/255f, 115/255f, 57/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
-        batch.draw(bg,0,0,x,y);
-        batch.draw(player,player.getX() + player.getWidth() - 5,player.getY() - 45,50,100);
-        batch.draw(box,box.getX() - 70,box.getY()-90,230,200);
-        batch.end();
-        debugRenderer.render(world,box2DCamera.combined);
-        world.step(Gdx.graphics.getDeltaTime(),6,2);
+
+        //render game map
+        renderer.render();
+
+        //render our Box2Ddebuglines
+        b2dr.render(world,gamecam.combined);
+
         stage.act(delta);
         stage.draw();
     }
@@ -136,6 +160,7 @@ public class TaskTwo extends ApplicationAdapter implements Screen, ContactListen
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+        gamePort.update(width,height);
     }
 
     @Override
@@ -155,52 +180,11 @@ public class TaskTwo extends ApplicationAdapter implements Screen, ContactListen
 
     @Override
     public void dispose() {
-        player.getTexture().dispose();
+        world.dispose();
+        map.dispose();
         stage.dispose();
-        batch.dispose();
-        sound.dispose();
-        song.dispose();
+        b2dr.dispose();
+        renderer.dispose();
     }
 
-    private void createStageTwo(){
-        Texture stage_Two = new Texture(Gdx.files.internal("UIElements/inprogress.png"));
-        TextureRegion stage_TwoRegion = new TextureRegion(stage_Two);
-        TextureRegionDrawable stage_TwoDrawable = new TextureRegionDrawable(stage_TwoRegion);
-        Image stage_TwoImage = new Image(stage_TwoDrawable);
-        stage_TwoImage.setSize(600,100);
-        stage_TwoImage.setPosition(380,400);
-        stage.addActor(stage_TwoImage);
-    }
-
-    @Override
-    public void beginContact(Contact contact) {
-        Fixture firstBody, secondBody;
-
-        if(contact.getFixtureA().getUserData() == "Player"){
-            firstBody = contact.getFixtureA(); //make sure that first body is always fixture A
-            secondBody = contact.getFixtureB();
-            //System.out.println("Fixture A is the Player");
-        }else{
-            //System.out.println("Fixture A is the Box");
-            firstBody = contact.getFixtureB();
-            secondBody = contact.getFixtureA();
-        }
-        System.out.println("The first body is " + firstBody.getUserData());
-        System.out.println("The second body is " + secondBody.getUserData());
-    }
-
-    @Override
-    public void endContact(Contact contact) {
-
-    }
-
-    @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-
-    }
-
-    @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-
-    }
 }

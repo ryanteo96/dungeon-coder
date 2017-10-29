@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.dungeoncoder.screens.TaskThree;
+import com.mygdx.dungeoncoder.screens.TaskTwo;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 
 public class B2WorldCreator {
@@ -67,6 +68,40 @@ public class B2WorldCreator {
             Rectangle rect = ((RectangleMapObject)object).getRectangle();
             goombas.add(new Goomba(screen, rect.getX()/DefaultValues.PPM, rect.getY() /DefaultValues.PPM));
         }
+    }
+
+    public B2WorldCreator(TaskTwo screen) {
+        World world = screen.getWorld();
+        TiledMap map = screen.getMap();
+        //create body and fixture variables
+        BodyDef bdef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fdef = new FixtureDef();
+        Body body;
+
+        //create ground bodies/fixtures
+        for (MapObject object : map.getLayers().get(1).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / DefaultValues.PPM, (rect.getY() + rect.getHeight() / 2) / DefaultValues.PPM);
+            body = world.createBody(bdef);
+            shape.setAsBox((rect.getWidth() / 2) / DefaultValues.PPM, (rect.getHeight() / 2) / DefaultValues.PPM);
+            fdef.shape = shape;
+            body.createFixture(fdef);
+        }
+        /*
+        //create pipe bodies/fixtures
+        for (MapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / DefaultValues.PPM, (rect.getY() + rect.getHeight() / 2) / DefaultValues.PPM);
+            body = world.createBody(bdef);
+            shape.setAsBox((rect.getWidth() / 2) / DefaultValues.PPM, (rect.getHeight() / 2) / DefaultValues.PPM);
+            fdef.shape = shape;
+            fdef.filter.categoryBits = DefaultValues.OBJECT_BIT; //when enemy collide pipe, it will turn around
+            body.createFixture(fdef);
+        }
+        */
     }
 
 }
