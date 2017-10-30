@@ -69,6 +69,8 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     Texture pic1;
     Sprite test;
 
+    private TextureAtlas stickman;
+
     public TaskOne(DungeonCoder g) {
         p1 = new SpriteBatch();
         pic1 = new Texture("stationaryninja.png");
@@ -76,6 +78,8 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         box2DCamera = new OrthographicCamera();
         box2DCamera.setToOrtho(false,VIRTUAL_WIDTH/shareVariable.PPM,VIRTUAL_HEIGHT/shareVariable.PPM);
         box2DCamera.position.set(0,0,0);
+
+        stickman = new TextureAtlas("chara/stickman.atlas");
 
         debugRenderer = new Box2DDebugRenderer();
 
@@ -108,20 +112,11 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         stage.addActor(deadlineText);
    }
 
+   public TextureAtlas getAtlas (){
+       return stickman;
+   }
+
    private void createGame(){
-       /*walksheet = new Texture("UIElements/george.png");
-       TextureRegion[][] tmpFrames = TextureRegion.split(walksheet,walksheet.getWidth(),walksheet.getHeight()); //image and pixels
-       walkFrames = new TextureRegion[16];
-       int index = 0;
-       for(int i = 0; i < 4; i++){ //rows
-           for(int j = 0; j < 4; j++){ //columns
-               walkFrames[index++] = tmpFrames[i][j];
-           }
-       }
-       walkAnimation = new Animation(1f/16f,walkFrames); //4 frames per second can also do 0.25*/
-
-
-       //player.setPosition((GameInfo.WIDTH));
        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
        fpslabel = new Label("fps: ", skin);
        walkingBatch = new SpriteBatch();
@@ -418,6 +413,8 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     public void hide() {
 
     }
+
+
 
     @Override
     public void dispose() {
