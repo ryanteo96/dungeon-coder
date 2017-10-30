@@ -379,12 +379,12 @@ public class TaskOne extends ApplicationAdapter implements Screen {
 
         if(paused){
             walkingBatch.begin();
-            walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),VIRTUAL_WIDTH/2-60/2,VIRTUAL_HEIGHT/2-60/2,60,60);
+            //walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),VIRTUAL_WIDTH/2-60/2,VIRTUAL_HEIGHT/2-60/2,60,60);
             walkingBatch.end();
         }else{
             walkingBatch.begin();
             timePassed += Gdx.graphics.getDeltaTime();
-            walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),VIRTUAL_WIDTH/2-60/2,VIRTUAL_HEIGHT/2-60/2,60,60);
+            //walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),VIRTUAL_WIDTH/2-60/2,VIRTUAL_HEIGHT/2-60/2,60,60);
             walkingBatch.end();
         }
 
@@ -420,10 +420,10 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     public void dispose() {
         stage.dispose();
         //ninjaAtlas.dispose();
-        walkingAtlas.dispose();
+        //walkingAtlas.dispose();
         backButtonSkin.dispose();
         backgroundBatch.dispose();
-        walkingBatch.dispose();
+        //walkingBatch.dispose();
         //skin.dispose();
         bg.dispose();
         world.dispose();
