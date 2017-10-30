@@ -27,10 +27,10 @@ public class ServerThread extends Thread {
 			outgoing = new DataOutputStream(socket.getOutputStream());	
 		}
 		catch(IOException e) {
-			e.printStackTrace();
 		}
 	}
 
+	// Send an integer value to the client.
 	private void sendInt(int data) {
 		try {
 			outgoing.writeInt(data);
@@ -44,6 +44,7 @@ public class ServerThread extends Thread {
 		}
 	}
 
+	// Recieve and integer value from the client.
 	private int recieveInt() {
 		int data = -1;
 		try {
@@ -59,7 +60,7 @@ public class ServerThread extends Thread {
 		return data;
 	}
 
-	// Send data in the form af a String to the client.
+	// Send a String to the client.
 	private void sendString(String data) {
 		try {
 			outgoing.writeUTF(data);	
@@ -73,6 +74,7 @@ public class ServerThread extends Thread {
 		}
 	}
 
+	// Recieve a String from the client.
 	private String recieveString() {
 		String data = "";
 		try {
@@ -102,6 +104,7 @@ public class ServerThread extends Thread {
 		}
 	}
 
+	// Recieve an OPCODE from the client
 	private byte recieveCode() {
 		byte code = (byte)(0xEE);
 		try {
@@ -160,6 +163,7 @@ public class ServerThread extends Thread {
 		}
 	}
 
+	// Get the user's code for a specific level
 	private void getUserLevelCode() {
 		String levelName = recieveString();
 		String fileName = connectedUser + levelName;
@@ -375,6 +379,7 @@ public class ServerThread extends Thread {
 		}
 	}
 
+	// Update the user's progress for a task.
 	private void updateProgress() {
 		String task = recieveString();
 		int percentage = recieveInt();
@@ -397,6 +402,7 @@ public class ServerThread extends Thread {
 		}
 	}
 
+	// Update the user's saved code and attempts.
 	private byte updateUserCode(String task) {
 		try {
 			String fileName = connectedUser + task;
@@ -418,6 +424,7 @@ public class ServerThread extends Thread {
 		}
 	}
 
+	// Get the relative info for the task of the current Student.
 	private void getTaskInfo() {
 		try {
 			String task = recieveString();
@@ -444,11 +451,9 @@ public class ServerThread extends Thread {
 		}
 	}
 
+	// Split the given string with the given token.
 	private String[] parseList(String list, String token) {
 		String[] listItems = list.split(token);
-		for (int i = 0; i < listItems.length; i++) {
-			System.out.println(listItems[i]);
-		}
 		return listItems;
 	}
 
@@ -530,16 +535,14 @@ public class ServerThread extends Thread {
 		}
 		return hash;
 	}
-
+	
+	// Check if the given date is past the deadline for the given task.
 	private void DeadlinePassed(String task, String date) {
 		String dueDate = getDeadline(task);
-		int passed = compareDates(date, dueDate);
-		if (passed == 1) {
-			sendCode((byte)(0x20));
-		}
-		sendCode((byte)(0x10));
+		sendInt(compareDates(date, dueDate));
 	}
 
+	// Query the database for the deadline of the given task.
 	private String getDeadline(String task) {
 		if (conn == null) {
 			connectDB();
@@ -555,6 +558,7 @@ public class ServerThread extends Thread {
 		return Deadline;
 	}
 
+	// Check to see if date1 is before, after, or on date2.
 	private int compareDates(String date1, String date2) {
 		String[] temp1 = date1.split("/");
 		String[] temp2 = date2.split("/");
@@ -589,6 +593,7 @@ public class ServerThread extends Thread {
 		return 0;
 	}
 
+	// Shutdown the connection.
 	private void shutdown(boolean timedout) {
 		try {
 			if (timedout) {
@@ -612,7 +617,7 @@ public class ServerThread extends Thread {
 		// Set socket to timeout after a second if no login/account creation request
 		//byte[] code = new byte[1];
 		
-		// Wait a max of 1 second for login or account creation instruction
+		// Wait a max of 5 seconds for login or account creation instruction
 		try {
 			socket.setSoTimeout(5000);
 		}

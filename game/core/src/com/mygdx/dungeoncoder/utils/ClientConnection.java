@@ -30,7 +30,7 @@ public class ClientConnection {
 		}
 	}
 
-	private void sendCode(byte code) {
+	private synchronized void sendCode(byte code) {
 		try {
 			outgoing.write(code);
 		}
@@ -39,7 +39,7 @@ public class ClientConnection {
 		}
 	}
 
-	private byte recieveCode() {
+	private synchronized byte recieveCode() {
 		byte code = (byte)(0xEE);
 		try {
 			code = (byte)(incoming.read());
@@ -54,7 +54,7 @@ public class ClientConnection {
 	}
 
 	// Should be called right after a new client connection is created
-	public boolean requestLogin(String username, String password) {
+	public synchronized boolean requestLogin(String username, String password) {
 		try {
 			sendCode((byte)(0x01));
 			if (recieveCode() == 0x10) {
@@ -85,7 +85,7 @@ public class ClientConnection {
 	}
 
 	// Can also be called right after a new client connection is created
-	public boolean requestAccountCreation(String username, String password) {
+	public synchronized boolean requestAccountCreation(String username, String password) {
 		try {
 			sendCode((byte)(0x02));
 			if (recieveCode() == 0x10) {
@@ -117,7 +117,7 @@ public class ClientConnection {
 
 	// updateFields should be in the format "field1,field2,field3"
 	// newInfo should be ordered username, email, password
-	public boolean requestAccountUpdate(String username, String password, String updateFields, String token, String[] newInfo) {
+	public synchronized boolean requestAccountUpdate(String username, String password, String updateFields, String token, String[] newInfo) {
 		try {
 			sendCode((byte)(0x03));
 			if (recieveCode() == 0x10) {
@@ -152,7 +152,7 @@ public class ClientConnection {
 		return false;
 	}
 
-	public boolean requestUpdateProgress(File file, String task, int percentage) {
+	public synchronized boolean requestUpdateProgress(File file, String task, int percentage) {
 		try {
 			sendCode((byte)(0x04));
 			if (recieveCode() == 0x10) {
@@ -179,7 +179,7 @@ public class ClientConnection {
 		return false;
 	}
 
-	private boolean sendFile(File file, String fileName) {
+	private synchronized boolean sendFile(File file, String fileName) {
 		try {
 			outgoing.writeUTF(fileName);
 			long length = file.length();
@@ -206,7 +206,7 @@ public class ClientConnection {
 		return false;
 	}
 
-	private boolean recieveFile(String fileName) {
+	private synchronized boolean recieveFile(String fileName) {
 		try {
 			String givenFileName = incoming.readUTF();
 			if (fileName.equals("")) {
@@ -232,7 +232,7 @@ public class ClientConnection {
 	}
 
 	// Request the specific information for the user on the specific task
-	public String requestTaskInformation(String task, String information) { 
+	public synchronized String requestTaskInformation(String task, String information) { 
 		sendCode((byte)(0x0A));
 		if (recieveCode() == 0x10) {
 			try {
@@ -258,7 +258,7 @@ public class ClientConnection {
 		return "";
 	}
 
-	private boolean requestCodeFile(String levelName) {
+	private synchronized boolean requestCodeFile(String levelName) {
 		sendCode((byte)(0x09));
 		if (recieveCode() == 0x10) {
 			try {
@@ -277,7 +277,8 @@ public class ClientConnection {
 		return false;
 	}
 
-	private void ping() {
+	// TO DO
+	private synchronized void ping() {
 		sendCode((byte)(0xFF));
 		recieveCode();
 	}
