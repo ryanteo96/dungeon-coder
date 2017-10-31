@@ -20,6 +20,8 @@ public class ServerThread extends Thread {
 
 	private String connectedUser = "";
 
+	private TimeoutCounter timeoutCounter = null;
+
 	public ServerThread(Socket socket) {
 		this.socket = socket;		
 		try {
@@ -610,6 +612,7 @@ public class ServerThread extends Thread {
 	}
 
 	private void pong() {
+		timeoutCounter.interrupt();
 		sendCode((byte)(0xFF));
 	}
 
@@ -654,9 +657,10 @@ public class ServerThread extends Thread {
 		catch (IOException e) {
 			// Shouldn't happen. Do Nothing
 		}
+
+		timeoutCounter.start();
 		
-		// TO BE UPDATED WITH FULL DUPLEX
-		while(run) {
+		while(run /*|| timeoutCounter.isAlive()*/) {
 			byte request = recieveCode();
 			
 			switch (request) {
