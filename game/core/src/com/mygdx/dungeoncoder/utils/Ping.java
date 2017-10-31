@@ -1,4 +1,4 @@
-import com.mygdx.dungeoncoder.screens.shareVariable;
+/*import com.mygdx.dungeoncoder.screens.shareVariable;
 
 public class Ping extends Thread {
 
@@ -18,3 +18,4 @@ public class Ping extends Thread {
 		ping();
 	}
 }
+*/

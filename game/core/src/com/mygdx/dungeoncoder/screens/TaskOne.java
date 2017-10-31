@@ -63,16 +63,12 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     private World world;
     private OrthographicCamera box2DCamera;
     private Box2DDebugRenderer debugRenderer;
-    private int posX = 0;
-    private int posY = 0;
-    SpriteBatch p1;
     Texture pic1;
     Sprite test;
 
     private TextureAtlas stickman;
 
     public TaskOne(DungeonCoder g) {
-        p1 = new SpriteBatch();
         pic1 = new Texture("stationaryninja.png");
         game = g;
         box2DCamera = new OrthographicCamera();
@@ -364,18 +360,6 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         stage.draw();
         stage.act(delta);
         //begin walk
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)){
-            posY = posY + 4;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-            posY = posY - 4;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-            posX = posX - 4;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            posX = posX + 4;
-        }
-        p1.begin();
-        p1.draw(pic1, posX, posY);
-        p1.end();
 
         if(paused){
             walkingBatch.begin();
@@ -419,15 +403,14 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        //ninjaAtlas.dispose();
-        //walkingAtlas.dispose();
+        ninjaAtlas.dispose();
+        walkingAtlas.dispose();
         backButtonSkin.dispose();
         backgroundBatch.dispose();
-        //walkingBatch.dispose();
-        //skin.dispose();
+        walkingBatch.dispose();
+        skin.dispose();
         bg.dispose();
         world.dispose();
-        p1.dispose();
         pic1.dispose();
         player.getTexture().dispose();
     }
