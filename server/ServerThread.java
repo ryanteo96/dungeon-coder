@@ -584,8 +584,19 @@ public class ServerThread extends Thread {
 	}
 
 	private void pong() {
+		try {
+			if (conn == null) {
+				connectDB();
+			}
+			rs = stmt.executeQuery("SELECT Announcement FROM Announcements");
+			while(rs.next()) {
+				sendString(rs.getString("Announcement"));
+			}			
+		}
+		catch(SQLException e) {
+		}
+
 		sendCode((byte)(0xFF));
-		// Get Messages
 	}
 
 	public void run() {
@@ -621,8 +632,8 @@ public class ServerThread extends Thread {
 		// Stop thread if no code is recieved in the given time frame
 
 		try {
-			// Set timeout time to 1 minute
-			socket.setSoTimeout(60000);
+			// Set timeout time to 30 seconds
+			socket.setSoTimeout(30000);
 		}
 		catch (IOException e) {
 			// Shouldn't happen. Do Nothing
@@ -658,7 +669,7 @@ public class ServerThread extends Thread {
 					getTaskInfo();
 				break;
 				case (byte)(0xFF) :
-					pong();
+					sendCode((byte)(0x10));
 				break;
 				// INVALIDREQUEST
 				default:

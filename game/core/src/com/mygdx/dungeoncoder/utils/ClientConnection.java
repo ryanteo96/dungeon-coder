@@ -1,4 +1,5 @@
 package com.mygdx.dungeoncoder.utils;
+import java.util.ArrayList;
 import java.net.*;
 import java.io.*;
 
@@ -8,12 +9,13 @@ import java.io.*;
  * Handles all requests and responses to and from the server.
  */
 public class ClientConnection {
-	public String ip = "13.59.159.206";
-	int port = 37536;
-	Socket client;
-	DataOutputStream outgoing;
-	DataInputStream incoming;
-
+	private String ip = "13.59.159.206";
+	private int port = 37536;
+	private Socket client;
+	private DataOutputStream outgoing;
+	private DataInputStream incoming;
+	private ArrayList<String> messages = new ArrayList<String>();
+	
 	// Initialize new Client Connection
 	public ClientConnection() {
 		try {
@@ -279,6 +281,17 @@ public class ClientConnection {
 
 	public synchronized void ping() {
 		sendCode((byte)(0xFF));
-		recieveCode();
+		while(recieveCode() != 0xFF) {
+			try {
+				messages.add(incoming.readUTF());
+			}
+			catch(IOException e) {
+				// Do Nothing
+			}
+		}
+	}
+
+	public synchronized ArrayList<String> getMessages() {
+		return messages;
 	}
 }
