@@ -6,30 +6,22 @@ $dbname = "userAccounts";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
-
-$param = "java Hash ";
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-$task = $_GET["task"];
 $return;
 
-$sql = "SELECT Student, Completion, Deadline, Attempts, Code, PointValue, Comments FROM " . $task;
+$sql = "SELECT " . "Date" . ",Announcement FROM Announcements";
 //echo $sql;
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
-        $return -> student = $row["Student"];
-        $return -> completion = $row["Completion"];
-        $return -> deadline = $row["Deadline"];
-        $return -> attempts = $row["Attempts"];
-        $return -> code = $row["Code"];
-        $return -> pointValue = $row["PointValue"];
-        $return -> comments = $row["Comments"];
+        $return -> date= $row["Date"];
+        $return -> announcement = $row["Announcement"];
         
         $returnJSON = json_encode($return);
         echo $returnJSON . "&";

@@ -1,0 +1,424 @@
+#taskModal {
+    display:none;
+    position:fixed;
+    z-index:2;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    overflow:auto;
+    background-color:rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+ #taskContent {
+     position:absolute;
+     background-color:#fefefe;
+     top:50px;
+     left:0px;
+     right:0px;
+     margin:auto;
+     padding:20px;
+     border:1px solid #888;
+     width:1000px;
+     height:700px;
+ }
+
+ #taskClose {
+    color:#aaa;
+    float:right;
+    font-size:28px;
+    font-weight:bold;
+}
+
+ #taskClose:hover,
+ #taskClose:focus {
+     color:black;
+     text-decoration:none;
+     cursor:pointer;
+ }
+
+ #taskHdrDiv {
+     top:50px;
+     right: 0px;
+     left: 0px;
+     position:absolute;
+     width:900px;
+     height:50px;
+     margin:auto;
+ }
+
+ #taskHdr {
+     position:absolute;
+     width:200px;
+     top:0px;
+     left:10px;
+     margin:auto;
+     font-size:30;
+     font-family:'Open Sans', san-serif;
+ }
+
+ #taskInfoDiv {
+     top:100px;
+     right: 0px;
+     left: 0px;
+     position:absolute;
+     width:900px;
+     height:300px;
+     margin:auto;
+     font-size:15;
+     font-family:'Open Sans', san-serif;
+ }
+
+ #taskInfoDesc {
+    position:absolute;
+    top:0px;
+    left:10px;
+    font-family:'Open Sans', san-serif;
+    font-style:italic;
+ }
+
+ #taskDeadlineLbl {
+     position:absolute;
+     width:200px;
+     top:220px;
+     left:10px;
+     margin:auto;
+ }
+
+ #taskDeadline {
+     position:absolute;
+     width:200px;
+     top:220px;
+     left:150px;
+     margin:auto;
+ }
+
+ #changeDeadline {
+     position:absolute;
+     width:200px;
+     top:250px;
+     left:10px;
+     margin:auto;
+ }
+
+ #changeDeadlineInput {
+     position:absolute;
+     width:150px;
+     top:250px;
+     left:150px;
+     margin:auto;
+ }
+
+ #changeDeadlineBtn {
+     position:absolute;
+     width:100px;
+     height:30px;
+     top:252px;
+     left:350px;
+     margin:auto;
+ }
+
+ #studentTaskListDiv {
+     top:400px;
+     right: 0px;
+     left: 0px;
+     position:absolute;
+     width:900px;
+     height:300px;
+     margin:auto;
+     border-style:solid;
+     border-width:1px;
+ }
+
+ #taskColHeadings {
+     position:absolute;
+     background-color: rgb(226, 226, 226);
+     content: "";
+     height:30px;
+     width:900px;
+     border-bottom:solid;
+     border-width:1px;
+     font-family:'Open Sans', san-serif;
+     font-size:15;
+ }
+
+ #taskStudentHeading {
+     position:absolute;
+     z-index:1;
+     top:2px;
+     width:150px;
+     height:30px;
+     text-align:center;
+ }
+
+ #taskDeadlineHeading {
+     position:absolute;
+     z-index:1;
+     top:2px;
+     left:150px;
+     width:100px;
+     height:30px;
+     text-align:center;
+ }
+
+ #taskCompletionHeading {
+     position:absolute;
+     z-index:1;
+     top:2px;
+     left:250px;
+     width:100px;
+     height:30px;
+     text-align:center;
+ }
+
+ #taskAttemptsHeading {
+     position:absolute;
+     z-index:1;
+     top:2px;
+     left:350px;
+     width:100px;
+     height:30px;
+     text-align:center;
+ }
+
+ #taskCodeHeading {
+     position:absolute;
+     z-index:1;
+     top:2px;
+     left:450px;
+     width:350px;
+     height:30px;
+     text-align:center;
+ }
+
+ #taskPointValueHeading {
+     position:absolute;
+     z-index:1;
+     top:2px;
+     left:800px;
+     width:100px;
+     height:30px;
+     text-align:center;
+ }
+
+ #taskCol1 {
+     position:absolute;
+     border-right:solid;
+     border-width:1px;
+     width:150px;
+     height:300px;
+ }
+
+ #taskCol2 {
+     position:absolute;
+     border-right:solid;
+     border-width:1px;
+     width:100px;
+     height:300px;
+     left:150px;
+ }
+ 
+ #taskCol3 {
+     position:absolute;
+     border-right:solid;
+     border-width:1px;
+     width:100px;
+     height:300px;
+     left:250px;
+ }
+
+ #taskCol4 {
+     position:absolute;
+     border-right:solid;
+     border-width:1px;
+     width:100px;
+     height:300px;
+     left:350px;
+ }
+
+ #taskCol5 {
+     position:absolute;
+     border-right:solid;
+     border-width:1px;
+     width:350px;
+     height:300px;
+     left:450px;
+ }
+
+ #taskListDivData {
+     position:absolute; 
+     top:432px;
+     right:0px;
+     left:0px;
+     width:900px;
+     height:268px;
+     margin:auto;
+     overflow-y:scroll;
+     overflow-x:hidden;
+     font-family:'Open Sans', san-serif;
+     font-size:15;
+ }
+
+ .divTaskEntriesRow {
+     display:flex;
+     width:1000px;
+     height:30px;
+ }
+
+ .divTaskEntriesRowCol1 {
+     position:absolute; 
+     width:150px;
+     height:30px;
+     text-align:center;
+     z-index:1;
+     overflow-y:hidden;
+     overflow-x:hidden;
+ }
+
+ .divTaskEntriesRowCol2 {
+     position:absolute; 
+     width:100px;
+     left:150px; 
+     height:30px;
+     text-align:center;
+     z-index:1;
+     overflow-y:hidden;
+     overflow-x:hidden;
+ }
+
+ .divTaskEntriesRowCol3 {
+     position:absolute; 
+     width:100px;
+     left:250px; 
+     height:30px;
+     text-align:center;
+     z-index:1;
+     overflow-y:hidden;
+     overflow-x:hidden;
+ }
+
+ .divTaskEntriesRowCol4 {
+     position:absolute; 
+     width:100px;
+     left:350px; 
+     height:30px;
+     text-align:center;
+     z-index:1;
+     overflow-y:hidden;
+     overflow-x:hidden;
+}
+
+.divTaskEntriesRowCol5 {
+     position:absolute; 
+     width:350px;
+     left:450px; 
+     height:30px;
+     text-align:center;
+     z-index:1;
+     overflow-y:hidden;
+     overflow-x:hidden;
+}
+
+.divTaskEntriesRowCol6 {
+     position:absolute; 
+     width:100px;
+     left:800px; 
+     height:30px;
+     text-align:center;
+     z-index:1;
+     overflow-y:hidden;
+     overflow-x:hidden;
+}
+
+#completionVal {
+    position:absolute;
+    width:170px;
+    height:80px;
+    top:50px;
+    left:50px;
+    margin:auto;
+    font-size:60;
+    text-align:center;
+    font-family:'Open Sans', san-serif;
+}
+
+#completionLbl {
+    position:absolute;
+    width:170px;
+    top:140px;
+    left:50px;
+    margin:auto;
+    font-size:13;
+    text-align:center;
+    font-family:'Open Sans', san-serif;
+}
+
+#deadlineVal {
+    position:absolute;
+    width:200px;
+    height:50px;
+    top:70px;
+    left:280px;
+    margin:auto;
+    font-size:35;
+    text-align:center;
+    font-family:'Open Sans', san-serif;
+}
+
+#deadlineLbl {
+    position:absolute;
+    width:202px;
+    top:140px;
+    left:280px;
+    margin:auto;
+    font-size:13;
+    text-align:center;
+    font-family:'Open Sans', san-serif;
+}
+
+#attemptsVal {
+    position:absolute;
+    width:150px;
+    height:80px;
+    top:50px;
+    left:550px;
+    margin:auto;
+    font-size:60;
+    text-align:center;
+    font-family:'Open Sans', san-serif;
+}
+
+#attemptsLbl {
+    position:absolute;
+    width:150px;
+    top:140px;
+    left:550px;
+    margin:auto;
+    font-size:13;
+    text-align:center;
+    font-family:'Open Sans', san-serif;
+}
+
+#pointsVal {
+    position:absolute;
+    width:150px;
+    height:80px;
+    top:50px;
+    left:750px;
+    margin:auto;
+    font-size:60;
+    text-align:center;
+    font-family:'Open Sans', san-serif;
+}
+
+#pointsLbl {
+    position:absolute;
+    width:150px;
+    top:140px;
+    left:750px;
+    margin:auto;
+    font-size:13;
+    text-align:center;
+    font-family:'Open Sans', san-serif;
+}

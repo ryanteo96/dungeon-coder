@@ -35,49 +35,57 @@ function showModal(type, previousModal) {
     } else if (type === "manageAccount") {
         modal = document.getElementById("manageAccountModal");
         span = document.getElementById("manageAccountClose");
+    } else if (type === "createAnnouncement") {
+        modal = document.getElementById("createAnnouncementModal");
+        span = document.getElementById("createAnnouncementClose");
+    } else if (type === "editStudent") {
+        modal = document.getElementById("editStudentModal");
+        span = document.getElementById("editStudentClose");
     }
-
-    /*
-    if (type === "signInModal") {
-        span = document.getElementById("signInClose");
-    } else if (type === "editModal") {
-        span = document.getElementById("editClose");
-    } else if (type === "alertModal") {
-        span = document.getElementById("alertClose");
-    } else if (type === "confirmationModal") {
-        span = document.getElementById("confirmationClose");
-    }*/
 
     modal.style.display = "block";
+    console.log("SET OPEN: " + modal.id);
+    console.log("SET OPEN: " + span.id);
 
     span.onclick = function() {
+        console.log("PRESS CLOSE: " + span.id);
         modal.style.display = "none";
-        /*
-        if (type === "editModal") {
-            userConfirmation("Are you sure you want to discard your changes to this entry?", modal, "cancel");
-        }else if (checkLogIn()) {
-            modal.style.display = "none";
-        } else
-            alertUser("Sign In Required.", modal);
-            */
+
+        if (previousModal === "Task1") {
+            modal = document.getElementById("taskModal");
+            span = document.getElementById("taskClose");
+        } else if (previousModal === "manageAccount") {
+            modal = document.getElementById("manageAccountModal");
+            span = document.getElementById("manageAccountClose");
+        } else if (previousModal === "createAnnouncement") {
+            modal = document.getElementById("createAnnouncementModal");
+            span = document.getElementById("createAnnouncementClose");
+        } else if (previousModal === "editStudent") {
+            modal = document.getElementById("editStudentModal");
+            span = document.getElementById("editStudentClose");
+        }
 
     }
 
-    modal.onclick = function(event) {
+    window.onclick = function(event) {
         if (event.target == modal) {
+            console.log("PRESS CLOSE: " + modal.id);
             modal.style.display = "none";
-        }
 
-        /*
-        if (event.target == modal) {
-            if (type === "editModal") {
-                userConfirmation("Are you sure you want to discard your changes to this entry?", modal, "cancel");
-            } else if (checkLogIn()) {
-                modal.style.display = "none";
-            } else 
-                alertUser("Sign In Required.", modal);
+            if (previousModal === "Task1") {
+                modal = document.getElementById("taskModal");
+                span = document.getElementById("taskClose");
+            } else if (previousModal === "manageAccount") {
+                modal = document.getElementById("manageAccountModal");
+                span = document.getElementById("manageAccountClose");
+            } else if (previousModal === "createAnnouncement") {
+                modal = document.getElementById("createAnnouncementModal");
+                span = document.getElementById("createAnnouncementClose");
+            } else if (previousModal === "editStudent") {
+                modal = document.getElementById("editStudentModal");
+                span = document.getElementById("editStudentClose");
+            }
         }
-        */
     }
 }
 

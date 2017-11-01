@@ -5,6 +5,8 @@ var currentDeadline;
 var taskObj;
 var allStudentTask;
 var temp;
+var announcements;
+var announcementObj;
 
 function body_onload() {
     if (!checkLoggedIn() || checkLoggedIn() === "null") {
@@ -15,11 +17,13 @@ function body_onload() {
     currentUser = sessionStorageGet("CurrentUser", null);
 
     retrieveStudentList();
+    retrieveAnnouncements();
     task1.onclick = task1_onclick;
     changeDeadlineBtn.onclick = changeDeadlineBtn_onclick;
     manageAccountBtn.onclick = manageAccountBtn_onclick;
     saveBtn.onclick = saveBtn_onclick;
     signOutBtn.onclick = signOutBtn_onclick;
+    createAnnouncementBtn.onclick = createAnnouncementBtn_onclick;
 }
 
 function displayStudents() {
@@ -70,7 +74,7 @@ function retrieveStudentList() {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
+            //console.log(this.responseText);
             var response = this.responseText;
             var array = response.split("&");
             parseEntries(array);
@@ -123,12 +127,12 @@ function changeDeadlineBtn_onclick() {
 }
 
 function attemptChangeDeadline(task, deadline) {
-    console.log(task);
-    console.log(deadline);  
+    //console.log(task);
+    //console.log(deadline);  
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
+            //console.log(this.responseText);
             var response = this.responseText;
             attemptRetrieveTask(task);
         }
@@ -145,17 +149,18 @@ function attemptRetrieveTask(task) {
             var responses = this.responseText.split("&");
 
             for (var i = 0; i < responses.length -1; i++) {
-                console.log(responses[i]);
+                //console.log(responses[i]);
                 taskObj = new Object();
                 taskObj = JSON.parse(responses[i]);
-                console.log(taskObj);
-                console.log(taskObj.deadline);
+                //console.log(taskObj);
+                //console.log(taskObj.deadline);
                 currentDeadline = taskObj.deadline;
                 updateDeadline();
                 allStudentTask.push(taskObj);
-                displayTaskStudents();
             }
-            
+
+            displayTaskStudents();
+            retrieveStatistics();
         }
     };
     xmlhttp.open("GET", "Tasks.php?task=" + task , true);
@@ -167,8 +172,8 @@ function displayTaskStudents() {
     taskListDivData.innerHTML = "";
     // traversing the array of entries and creating HTML components and CSS styles.
     for(var i = 0; i < allStudentTask.length; i++) {
-        console.log("yes");
-        console.log(allStudentTask);
+        //console.log("yes");
+        //console.log(allStudentTask);
         var entry = allStudentTask[i];
     
         var row = document.createElement("div");
@@ -188,13 +193,13 @@ function displayTaskStudents() {
         col6.className = "divTaskEntriesRowCol6";
 
         col1.innerHTML = entry.student;
-        col2.innerHTML = entry.completion;
-        col3.innerHTML = entry.deadline;
-        col4.innerHTML = entry.attempt;
+        col2.innerHTML = entry.deadline;
+        col3.innerHTML = entry.completion;
+        col4.innerHTML = entry.attempts;
         col5.innerHTML = entry.code;
         col6.innerHTML = entry.pointValue;
         
-        row.ondblclick = row_onblclick // run corresponding functions when buttons are pressed.
+        row.ondblclick = taskRow_onblclick // run corresponding functions when buttons are pressed.
         row.index = i; 
         row.style.cursor = 'pointer'; // changing the pointer when mouse is hovered over.*/
 
@@ -210,38 +215,170 @@ function displayTaskStudents() {
 }
 
 function updateDeadline() {
-    taskDeadline.innerHTML = currentDeadline;
+    deadlineVal.innerHTML = currentDeadline;
 }
 
-function row_onblclick() {
-    temp = new Object();
-    temp = allStudentTask[this.index];
-    currentStudent.innerHTML = temp.student;
-    changePointValueBtn.onclick = changePointValueBtn_onclick;
+function signOutBtn_onclick() {
+    signOut();
 }
 
-function changePointValueBtn_onclick() {
-    var pointValue = changePointValueInput.value;
-    if (pointValue.length <= 0) {
-        alert("Point Value required.");
-    } else {
-        attemptChangePointValue(currentTask, temp.student, pointValue);
+function createAnnouncementBtn_onclick() {
+    showModal("createAnnouncement", null);
+
+    createAnnouncementSubmitBtn.onclick = function() {
+        if (createAnnouncementInput.value.length > 0)
+            createAnnouncement();
+
+        var modal = document.getElementById("createAnnouncementModal");
+        modal.style.display = "none";
     }
 }
 
-function attemptChangePointValue(task, user, pointValue) {
+function createAnnouncement() {
+    var date = new Date();
+    var dateString = date.toISOString()
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            //console.log(this.responseText);
+            var response = this.responseText;
+            retrieveAnnouncements();
+        }
+    };
+    xmlhttp.open("GET", "CreateAnnouncement.php?date=" + dateString.substring(0, 10) + "&announcement=" + createAnnouncementInput.value, true);
+    xmlhttp.send();
+}
+
+function retrieveAnnouncements() {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            announcements = new Array();
+            var responses = this.responseText.split("&");
+
+            for (var i = 0; i < responses.length -1; i++) {
+                announcementObj = new Object();
+                announcementObj = JSON.parse(responses[i]);
+                announcements.push(announcementObj);
+                displayAnnouncements();
+            }
+        }
+    };
+    xmlhttp.open("GET", "GetAnnouncements.php", true);
+    xmlhttp.send();
+}
+
+function displayAnnouncements() {
+    announcementListData.innerHTML = "";
+    for(var i = 0; i < announcements.length; i++) {
+        var entry = announcements[i];
+
+        var row = document.createElement("div");
+        var col1 = document.createElement("div");
+        var col2 = document.createElement("div");
+
+        row.className = "divAnnouncementsRow";
+        col1.className = "divAnnouncementsRowCol1";
+        col2.className = "divAnnouncementsRowCol2";
+
+        col1.innerHTML = entry.date;
+        col2.innerHTML = entry.announcement;
+        
+        /*row.ondblclick = row_onblclick // run corresponding functions when buttons are pressed.
+        row.index = i; 
+        row.style.cursor = 'pointer'; // changing the pointer when mouse is hovered over.*/
+
+        row.appendChild(col1);
+        row.appendChild(col2);
+
+        announcementListData.appendChild(row);
+    }
+}
+
+function retrieveStatistics() {
+    var classCompletion = 0;
+    var averageAttempts = 0;
+    var averagePoints = 0;
+
+    for (var i = 0; i < allStudentTask.length; i++) {
+        classCompletion += parseFloat(allStudentTask[i].completion);
+        averageAttempts += parseFloat(allStudentTask[i].attempts);
+        averagePoints += parseFloat(allStudentTask[i].pointValue);
+    }   
+
+    if (classCompletion !== 0) {
+        classCompletion = classCompletion / allStudentTask.length;
+    }
+
+    if (averageAttempts !== 0) {
+        averageAttempts = averageAttempts / allStudentTask.length;
+    }
+
+    if (averagePoints !== 0) {
+        averagePoints = averagePoints / allStudentTask.length;
+    }
+
+    completionVal.innerHTML = classCompletion.toFixed(2) + "%";
+    attemptsVal.innerHTML = averageAttempts.toFixed(2);
+    pointsVal.innerHTML = averagePoints.toFixed(2);
+}
+
+
+function taskRow_onblclick() {
+    temp = new Object();
+    temp = allStudentTask[this.index];
+    showModal("editStudent", "Task1");
+
+    editStudentName.innerHTML = temp.student;
+    editStudentDeadlineInput.value = temp.deadline;
+    editStudentPointInput.value = temp.pointValue;
+    editStudentCommentInput.value = temp.comments;
+
+    editStudentSaveBtn.onclick = function() {
+
+        var obj = new Object();
+        obj.student = temp.student;
+        obj.deadline = editStudentDeadlineInput.value;
+        obj.pointValue = editStudentPointInput.value;
+        obj.comment = editStudentCommentInput.value;
+
+        attemptEditUser(currentTask, obj);
+
+        var modal = document.getElementById("editStudentModal");
+        modal.style.display = "none";
+    }
+}
+
+
+function attemptEditUser(task, obj) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             console.log(this.responseText);  
             attemptRetrieveTask(task);
+            retrieveStatistics();
         }
     };
-    xmlhttp.open("GET", "PointValue.php?task=" + task + "&user=" + user + "&pointValue=" + pointValue, true);
-    xmlhttp.send();
-    
-}
 
-function signOutBtn_onclick() {
-    signOut();
+    var query = "&task=" + currentTask;
+
+    if (obj.pointValue !== null) {
+        if (obj.pointValue < 0) {
+            alert("Valid point required.");
+        }
+
+        query += "&point=" + obj.pointValue;
+    }
+
+    if (obj.deadline !== null) {
+        query += "&deadline=" + obj.deadline;
+    }
+
+    if (obj.comment !== null) {
+        query += "&comment=" + obj.comment;
+    }
+
+    xmlhttp.open("GET", "EditStudent.php?user=" + obj.student + query, true);
+    xmlhttp.send();
 }

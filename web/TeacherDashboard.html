@@ -5,7 +5,10 @@
         <script language="javascript" type="text/javascript" src="Shared.js"></script>
         <script language="javascript" type="text/javascript" src="ManageAccount.js"></script>
 
-        <link rel="stylesheet" type="text/css" href="ManageAccount.css">
+        <link rel="stylesheet" type="text/css" href="ManageAccountModal.css">
+        <link rel="stylesheet" type="text/css" href="TeacherDashboardTaskModal.css">
+        <link rel="stylesheet" type="text/css" href="CreateAnnouncementModal.css">
+        <link rel="stylesheet" type="text/css" href="EditStudent.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700" rel="stylesheet">
         <style type="text/css">
             #teacherDashBoardDiv {
@@ -35,7 +38,18 @@
                 font-family:'Open Sans', san-serif;
             }
 
+
             #manageAccountBtn {
+                position:absolute;
+                width:190px;
+                top:0px;
+                left:600px;
+                margin:auto;
+                font-size:20;
+                font-family:'Open Sans', san-serif;
+            }
+
+            #signOutBtn {
                 position:absolute;
                 width:190px;
                 top:0px;
@@ -45,23 +59,97 @@
                 font-family:'Open Sans', san-serif;
             }
 
-            #signOutBtn {
+            #announcementDiv {
+                position:absolute;
+                top:100px;
+                left:0px;
+                right:0px;
+                width:1000px;
+                height:200px;
+                margin:auto;
+            }
+
+            #announcementHdr {
                 position:absolute;
                 width:190px;
-                top:50px;
-                left:800px;
+                top:0px;
+                left:10px;
+                margin:auto;
+                font-size:30;
+                font-family:'Open Sans', san-serif;
+            }
+
+            #createAnnouncementBtn {
+                position:absolute;
+                width:250px;
+                top:0px;
+                left:750px;
                 margin:auto;
                 font-size:20;
                 font-family:'Open Sans', san-serif;
             }
 
+            #announcementList {
+                position:absolute; 
+                top:50px;
+                right:0px;
+                left:0px;
+                width:1000px;
+                height:150px;
+                margin:auto;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+                border-style:solid;
+                border-width:1px;
+            }
+            
+            #announcementListData {
+                position:absolute; 
+                top:0px;
+                right:0px;
+                left:0px;
+                width:1000px;
+                height:150px;
+                margin:auto;
+                overflow-y:scroll;
+                overflow-x:hidden;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
+
+            .divAnnouncementsRow {
+                display:flex;
+                width:1000px;
+                height:30px;
+            }
+
+            .divAnnouncementsRowCol1 {
+                position:absolute; 
+                width:150px;
+                height:30px;
+                text-align:center;
+                z-index:1;
+                overflow-y:hidden;
+                overflow-x:hidden;
+            }
+
+            .divAnnouncementsRowCol2 {
+                position:absolute; 
+                width:850px;
+                left:150px; 
+                height:30px;
+                z-index:1;
+                overflow-y:hidden;
+                overflow-x:hidden;
+            }
+
             #classTasks {
                 position:absolute;  
-                top:120px;
+                top:350px;
                 left:0px;
                 right:0px;
                 width:1000px;
-                height:40%;
+                height:250px;
                 margin:auto;
             }
 
@@ -255,13 +343,13 @@
                 background-color:rgb(226, 226, 226);
             }
 
-            #studentListHdrDiv {
-                top:380px;
+            #studentListDiv {
+                top:600px;
                 right: 0px;
                 left: 0px;
                 position:absolute;
                 width:1000px;
-                height:10%;
+                height:360px;
                 margin:auto;
             }
 
@@ -275,8 +363,8 @@
                 font-family:'Open Sans', san-serif;
             }
 
-            #studentListDiv {
-                top:430px;
+            #studentList {
+                top:50px;
                 right: 0px;
                 left: 0px;
                 position:absolute;
@@ -291,6 +379,7 @@
                 position:absolute;
                 background-color: rgb(226, 226, 226);
                 content: "";
+                top:0px;
                 height:30px;
                 width:1000px;
                 border-bottom:solid;
@@ -394,7 +483,7 @@
 
             #studentListDivData {
                 position:absolute; 
-                top:462px;
+                top:82px;
                 right:0px;
                 left:0px;
                 width:1000px;
@@ -466,373 +555,6 @@
                 overflow-x:hidden;
            }
 
-           #taskModal {
-               display:none;
-               position:fixed;
-               z-index:2;
-               left:0;
-               top:0;
-               width:100%;
-               height:100%;
-               overflow:auto;
-               background-color:rgb(0,0,0);
-               background-color: rgba(0,0,0,0.4);
-           }
-
-            #taskContent {
-                position:absolute;
-                background-color:#fefefe;
-                top:50px;
-                left:0px;
-                right:0px;
-                margin:auto;
-                padding:20px;
-                border:1px solid #888;
-                width:1000px;
-                height:600px;
-            }
-
-            #taskClose {
-               color:#aaa;
-               float:right;
-               font-size:28px;
-               font-weight:bold;
-           }
-
-            #taskClose:hover,
-            #taskClose:focus {
-                color:black;
-                text-decoration:none;
-                cursor:pointer;
-            }
-           
-            #taskHdrDiv {
-                top:50px;
-                right: 0px;
-                left: 0px;
-                position:absolute;
-                width:900px;
-                height:50px;
-                margin:auto;
-            }
-
-            #taskHdr {
-                position:absolute;
-                width:200px;
-                top:0px;
-                left:10px;
-                margin:auto;
-                font-size:30;
-                font-family:'Open Sans', san-serif;
-            }
-
-            #taskInfoDiv {
-                top:100px;
-                right: 0px;
-                left: 0px;
-                position:absolute;
-                width:900px;
-                height:100px;
-                margin:auto;
-                font-size:15;
-                font-family:'Open Sans', san-serif;
-            }
-
-            #taskDeadlineLbl {
-                position:absolute;
-                width:200px;
-                top:0px;
-                left:10px;
-                margin:auto;
-            }
-
-            #taskDeadline {
-                position:absolute;
-                width:200px;
-                top:0px;
-                left:150px;
-                margin:auto;
-            }
-
-            #changeDeadline {
-                position:absolute;
-                width:200px;
-                top:30px;
-                left:10px;
-                margin:auto;
-            }
-
-            #currentStudentLbl {
-                position:absolute;
-                width:200px;
-                top:60px;
-                left:10px;
-                margin:auto;
-            }
-
-            #currentStudent {
-                position:absolute;
-                width:200px;
-                top:60px;
-                left:150px;
-                margin:auto;
-            }
-
-            #changeDeadlineInput {
-                position:absolute;
-                width:150px;
-                top:30px;
-                left:150px;
-                margin:auto;
-            }
-
-            #changeDeadlineBtn {
-                position:absolute;
-                width:100px;
-                height:30px;
-                top:32px;
-                left:350px;
-                margin:auto;
-            }
-
-            #changePointValueLbl {
-                position:absolute;
-                width:200px;
-                top:60px;
-                left:250px;
-                margin:auto;
-            }
-
-            #changePointValueInput{
-                position:absolute;
-                width:150px;
-                top:60px;
-                left:350px;
-                margin:auto;
-            }
-
-            #changePointValueBtn {
-                position:absolute;
-                width:100px;
-                height:30px;
-                top:62px;
-                left:550px;
-                margin:auto;
-            }
-
-            #studentTaskListDiv {
-                top:200px;
-                right: 0px;
-                left: 0px;
-                position:absolute;
-                width:1000px;
-                height:300px;
-                margin:auto;
-                border-style:solid;
-                border-width:1px;
-            }
-
-            #taskColHeadings {
-                position:absolute;
-                background-color: rgb(226, 226, 226);
-                content: "";
-                height:30px;
-                width:1000px;
-                border-bottom:solid;
-                border-width:1px;
-                font-family:'Open Sans', san-serif;
-                font-size:15;
-            }
-
-            #taskStudentHeading {
-                position:absolute;
-                z-index:1;
-                top:2px;
-                width:200px;
-                height:30px;
-                text-align:center;
-            }
-
-            #taskDeadlineHeading {
-                position:absolute;
-                z-index:1;
-                top:2px;
-                left:200px;
-                width:100px;
-                height:30px;
-                text-align:center;
-            }
-
-            #taskCompletionHeading {
-                position:absolute;
-                z-index:1;
-                top:2px;
-                left:300px;
-                width:100px;
-                height:30px;
-                text-align:center;
-            }
-
-            #taskAttemptsHeading {
-                position:absolute;
-                z-index:1;
-                top:2px;
-                left:400px;
-                width:100px;
-                height:30px;
-                text-align:center;
-            }
-
-            #taskCodeHeading {
-                position:absolute;
-                z-index:1;
-                top:2px;
-                left:500px;
-                width:400px;
-                height:30px;
-                text-align:center;
-            }
-
-            #taskPointValueHeading {
-                position:absolute;
-                z-index:1;
-                top:2px;
-                left:900px;
-                width:100px;
-                height:30px;
-                text-align:center;
-            }
-
-            #taskCol1 {
-                position:absolute;
-                border-right:solid;
-                border-width:1px;
-                width:200px;
-                height:300px;
-            }
-
-            #taskCol2 {
-                position:absolute;
-                border-right:solid;
-                border-width:1px;
-                width:100px;
-                height:300px;
-                left:200px;
-            }
-            
-            #taskCol3 {
-                position:absolute;
-                border-right:solid;
-                border-width:1px;
-                width:100px;
-                height:300px;
-                left:300px;
-            }
-
-            #taskCol4 {
-                position:absolute;
-                border-right:solid;
-                border-width:1px;
-                width:100px;
-                height:300px;
-                left:400px;
-            }
-
-            #taskCol5 {
-                position:absolute;
-                border-right:solid;
-                border-width:1px;
-                width:400px;
-                height:300px;
-                left:500px;
-            }
-
-            #taskListDivData {
-                position:absolute; 
-                top:232px;
-                right:0px;
-                left:0px;
-                width:1000px;
-                height:268px;
-                margin:auto;
-                overflow-y:scroll;
-                overflow-x:hidden;
-                font-family:'Open Sans', san-serif;
-                font-size:15;
-            }
-
-            .divTaskEntriesRow {
-                display:flex;
-                width:1000px;
-                height:30px;
-            }
-
-            .divTaskEntriesRowCol1 {
-                position:absolute; 
-                width:200px;
-                height:30px;
-                text-align:center;
-                z-index:1;
-                overflow-y:hidden;
-                overflow-x:hidden;
-            }
-
-            .divTaskEntriesRowCol2 {
-                position:absolute; 
-                width:100px;
-                left:200px; 
-                height:30px;
-                text-align:center;
-                z-index:1;
-                overflow-y:hidden;
-                overflow-x:hidden;
-            }
-
-            .divTaskEntriesRowCol3 {
-                position:absolute; 
-                width:100px;
-                left:300px; 
-                height:30px;
-                text-align:center;
-                z-index:1;
-                overflow-y:hidden;
-                overflow-x:hidden;
-            }
-
-            .divTaskEntriesRowCol4 {
-                position:absolute; 
-                width:100px;
-                left:400px; 
-                height:30px;
-                text-align:center;
-                z-index:1;
-                overflow-y:hidden;
-                overflow-x:hidden;
-           }
-
-           .divTaskEntriesRowCol5 {
-                position:absolute; 
-                width:400px;
-                left:500px; 
-                height:30px;
-                text-align:center;
-                z-index:1;
-                overflow-y:hidden;
-                overflow-x:hidden;
-           }
-
-           .divTaskEntriesRowCol6 {
-                position:absolute; 
-                width:100px;
-                left:900px; 
-                height:30px;
-                text-align:center;
-                z-index:1;
-                overflow-y:hidden;
-                overflow-x:hidden;
-           }
-
-
         </style>
     </head>
 
@@ -872,41 +594,53 @@
                 </div>
             </div>
 
+            <!-- Div for Announcements -->
+            <div id=announcementDiv>
+                <label id="announcementHdr">ANNOUNCEMENTS</label>
+                <input id="createAnnouncementBtn" type="button" value="Create Announcement"></input>
+                
+                <div id="announcementList">
+                    <div id="announcementListData"></div>
+                </div>
+            </div>
+
             <!-- Div for Class Task. -->
             <div id="classTasks">
-                <input id="task1" type=button value="TASK 1"></input>
-                <input id="task2" type=button value="TASK 2"></input>
-                <input id="task3" type=button value="TASK 3"></input>
-                <input id="task4" type=button value="TASK 4"></input>
-                <input id="task5" type=button value="TASK 5"></input>
-                <input id="task6" type=button value="TASK 6"></input>
-                <input id="task7" type=button value="TASK 7"></input>
-                <input id="task8" type=button value="TASK 8"></input>
-                <input id="task9" type=button value="TASK 9"></input>
-                <input id="task10" type=button value="TASK 10"></input>
+                <input id="task1" type="button" value="TASK 1"></input>
+                <input id="task2" type="button" value="TASK 2"></input>
+                <input id="task3" type="button" value="TASK 3"></input>
+                <input id="task4" type="button" value="TASK 4"></input>
+                <input id="task5" type="button" value="TASK 5"></input>
+                <input id="task6" type="button" value="TASK 6"></input>
+                <input id="task7" type="button" value="TASK 7"></input>
+                <input id="task8" type="button" value="TASK 8"></input>
+                <input id="task9" type="button" value="TASK 9"></input>
+                <input id="task10" type="button" value="TASK 10"></input>
             </div>
-            <!-- Div for Student Header Div. -->
-            <div id=studentListHdrDiv>
-                <label id="studentListHdr">STUDENTS</label>
-            </div>
+
             <!-- Div for Student List Entries. -->   
             <div id="studentListDiv">
-                <div id="colHeadings">
-                    <div id="studentNameHeading">Name</div>
-                    <div id="studentIDHeading">ID</div>
-                    <div id="studentEmailHeading">Email Address</div>
-                    <div id="studentScoreHeading">Score</div>
-                    <div id="studentTagHeading">Tag</div>
+                <label id="studentListHdr">STUDENTS</label>
+
+                <div id="studentList">
+                    <div id="colHeadings">
+                        <div id="studentNameHeading">Name</div>
+                        <div id="studentIDHeading">ID</div>
+                        <div id="studentEmailHeading">Email Address</div>
+                        <div id="studentScoreHeading">Score</div>
+                        <div id="studentTagHeading">Tag</div>
+                    </div>
+                    <div id="col1"></div>
+                    <div id="col2"></div>
+                    <div id="col3"></div>
+                    <div id="col4"></div>
+                    <div id="col5"></div>
                 </div>
-                <div id="col1"></div>
-                <div id="col2"></div>
-                <div id="col3"></div>
-                <div id="col4"></div>
-                <div id="col5"></div>
+
+                <!-- Div for Student List Data. -->
+                <div id="studentListDivData"></div>  
             </div>
-            <!-- Div for Student List Data. -->
-            <div id="studentListDivData"></div>
-            
+
             <!-- Task Modal -->
             <div id="taskModal">
                 <div id="taskContent">
@@ -917,16 +651,23 @@
                         </div>
 
                         <div id="taskInfoDiv">
-                            <label id="taskDeadlineLbl">Current Deadline:</label>
-                            <label id="taskDeadline"></label>
+                            <label id="taskInfoDesc">Change the deadline for all students and also double click on a student to assign points, tags, deadlines, comments, etc. </label>
+
+                            <label id="completionVal">?</label>
+                            <label id="completionLbl">Class Completion</label>
+
+                            <label id="deadlineVal">?</label>
+                            <label id="deadlineLbl">Current Deadline</label>
+
+                            <label id="attemptsVal">?</label>
+                            <label id="attemptsLbl">Average Attempts</label>
+    
+                            <label id="pointsVal">?</label>
+                            <label id="pointsLbl">Average Points</label>
+
                             <label id="changeDeadline">Change Deadline:</label>
                             <input id="changeDeadlineInput" type="date"></input>
                             <input id="changeDeadlineBtn" type="button" value="Change"></input>
-                            <label id="currentStudentLbl">Selected Student:</label>
-                            <label id="currentStudent">None</label>
-                            <label id="changePointValueLbl">Point Value:</label>
-                            <input id="changePointValueInput" type="number"></input>
-                            <input id="changePointValueBtn" type="button" value="Change"></input>
                         </div>
 
                         <div id="studentTaskListDiv">
@@ -951,6 +692,46 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Create Announcement Modal -->
+            <div id="createAnnouncementModal">
+                <div id="createAnnouncementContent">
+                    <span id="createAnnouncementClose">&times;</span>
+                    <label id="createAnnouncementHdr">CREATE ANNOUNCEMENT</label>
+
+                    <label id="createAnnouncementDesc">Enter the announcement in the provided text area and press the Submit button to create an announcement.</label>
+                    <label id="createAnnouncementLbl">Announcement: </label>
+                    <textarea id="createAnnouncementInput"></textarea>
+                    
+                    <input id="createAnnouncementSubmitBtn" type="button" value="Submit"></input>
+                </div>
+            </div>
+
+            <!-- Edit Student Modal -->
+            <div id="editStudentModal">
+                <div id="editStudentContent">
+                    <span id="editStudentClose">&times;</span>
+                    <label id="editStudentHdr">EDIT STUDENT TASK</label>
+
+                    <label id="editStudentNameLbl">Student:</label>
+                    <label id="editStudentName"></label>
+
+                    <label id="editStudentDeadlineLbl">Deadline: </label>
+                    <input id="editStudentDeadlineInput" type="date"></input>
+
+                    <label id="editStudentPointLbl">Point: </label>
+                    <input id="editStudentPointInput" type="number"></input>
+
+                    <label id="editStudentCommentLbl">Comment: </label>
+                    <textarea id="editStudentCommentInput"></textarea>
+                    
+                    <label id="editStudentCodeLbl">Code: </label>
+
+                    <input id="editStudentSaveBtn" type="button" value="Save"></input>
+                </div>
+            </div>
+
+
         </div>    
     </body>
 </html>
