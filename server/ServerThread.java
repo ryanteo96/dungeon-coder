@@ -21,8 +21,6 @@ public class ServerThread extends Thread {
 
 	private String connectedUser = "";
 
-	private TimeoutCounter timeoutCounter = null;
-
 	public ServerThread(Socket socket) {
 		this.socket = socket;		
 		try {
@@ -586,13 +584,12 @@ public class ServerThread extends Thread {
 	}
 
 	private void pong() {
-		timeoutCounter.interrupt();
 		sendCode((byte)(0xFF));
+		// Get Messages
 	}
 
 	public void run() {
 		// Set socket to timeout after a second if no login/account creation request
-		//byte[] code = new byte[1];
 		
 		// Wait a max of 5 seconds for login or account creation instruction
 		try {
@@ -602,7 +599,6 @@ public class ServerThread extends Thread {
 			// Shouldn't happen. Do Nothing
 		}
 		// Read the code sent by the client
-		//incoming.read(code)
 		
 		byte code = recieveCode();
 		// Recieved LOGIN code
@@ -631,10 +627,8 @@ public class ServerThread extends Thread {
 		catch (IOException e) {
 			// Shouldn't happen. Do Nothing
 		}
-
-		timeoutCounter.start();
 		
-		while(run /*|| timeoutCounter.isAlive()*/) {
+		while(run) {
 			byte request = recieveCode();
 			
 			switch (request) {
