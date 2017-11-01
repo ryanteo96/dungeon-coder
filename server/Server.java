@@ -25,7 +25,6 @@ public class Server {
 				serverThread.start();
 			}
 			catch(IOException e) {
-				e.printStackTrace();
 			}
 		}
 	}
