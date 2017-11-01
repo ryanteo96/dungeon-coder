@@ -1,4 +1,6 @@
-public static class Pinger extends Thread {
+package com.mygdx.dungeoncoder.screens;
+
+public class Pinger extends Thread {
 	
 	public Pinger() {
 	}

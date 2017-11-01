@@ -91,7 +91,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         createBack();
         //createAttempts();
         //createProgress();
-        //createTextArea();
+        createTextArea();
         //createHint();
         //createTaskOneTextImage();
         //createDeadline();
@@ -297,6 +297,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         textArea.setY(50);
         textArea.setWidth(500);
         textArea.setHeight(500);
+        System.out.println(textArea.getText());
         stage.addActor(textArea);
     }
 
