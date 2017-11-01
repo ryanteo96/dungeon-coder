@@ -26,11 +26,12 @@ public class LoginScreen implements Screen {
     private TextField txfUsername;
     private final TextField txfPassword;
     private Skin textSkin;
-
+    private Pinger ping;
     public LoginScreen(DungeonCoder g) {
         game = g;
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
+        ping = new Pinger();
         Gdx.input.setInputProcessor(stage);
         Skin skin = new Skin(Gdx.files.internal("comic-ui.json"));
 
@@ -157,6 +158,8 @@ public class LoginScreen implements Screen {
         shareVariable.connect = new ClientConnection();
         if (shareVariable.connect.requestLogin(txfUsername.getText(), txfPassword.getText())) {
             shareVariable.connected = true;
+            ping.start();
+            System.out.println(ping);
             g.setScreen(new MainMenuScreen(g));
             //System.out.println(shareVariable.connect);
         } else {
