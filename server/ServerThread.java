@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Date;
 import java.security.*;
 import java.sql.*;
 import java.net.*;
@@ -539,60 +540,33 @@ public class ServerThread extends Thread {
 	}
 	
 	// Check if the given date is past the deadline for the given task.
-	private void DeadlinePassed(String task, String date) {
-		String dueDate = getDeadline(task);
+	private void DeadlinePassed(String task, Date date) {
+		Date dueDate = getDeadline(task);
 		sendInt(compareDates(date, dueDate));
 	}
 
 	// Query the database for the deadline of the given task.
-	private String getDeadline(String task) {
+	private Date getDeadline(String task) {
 		if (conn == null) {
 			connectDB();
 		}
-		String Deadline = null;
+		Date deadline = null;
 		try {
 			rs = stmt.executeQuery("SELECT Deadline FROM " + task + " WHERE Student = '" + connectedUser + "'");
 			rs.next();
-			Deadline = rs.getString("Deadline");
+			deadline = rs.getDate("Deadline");
 		}
 		catch (SQLException e) {
 		}
-		return Deadline;
+		return deadline;
 	}
 
 	// Check to see if date1 is before, after, or on date2.
-	private int compareDates(String date1, String date2) {
-		String[] temp1 = date1.split("/");
-		String[] temp2 = date2.split("/");
-		int[] decomposedDate1 = new int[3];
-		int[] decomposedDate2 = new int[3];
-		for (int i = 0; i < 3; i++) {
-			decomposedDate1[i] = Integer.parseInt(temp1[i]);
-			decomposedDate2[i] = Integer.parseInt(temp2[i]);
-		}
-		if (decomposedDate1[2] < decomposedDate2[2]) {
+	private int compareDates(Date date1, Date date2) {
+		if (date1.before(date2)) {
 			return -1;
 		}
-		else if (decomposedDate1[2] > decomposedDate2[2]) {
-			return 1;
-		}
-		else {
-			if (decomposedDate1[1] < decomposedDate2[1]) {
-				return -1;
-			}
-			else if (decomposedDate1[1] > decomposedDate2[1]) {
-				return 1;
-			}
-			else {
-				if (decomposedDate1[0] < decomposedDate2[0]) {
-					return -1;
-				}
-				else if (decomposedDate1[0] > decomposedDate2[0]) {
-					return 1;
-				}
-			}
-		}
-		return 0;
+		return 1;
 	}
 
 	// Shutdown the connection.
