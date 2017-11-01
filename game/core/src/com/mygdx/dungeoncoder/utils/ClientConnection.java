@@ -277,8 +277,7 @@ public class ClientConnection {
 		return false;
 	}
 
-	// TO DO
-	private synchronized void ping() {
+	public synchronized void ping() {
 		sendCode((byte)(0xFF));
 		recieveCode();
 	}
