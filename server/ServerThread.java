@@ -164,10 +164,30 @@ public class ServerThread extends Thread {
 		}
 	}
 
-	// Get the user's code for a specific level
-	private void getUserLevelCode() {
+	private void getMostRecentCodeFile() {
 		String levelName = recieveString();
 		String fileName = connectedUser + levelName;
+		try {
+			if (conn == null) {
+				connectDB();
+			}
+			rs = stmt.executeQuery("SELECT Attempts FROM " + levelName + " WHERE Student = " + connectedUser + "");
+			rs.next();
+			int attempts = rs.getInt("Attempts");
+			fileName += Integer.toString(attempts);	
+		}
+		catch(SQLException e) {
+			sendCode((byte)(0x60));
+			return;
+		}
+		File file = new File(fileName);
+		sendFile(file, fileName);
+		sendCode((byte)(0x10));
+	}
+
+	// Get the user's code for a specific level
+	private void getUserLevelCode() {
+		String fileName = recieveString();
 		File file = new File(fileName);
 		sendFile(file, fileName);
 		sendCode((byte)(0x10));
@@ -657,6 +677,10 @@ public class ServerThread extends Thread {
 				case 0x08 :
 					sendCode((byte)(0x10));
 					getUserLevelCode();
+				break;
+				case 0x18 :
+					sendCode((byte)(0x10));
+					getMostRecentCodeFile();
 				break;
 				// FETCHLEVELFILE
 				case 0x09 :

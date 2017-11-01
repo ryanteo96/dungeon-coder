@@ -260,8 +260,24 @@ public class ClientConnection {
 		return "";
 	}
 
-	private synchronized boolean requestCodeFile(String levelName) {
-		sendCode((byte)(0x09));
+	public synchronized boolean requestCodeFile(String fileName) {
+		sendCode((byte)(0x08));
+		if (recieveCode() == 0x10) {
+			try {
+				outgoing.writeUTF(fileName);
+				recieveFile("");
+				return true;
+			}
+			catch (IOException e) {
+				// Do Nothing
+			}
+		}
+		// Server refused file request
+		return false;
+	}
+
+	public synchronized boolean requestMostRecentLevelCode(String levelName) {
+		sendCode((byte)(0x18));
 		if (recieveCode() == 0x10) {
 			try {
 				outgoing.writeUTF(levelName);
@@ -272,10 +288,7 @@ public class ClientConnection {
 				// Do Nothing
 			}
 		}
-		else {
-			// Server refused file request
-			return false;
-		}
+		// Server refused file request
 		return false;
 	}
 
