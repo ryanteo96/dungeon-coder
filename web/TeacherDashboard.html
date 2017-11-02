@@ -8,7 +8,8 @@
         <link rel="stylesheet" type="text/css" href="ManageAccountModal.css">
         <link rel="stylesheet" type="text/css" href="TeacherDashboardTaskModal.css">
         <link rel="stylesheet" type="text/css" href="CreateAnnouncementModal.css">
-        <link rel="stylesheet" type="text/css" href="EditStudent.css">
+        <link rel="stylesheet" type="text/css" href="EditStudentTask.css">
+        <link rel="stylesheet" type="text/css" href="EditStudentList.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700" rel="stylesheet">
         <style type="text/css">
             #teacherDashBoardDiv {
@@ -392,16 +393,6 @@
                 position:absolute;
                 z-index:1;
                 top:2px;
-                width:200px;
-                height:30px;
-                text-align:center;
-            }
-
-            #studentIDHeading {
-                position:absolute;
-                z-index:1;
-                top:2px;
-                left:200px;
                 width:150px;
                 height:30px;
                 text-align:center;
@@ -411,27 +402,47 @@
                 position:absolute;
                 z-index:1;
                 top:2px;
-                left:350px;
-                width:350px;
+                left:150px;
+                width:200px;
                 height:30px;
                 text-align:center;
             }
 
-            #studentScoreHeading {
+            #studentClassHeading {
                 position:absolute;
                 z-index:1;
                 top:2px;
-                left:700px;
+                left:350px;
                 width:150px;
                 height:30px;
                 text-align:center;
             }
 
-            #studentTagHeading {
+            #studentGradeHeading {
                 position:absolute;
                 z-index:1;
                 top:2px;
-                left:850px;
+                left:500px;
+                width:150px;
+                height:30px;
+                text-align:center;
+            }
+
+            #studentLockHeading {
+                position:absolute;
+                z-index:1;
+                top:2px;
+                left:650px;
+                width:150px;
+                height:30px;
+                text-align:center;
+            }
+
+            #studentPriorityHeading {
+                position:absolute;
+                z-index:1;
+                top:2px;
+                left:800px;
                 width:150px;
                 height:30px;
                 text-align:center;
@@ -441,7 +452,7 @@
                 position:absolute;
                 border-right:solid;
                 border-width:1px;
-                width:200px;
+                width:150px;
                 height:300px;
             }
 
@@ -449,16 +460,16 @@
                 position:absolute;
                 border-right:solid;
                 border-width:1px;
-                width:150px;
+                width:200px;
                 height:300px;
-                left:200px;
+                left:150px;
             }
             
             #col3 {
                 position:absolute;
                 border-right:solid;
                 border-width:1px;
-                width:350px;
+                width:150px;
                 height:300px;
                 left:350px;
             }
@@ -469,7 +480,7 @@
                 border-width:1px;
                 width:150px;
                 height:300px;
-                left:700px;
+                left:500px;
             }
 
             #col5 {
@@ -478,7 +489,16 @@
                 border-width:1px;
                 width:150px;
                 height:300px;
-                left:850px;
+                left:650px;
+            }
+
+            #col6 {
+                position:absolute;
+                border-right:solid;
+                border-width:1px;
+                width:150px;
+                height:300px;
+                left:800px;
             }
 
             #studentListDivData {
@@ -503,7 +523,7 @@
 
             .divEntriesRowCol1 {
                 position:absolute; 
-                width:200px;
+                width:150px;
                 height:30px;
                 text-align:center;
                 z-index:1;
@@ -513,8 +533,8 @@
 
             .divEntriesRowCol2 {
                 position:absolute; 
-                width:150px;
-                left:200px; 
+                width:200px;
+                left:150px; 
                 height:30px;
                 text-align:center;
                 z-index:1;
@@ -524,7 +544,7 @@
 
             .divEntriesRowCol3 {
                 position:absolute; 
-                width:350px;
+                width:150px;
                 left:350px; 
                 height:30px;
                 text-align:center;
@@ -536,7 +556,7 @@
             .divEntriesRowCol4 {
                 position:absolute; 
                 width:150px;
-                left:700px; 
+                left:500px; 
                 height:30px;
                 text-align:center;
                 z-index:1;
@@ -547,7 +567,18 @@
            .divEntriesRowCol5 {
                 position:absolute; 
                 width:150px;
-                left:850px; 
+                left:650px; 
+                height:30px;
+                text-align:center;
+                z-index:1;
+                overflow-y:hidden;
+                overflow-x:hidden;
+           }
+
+           .divEntriesRowCol6 {
+                position:absolute; 
+                width:150px;
+                left:800px; 
                 height:30px;
                 text-align:center;
                 z-index:1;
@@ -624,17 +655,19 @@
 
                 <div id="studentList">
                     <div id="colHeadings">
-                        <div id="studentNameHeading">Name</div>
-                        <div id="studentIDHeading">ID</div>
+                        <div id="studentNameHeading">Student</div>
                         <div id="studentEmailHeading">Email Address</div>
-                        <div id="studentScoreHeading">Score</div>
-                        <div id="studentTagHeading">Tag</div>
+                        <div id="studentClassHeading">Class</div>
+                        <div id="studentGradeHeading">Grade</div>
+                        <div id="studentLockHeading">Lock</div>
+                        <div id="studentPriorityHeading">Priority</div>
                     </div>
                     <div id="col1"></div>
                     <div id="col2"></div>
                     <div id="col3"></div>
                     <div id="col4"></div>
                     <div id="col5"></div>
+                    <div id="col6"></div>
                 </div>
 
                 <!-- Div for Student List Data. -->
@@ -707,30 +740,64 @@
                 </div>
             </div>
 
-            <!-- Edit Student Modal -->
-            <div id="editStudentModal">
-                <div id="editStudentContent">
-                    <span id="editStudentClose">&times;</span>
-                    <label id="editStudentHdr">EDIT STUDENT TASK</label>
+            <!-- Edit Student Task Modal -->
+            <div id="editStudentTaskModal">
+                <div id="editStudentTaskContent">
+                    <span id="editStudentTaskClose">&times;</span>
+                    <label id="editStudentTaskHdr">EDIT STUDENT TASK</label>
 
-                    <label id="editStudentNameLbl">Student:</label>
-                    <label id="editStudentName"></label>
+                    <label id="editStudentTaskNameLbl">Student:</label>
+                    <label id="editStudentTaskName"></label>
 
-                    <label id="editStudentDeadlineLbl">Deadline: </label>
-                    <input id="editStudentDeadlineInput" type="date"></input>
+                    <label id="editStudentTaskDeadlineLbl">Deadline: </label>
+                    <input id="editStudentTaskDeadlineInput" type="date"></input>
 
-                    <label id="editStudentPointLbl">Point: </label>
-                    <input id="editStudentPointInput" type="number"></input>
+                    <label id="editStudentTaskPointLbl">Point: </label>
+                    <input id="editStudentTaskPointInput" type="number"></input>
 
-                    <label id="editStudentCommentLbl">Comment: </label>
-                    <textarea id="editStudentCommentInput"></textarea>
+                    <label id="editStudentTaskCommentLbl">Comment: </label>
+                    <textarea id="editStudentTaskCommentInput"></textarea>
                     
-                    <label id="editStudentCodeLbl">Code: </label>
+                    <label id="editStudentTaskCodeLbl">Code: </label>
 
-                    <input id="editStudentSaveBtn" type="button" value="Save"></input>
+                    <input id="editStudentTaskSaveBtn" type="button" value="Save"></input>
                 </div>
             </div>
 
+            <!-- Edit Student List Modal -->
+            <div id="editStudentListModal">
+                <div id="editStudentListContent">
+                    <span id="editStudentListClose">&times;</span>
+                    <label id="editStudentListHdr">EDIT STUDENT</label>
+
+                    <label id="editStudentListNameLbl">Student:</label>
+                    <label id="editStudentListName"></label>
+
+                    <label id="editStudentListEmailLbl">Email:</label>
+                    <label id="editStudentListEmail"></label>
+
+                    <label id="editStudentListClassLbl">Class:</label>
+                    <label id="editStudentListClass"></label>
+
+                    <div id="editStudentListDiv">
+                        <label id="editStudentListGradeVal">?</label>
+                        <label id="editStudentListGradeLbl">Grade</label>
+
+                        <label id="editStudentListLockVal">?</label>
+                        <label id="editStudentListLockLbl">Lock</label>
+
+                        <label id="editStudentListPriorityVal">?</label>
+                        <label id="editStudentListPriorityLbl">Priority</label>
+
+                        <label id="editStudentListGradeInputLbl">Change grade: </label>
+                        <input id="editStudentListGradeInput" type="text"></input>
+
+                        <input id="editStudentListSetLock" type="button" value="Set Lock"></input>
+                        <input id="editStudentListSetPriority" type="button" value="Set Priority"></input>
+                        <input id="editStudentListSaveBtn" type="button" value="Save"></input>
+                    </div>
+                </div>
+            </div>
 
         </div>    
     </body>

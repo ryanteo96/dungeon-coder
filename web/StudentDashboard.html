@@ -89,25 +89,96 @@
                 position:absolute;
                 width:100px;
                 height:100px;
-                top:0px;
-                left:20px;
+                top:30px;
+                left:60px;
                 margin:auto;
                 font-size:70;
                 text-align:center;
                 font-family:'Open Sans', san-serif;
-                border-style:solid;
-                border-width:1px;
             }
 
             #studentGradeHdr {
                 position:absolute;
                 width:100px;
-                top:110px;
-                left:20px;
+                top:130px;
+                left:60px;
                 margin:auto;
                 font-size:18;
                 text-align:center;
                 font-family:'Open Sans', san-serif;
+            }
+
+             #announcementDiv {
+                position:absolute;
+                top:0px;
+                left:220px;
+                width:780px;
+                height:200px;
+                margin:auto;
+            }
+
+            #announcementHdr {
+                position:absolute;
+                width:190px;
+                top:0px;
+                left:10px;
+                margin:auto;
+                font-size:20;
+                font-family:'Open Sans', san-serif;
+            }
+
+            #announcementList {
+                position:absolute; 
+                top:30px;
+                right:0px;
+                left:0px;
+                width:780px;
+                height:150px;
+                margin:auto;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+                border-style:solid;
+                border-width:1px;
+            }
+            
+            #announcementListData {
+                position:absolute; 
+                top:0px;
+                right:0px;
+                left:0px;
+                width:780px;
+                height:150px;
+                margin:auto;
+                overflow-y:scroll;
+                overflow-x:hidden;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
+
+            .divAnnouncementsRow {
+                display:flex;
+                width:1000px;
+                height:30px;
+            }
+
+            .divAnnouncementsRowCol1 {
+                position:absolute; 
+                width:150px;
+                height:30px;
+                text-align:center;
+                z-index:1;
+                overflow-y:hidden;
+                overflow-x:hidden;
+            }
+
+            .divAnnouncementsRowCol2 {
+                position:absolute; 
+                width:850px;
+                left:150px; 
+                height:30px;
+                z-index:1;
+                overflow-y:hidden;
+                overflow-x:hidden;
             }
 
             #classTasks {
@@ -528,6 +599,16 @@
             <div id=studentGradebookDiv>
                 <label id="studentGradeHdr">GRADE</label>
                 <label id="studentGrade">?</label>
+
+                <!-- Div for Announcements -->
+                <div id=announcementDiv>
+                    <label id="announcementHdr">ANNOUNCEMENTS</label>
+                
+                    <div id="announcementList">
+                        <div id="announcementListData"></div>
+                    </div>
+                </div>
+
 
                 <!-- Div for Class Task. -->
                 <div id="classTasks">
