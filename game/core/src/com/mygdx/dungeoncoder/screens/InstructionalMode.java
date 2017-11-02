@@ -26,6 +26,8 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.ClientConnection;
 
+import java.io.FileNotFoundException;
+
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
@@ -352,7 +354,11 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         yesButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                stageTwo(game);
+                try {
+                    stageTwo(game);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -360,7 +366,11 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                stageTwo(game);
+                try {
+                    stageTwo(game);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -504,7 +514,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         g.setScreen(new TaskOne(g));
     }
 
-    private void stageTwo(DungeonCoder g) {
+    private void stageTwo(DungeonCoder g) throws FileNotFoundException {
         g.setScreen(new TaskTwo(g));
     }
 

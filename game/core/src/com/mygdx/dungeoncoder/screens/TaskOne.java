@@ -91,7 +91,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         createBack();
         //createAttempts();
         //createProgress();
-        createTextArea();
+        //createTextArea();
         //createHint();
         //createTaskOneTextImage();
         //createDeadline();

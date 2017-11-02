@@ -1,5 +1,7 @@
 package com.mygdx.dungeoncoder.screens;
 
+import java.io.*;
+
 import Scenes.Hud;
 import Sprites.Adventurer;
 import Sprites.Enemy;
@@ -33,6 +35,7 @@ import com.mygdx.dungeoncoder.backgroundElements.Land;
 import com.mygdx.dungeoncoder.utils.B2WorldCreator;
 import com.mygdx.dungeoncoder.utils.WorldContactListener;
 import com.mygdx.dungeoncoder.values.DefaultValues;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import static com.badlogic.gdx.utils.Scaling.fit;
 import static com.mygdx.dungeoncoder.DungeonCoder.V_HEIGHT;
@@ -42,6 +45,12 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
 
 public class TaskTwo implements Screen {
+    //Write files
+    BufferedWriter bw = null;
+    FileWriter fw = null;
+    private static final String FILENAME = "C:\\Users\\LCLY\\Desktop\\Dungeon\\dungeon-coder\\game\\core\\assets\\test.txt";
+    private TextButton saveButton;
+
     private DungeonCoder game;
     private Stage stage;
     Skin backButtonSkin;
@@ -64,8 +73,11 @@ public class TaskTwo implements Screen {
     //sprites
     private Adventurer player;
 
+    //textArea
+    private TextArea textArea;
+    private Skin skin;
 
-    public TaskTwo(DungeonCoder g) {
+    public TaskTwo(DungeonCoder g) throws FileNotFoundException {
         game = g;
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
@@ -102,6 +114,7 @@ public class TaskTwo implements Screen {
 
         //back button
         createBack();
+        createTextArea();
     }
 
     private void createBack() {
@@ -117,6 +130,72 @@ public class TaskTwo implements Screen {
         });
         stage.addActor(btnBack);
     }
+
+    private void createTextArea() throws FileNotFoundException {
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+
+        textArea = new TextArea(" public class Solution  {\n " +
+                "   public static void main(String[] args) " +
+                "  {\n      /*Enter your code here...*/\n   }\n }", skin);
+        textArea.setX(50);
+        textArea.setY(70);
+        textArea.setWidth(500);
+        textArea.setHeight(500);
+        stage.addActor(textArea);
+
+        skin = new Skin (Gdx.files.internal("UIElements/test.json"));
+        saveButton = new TextButton("Save", skin);
+        saveButton.setPosition(460, 13);
+        saveButton.setSize(80, 30);
+        saveButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                String code = textArea.getText();
+                try{
+                    fw = new FileWriter(FILENAME);
+                    bw = new BufferedWriter(fw);
+                    bw.write(code);
+                    bw.flush();
+                }catch(IOException err){
+                    err.printStackTrace();
+                }finally{
+                    try{
+                        if(bw != null){
+                            bw.close();
+                        }
+                        if(fw!= null){
+                            fw.close();
+                        }
+                    }catch(IOException ex){
+                        ex.printStackTrace();
+                    }
+                }
+                System.out.println("Code saved!");
+            }
+        });
+
+        stage.addActor(saveButton);
+
+
+        BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\LCLY\\Desktop\\Dungeon\\dungeon-coder\\game\\core\\assets\\test.txt"));
+        String line;
+        try {
+            while((line = br.readLine())!= null)
+            {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+        try {
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     public TextureAtlas getAtlas(){
         return atlas;
@@ -221,6 +300,7 @@ public class TaskTwo implements Screen {
         stage.dispose();
         b2dr.dispose();
         renderer.dispose();
+
     }
 
 }
