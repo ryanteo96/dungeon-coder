@@ -132,11 +132,42 @@ public class TaskTwo implements Screen {
     }
 
     private void createTextArea() throws FileNotFoundException {
-        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+        //to build string into the text file
+        StringBuilder sb = new StringBuilder();
+        // The name of the file to open.
+        String fileName = "test.txt";
+        // This will reference one line at a time
+        String line = null;
 
-        textArea = new TextArea(" public class Solution  {\n " +
-                "   public static void main(String[] args) " +
-                "  {\n      /*Enter your code here...*/\n   }\n }", skin);
+        try {
+            // FileReader reads text files in the default encoding.
+            FileReader fileReader = new FileReader(fileName);
+
+            // Always wrap FileReader in BufferedReader.
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+
+            while((line = bufferedReader.readLine()) != null) {
+                System.out.println(line);
+                sb.append(line);
+                sb.append("\n");
+            }
+
+            // Always close files.
+            bufferedReader.close();
+        }
+        catch(FileNotFoundException ex) {
+            System.out.println("Unable to open file '" + fileName + "'");
+        }
+        catch(IOException ex) {
+            System.out.println("Error reading file '"  + fileName + "'");
+            // Or we could just do this:
+            // ex.printStackTrace();
+        }
+
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+        String textFileString = sb.toString();
+        textArea = new TextArea(textFileString,skin);
         textArea.setX(50);
         textArea.setY(70);
         textArea.setWidth(500);
@@ -145,55 +176,47 @@ public class TaskTwo implements Screen {
 
         skin = new Skin (Gdx.files.internal("UIElements/test.json"));
         saveButton = new TextButton("Save", skin);
-        saveButton.setPosition(460, 13);
-        saveButton.setSize(80, 30);
+        saveButton.setPosition(460, 10);
+        saveButton.setSize(100, 50);
         saveButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 String code = textArea.getText();
-                try{
-                    fw = new FileWriter(FILENAME);
-                    bw = new BufferedWriter(fw);
-                    bw.write(code);
-                    bw.flush();
-                }catch(IOException err){
-                    err.printStackTrace();
-                }finally{
-                    try{
-                        if(bw != null){
-                            bw.close();
-                        }
-                        if(fw!= null){
-                            fw.close();
-                        }
-                    }catch(IOException ex){
-                        ex.printStackTrace();
-                    }
+                try {
+                    File file = new File("test.txt");
+                    FileWriter fileWriter = new FileWriter(file);
+                    fileWriter.write(code);
+                    fileWriter.flush();
+                    fileWriter.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
                 System.out.println("Code saved!");
+                String fileName = "test.txt";
+                // This will reference one line at a time
+                String line = null;
+
+                try {
+
+                    FileReader fileReader = new FileReader(fileName);
+                    BufferedReader bufferedReader = new BufferedReader(fileReader);
+                    while((line = bufferedReader.readLine()) != null) {
+                        System.out.println(line);
+                    }
+                    bufferedReader.close();
+                }
+                catch(FileNotFoundException ex) {
+                    System.out.println("Unable to open file '" + fileName + "'");
+                }
+                catch(IOException ex) {
+                    System.out.println("Error reading file '"  + fileName + "'");
+                }
             }
         });
 
+        //to find the path of the file
+        //System.out.println("File path: " + new File("test.txt").getAbsolutePath());
         stage.addActor(saveButton);
-
-
-        BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\LCLY\\Desktop\\Dungeon\\dungeon-coder\\game\\core\\assets\\test.txt"));
-        String line;
-        try {
-            while((line = br.readLine())!= null)
-            {
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
-        try {
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
 
