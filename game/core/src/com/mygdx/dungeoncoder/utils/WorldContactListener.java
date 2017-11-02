@@ -22,12 +22,10 @@ public class WorldContactListener implements ContactListener{
           //if Mario collides with the enemy head bit, then execute
           case DefaultValues.MARIO_HEAD_BIT | DefaultValues.BRICK_BIT:
           case DefaultValues.MARIO_HEAD_BIT | DefaultValues.COIN_BIT:
-              if(fixA.getFilterData().categoryBits == DefaultValues.MARIO_HEAD_BIT){
+              if(fixA.getFilterData().categoryBits == DefaultValues.MARIO_HEAD_BIT)
                   ((InteractiveTileObject) fixB.getUserData()).onHeadHit((Mario)fixA.getUserData());
-              }
-              else{
+              else
                   ((InteractiveTileObject) fixA.getUserData()).onHeadHit((Mario)fixB.getUserData());
-              }
               break;
           case DefaultValues.ENEMY_HEAD_BIT | DefaultValues.MARIO_BIT:
               if(fixA.getFilterData().categoryBits == DefaultValues.ENEMY_HEAD_BIT)
@@ -59,7 +57,13 @@ public class WorldContactListener implements ContactListener{
                   ((Item)fixB.getUserData()).use((Mario)fixA.getUserData());
               break;
           case DefaultValues.MARIO_BIT | DefaultValues.ENEMY_BIT:
-              Gdx.app.log("MARIO", "DIED");
+              if(fixA.getFilterData().categoryBits == DefaultValues.MARIO_BIT) {
+                  ((Mario) fixA.getUserData()).hit();
+                  Gdx.app.log("MARIO", "DIED");
+              }else {
+                  ((InteractiveTileObject) fixA.getUserData()).onHeadHit((Mario) fixB.getUserData());
+                  ((Mario) fixB.getUserData()).hit();
+              }
               break;
       }
     }

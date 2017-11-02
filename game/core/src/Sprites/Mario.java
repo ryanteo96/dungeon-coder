@@ -34,6 +34,7 @@ public class Mario extends Sprite {
     private boolean marioIsBig;
     private boolean runGrowAnimation;
     private boolean timeToDefineBigMario;
+    private boolean timeToRedefineBigMario;
 
     private TaskThree screen;
 
@@ -94,6 +95,9 @@ public class Mario extends Sprite {
         if(timeToDefineBigMario){
             defineBigMario();
         }
+        if(timeToRedefineBigMario){
+            redefineMario();
+        }
     }
 
     public void grow(){
@@ -103,6 +107,17 @@ public class Mario extends Sprite {
             timeToDefineBigMario = true;
             setBounds(getX(),getY(),getWidth(),getHeight() * 2);
             DungeonCoder.manager.get("Mario/sounds/powerup.wav", Sound.class).play();
+        }
+    }
+
+    public void hit(){
+        if(marioIsBig){
+            marioIsBig = false;
+            timeToRedefineBigMario = true;
+            setBounds(getX(),getY(),getWidth(),getHeight() / 2); //go back to original height
+            DungeonCoder.manager.get("Mario/sounds/powerdown.wav", Sound.class).play();
+        }else{
+            DungeonCoder.manager.get("Mario/sounds/mariodie.wav", Sound.class).play();
         }
     }
 
@@ -160,6 +175,7 @@ public class Mario extends Sprite {
             return State.STANDING;
 
     }
+
 
     public void defineMario(){
         BodyDef bdef = new BodyDef();
@@ -231,5 +247,43 @@ public class Mario extends Sprite {
         b2body.createFixture(fdef).setUserData(this);//this is the MARIO HEAD BIT
         timeToDefineBigMario = false;
     }
+
+    public void redefineMario(){
+        Vector2 position = b2body.getPosition();//get the current position
+        world.destroyBody(b2body);//destroy big mario
+
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(position);//create it at the current position
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        b2body = world.createBody(bdef);
+
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(6/ DefaultValues.PPM);
+        fdef.filter.categoryBits = DefaultValues.MARIO_BIT;
+        //what can mario collide with
+        fdef.filter.maskBits = DefaultValues.GROUND_BIT |
+                DefaultValues.COIN_BIT |
+                DefaultValues.BRICK_BIT |
+                DefaultValues.ENEMY_BIT |
+                DefaultValues.OBJECT_BIT|
+                DefaultValues.ENEMY_HEAD_BIT|
+                DefaultValues.ITEM_BIT; // | is or
+
+        fdef.shape = shape;
+        b2body.createFixture(fdef).setUserData(this);
+
+        //create sensor on mario head
+        //edgeshape line between 2 diff points
+        EdgeShape head = new EdgeShape();
+        head.set(new Vector2(-2 / DefaultValues.PPM, 7 /DefaultValues.PPM), new Vector2(2 / DefaultValues.PPM, 7 /DefaultValues.PPM));
+        fdef.filter.categoryBits = DefaultValues.MARIO_HEAD_BIT;
+        fdef.shape = head;
+        fdef.isSensor = true;
+
+        b2body.createFixture(fdef).setUserData(this);//this is the MARIO HEAD BIT
+        timeToRedefineBigMario = false;
+    }
+
 
 }
