@@ -43,6 +43,9 @@ function getUserTaskInformation(task) {
             pointsVal.innerHTML = taskInformation.points;
             codeVal.innerHTML = taskInformation.code;
             commentsVal.innerHTML = taskInformation.comments;
+            exampleCodeVal.innerHTML = taskInformation.savedCode;
+            createCodeLink();
+            createExampleCodeLink();
 
             if (taskInformation.deadline === null) 
                 deadlineVal.innerHTML = '-';
@@ -63,7 +66,7 @@ function getUserInformation() {
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             userInformation = new Object();
-            console.log(this.responseText);
+            //console.log(this.responseText);
             var response = this.responseText;
             var array = response.split("&");
             userInformation = JSON.parse(array);
@@ -117,5 +120,31 @@ function displayAnnouncements() {
         row.appendChild(col2);
 
         announcementListData.appendChild(row);
+    }
+}
+
+function createCodeLink(file) {
+    codeVal.innerHTML = "";
+
+    var text = document.createElement("button");
+    text.id = "codeDownload";
+    text.innerHTML = "View Code<br><br>Right click -> Save As to download file." ;    
+    codeVal.appendChild(text);  
+
+    codeDownload.onclick = function() {
+        window.open('/files/test.java', '_blank');
+    }
+}
+
+function createExampleCodeLink(file) {
+    exampleCodeVal.innerHTML = "";
+
+    var text = document.createElement("button");
+    text.id = "exampleCodeDownload";
+    text.innerHTML = "View Code<br><br>Right click -> Save As to download file.";
+    exampleCodeVal.appendChild(text);
+
+    exampleCodeDownload.onclick = function () {
+        window.open('/files/test2.java', '_blank');
     }
 }

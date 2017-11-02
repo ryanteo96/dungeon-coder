@@ -134,6 +134,40 @@
     font-family:'Open Sans', san-serif;
 }
 
+#editStudentTaskCodeVal {
+    position:absolute;
+    width:500px;
+    height:50px;
+    top:100px;
+    left:450px;
+    margin:auto;
+    font-size:50;
+    text-align:center;
+    border-style:dotted;
+    border-width:1px;
+    font-family:'Open Sans', san-serif;
+}
+
+#codeDownload {
+    position:absolute;
+    width:500px;
+    height:50px;
+    background:none;
+    border:none;
+    left:0px;
+}
+
+#editStudentTaskExampleCodeSelect {
+    position:absolute;
+    top:200px;
+    left:650px;
+    width:300px;
+    margin:auto;
+    font-size:15;
+    font-family:'Open Sans', san-serif;
+}
+
+
 #editStudentTaskSaveBtn {
     position:absolute;
     top:450px;

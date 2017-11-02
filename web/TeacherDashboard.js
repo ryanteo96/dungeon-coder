@@ -339,6 +339,20 @@ function taskRow_onblclick() {
     editStudentTaskPointInput.value = temp.pointValue;
     editStudentTaskCommentInput.value = temp.comments;
 
+    editStudentTaskCodeVal.innerHTML = "";
+    var text = document.createElement("button");
+    text.id = "codeDownload";
+    text.innerHTML = "View Code<br><br>Right click -> Save As to download file.";
+    editStudentTaskCodeVal.appendChild(text);
+
+    editStudentTaskExampleCodeSelect.onclick = function() {
+        alert("Functionality in progress.");
+    }
+
+    codeDownload.onclick = function () {
+        window.open('/files/test.java', '_blank');
+    }
+
     editStudentTaskSaveBtn.onclick = function() {
         var obj = new Object();
         obj.student = temp.student;
