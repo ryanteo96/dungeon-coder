@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
@@ -38,7 +39,13 @@ import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.B2WorldCreator;
 import com.mygdx.dungeoncoder.utils.WorldContactListener;
 import com.mygdx.dungeoncoder.values.DefaultValues;
+import com.mygdx.dungeoncoder.values.Item;
+import com.mygdx.dungeoncoder.values.ItemDef;
+import com.mygdx.dungeoncoder.values.Mushroom;
 import org.w3c.dom.css.Rect;
+
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import static com.badlogic.gdx.utils.Scaling.fit;
 import static com.mygdx.dungeoncoder.DungeonCoder.V_HEIGHT;
@@ -74,6 +81,9 @@ public class TaskThree implements Screen {
 
     //music
     private Music music;
+
+    private Array<Item> items;
+    private LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
     public TaskThree(DungeonCoder g) {
         game = g;
@@ -115,13 +125,29 @@ public class TaskThree implements Screen {
 
         music = DungeonCoder.manager.get("Mario/music/mario_music.ogg", Music.class);
         music.setLooping(true);
-        music.play();
+        //music.play();
+
+        items = new Array<Item>();
+        itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
 
         createBack();
     }
 
     public TextureAtlas getAtlas(){
         return atlas;
+    }
+
+    public void spawnItem(ItemDef idef){
+        itemsToSpawn.add(idef);
+    }
+
+    public void handleSpawningItems(){
+        if(!itemsToSpawn.isEmpty()){
+            ItemDef idef = itemsToSpawn.poll();
+            if(idef.type == Mushroom.class){
+                items.add(new Mushroom(this,idef.position.x,idef.position.y));
+            }
+        }
     }
 
     private void createBack() {
@@ -165,6 +191,7 @@ public class TaskThree implements Screen {
     public void update(float dt){
         //handle user input first
         handleInput(dt);
+        handleSpawningItems();
 
         //takes 1 step in the physics simulation 60 times per second
         world.step(1/60f, 6,2);
@@ -176,6 +203,11 @@ public class TaskThree implements Screen {
                 enemy.b2body.setActive(true);//activate goomba
             }
         }
+
+        for(Item item : items){
+            item.update(dt);
+        }
+
         hud.update(dt);
         //attach our gamecam to our player's x coordinate
         gamecam.position.x = player.b2body.getPosition().x;
@@ -209,6 +241,10 @@ public class TaskThree implements Screen {
         for(Enemy enemy : creator.getGoombas()){
             enemy.draw(game.batch);
         }
+        for(Item item : items){
+            item.draw(game.batch);
+        }
+
         game.batch.end();
 
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
