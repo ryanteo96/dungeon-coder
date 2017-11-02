@@ -1,5 +1,6 @@
 package Sprites;
 
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -12,7 +13,7 @@ import com.mygdx.dungeoncoder.screens.TaskThree;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 
 public class Mario extends Sprite {
-    public enum State{FALLING, JUMPING, STANDING, RUNNING, GROWING};
+    public enum State{FALLING, JUMPING, STANDING, RUNNING, GROWING, DEAD};
 
     public World world;
     public Body b2body;
@@ -21,6 +22,7 @@ public class Mario extends Sprite {
     private TextureRegion bigMarioStand;
     private TextureRegion bigMarioJump;
     private TextureRegion marioJump;
+    private TextureRegion marioDead;
 
     public State currentState;
     public State previousState;
@@ -35,6 +37,7 @@ public class Mario extends Sprite {
     private boolean runGrowAnimation;
     private boolean timeToDefineBigMario;
     private boolean timeToRedefineBigMario;
+    private boolean marioIsDead;
 
     private TaskThree screen;
 
@@ -70,12 +73,16 @@ public class Mario extends Sprite {
         frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"),0,0,16,32));
         growMario = new Animation(0.2f, frames);
 
-
+        //create jump mario texture region
         marioJump = new TextureRegion(screen.getAtlas().findRegion("little_mario"),80,0,16,16);
         bigMarioJump = new TextureRegion(screen.getAtlas().findRegion("big_mario"),80,0,16,32);
 
+        //create stand mario texture region
         marioStand = new TextureRegion(screen.getAtlas().findRegion("little_mario"),0,0,16,16);
         bigMarioStand = new TextureRegion(screen.getAtlas().findRegion("big_mario"),0,0,16,32);
+
+        //create dead mario texture region
+        marioDead = new TextureRegion(screen.getAtlas().findRegion("little_mario"),96,0,16,16);// add 16 pixels into X to get the dead animation
 
         //set mario in box2d
         defineMario();
@@ -117,7 +124,16 @@ public class Mario extends Sprite {
             setBounds(getX(),getY(),getWidth(),getHeight() / 2); //go back to original height
             DungeonCoder.manager.get("Mario/sounds/powerdown.wav", Sound.class).play();
         }else{
+            DungeonCoder.manager.get("Mario/music/mario_music.ogg", Music.class).stop();
             DungeonCoder.manager.get("Mario/sounds/mariodie.wav", Sound.class).play();
+            marioIsDead = true;
+            Filter filter = new Filter();
+            //no fixture can collide with mario
+            filter.maskBits = DefaultValues.NOTHING_BIT;
+            for(Fixture fixture : b2body.getFixtureList()){
+                fixture.setFilterData(filter);
+            }
+            b2body.applyLinearImpulse(new Vector2(0,4f),b2body.getWorldCenter(),true);//apply impulse in Y direction
         }
     }
 
@@ -125,6 +141,9 @@ public class Mario extends Sprite {
         currentState = getState();
         TextureRegion region;
         switch(currentState){
+            case DEAD:
+                region = marioDead;
+                break;
             case GROWING:
                 region = growMario.getKeyFrame(stateTimer);//not true coz not loopable
                 if(growMario.isAnimationFinished(stateTimer)){
@@ -163,7 +182,9 @@ public class Mario extends Sprite {
     }
 
     public State getState(){
-        if(runGrowAnimation)
+        if(marioIsDead)
+            return State.DEAD;
+        else if(runGrowAnimation)
             return State.GROWING;
         else if(b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0 && previousState == State.JUMPING))
             return State.JUMPING;

@@ -125,7 +125,7 @@ public class TaskThree implements Screen {
 
         music = DungeonCoder.manager.get("Mario/music/mario_music.ogg", Music.class);
         music.setLooping(true);
-        //music.play();
+        music.play();
 
         items = new Array<Item>();
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
@@ -174,17 +174,20 @@ public class TaskThree implements Screen {
     }
 
     public void handleInput(float dt) {
-        //control player using immediate impulses, use world center so the torque wont make the character fly around
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
-            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
-            player.currentState = Mario.State.JUMPING;
-            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.previousState == Mario.State.JUMPING){
-                player.b2body.applyLinearImpulse(new Vector2(0, -4f), player.b2body.getWorldCenter(), true);
+        //if he's dead, dun get any input
+        if(player.currentState != Mario.State.DEAD){
+            //control player using immediate impulses, use world center so the torque wont make the character fly around
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
+                player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
+                player.currentState = Mario.State.JUMPING;
+                if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.previousState == Mario.State.JUMPING){
+                    player.b2body.applyLinearImpulse(new Vector2(0, -4f), player.b2body.getWorldCenter(), true);
+                }
+            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2) { //isKeyPressed for holding down keys
+                player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)  {
+                player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2) { //isKeyPressed for holding down keys
-            player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)  {
-            player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
         }
     }
 
@@ -209,8 +212,11 @@ public class TaskThree implements Screen {
         }
 
         hud.update(dt);
-        //attach our gamecam to our player's x coordinate
-        gamecam.position.x = player.b2body.getPosition().x;
+
+        //if mario dies, freeze the camera right where he died
+        if(player.currentState != Mario.State.DEAD){
+            gamecam.position.x = player.b2body.getPosition().x;
+        }
 
         //update gamecam with correct corrdinates after changes
         gamecam.update();
