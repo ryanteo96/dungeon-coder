@@ -155,6 +155,7 @@
     background:none;
     border:none;
     left:0px;
+    cursor:pointer;
 }
 
 #editStudentTaskExampleCodeSelect {
@@ -165,6 +166,7 @@
     margin:auto;
     font-size:15;
     font-family:'Open Sans', san-serif;
+    cursor:pointer;
 }
 
 

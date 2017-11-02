@@ -12,9 +12,18 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
+$sort = $_GET["sort"];
 $return;
+$sortQuery = "";
 
-$sql = "SELECT Username, Email, Class, Grade, LockStatus, Priority FROM Users WHERE Type='student'";
+if ($sort !== null) {
+    if ($sort === "asc")
+        $sortQuery = "ORDER BY Priority ASC";
+    else if ($sort === "desc")
+        $sortQuery = "ORDER BY Priority DESC";
+}
+
+$sql = "SELECT Username, Email, Class, Grade, LockStatus, Priority FROM Users WHERE Type='student' " . $sortQuery;
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {

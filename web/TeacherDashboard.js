@@ -16,7 +16,7 @@ function body_onload() {
 
     currentUser = sessionStorageGet("CurrentUser", null);
 
-    retrieveStudentList();
+    retrieveStudentList(null);
     retrieveAnnouncements();
     task1.onclick = task1_onclick;
     changeDeadlineBtn.onclick = changeDeadlineBtn_onclick;
@@ -24,6 +24,7 @@ function body_onload() {
     saveBtn.onclick = saveBtn_onclick;
     signOutBtn.onclick = signOutBtn_onclick;
     createAnnouncementBtn.onclick = createAnnouncementBtn_onclick;
+    studentPriorityHeading.onclick = studentPriorityHeading_onclick;
 }
 
 function displayStudents() {
@@ -82,12 +83,12 @@ function displayStudents() {
     }
 }
 
-function retrieveStudentList() {
+function retrieveStudentList(sort) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             entries = new Array();
-            //console.log(this.responseText);
+            console.log(this.responseText);
             var responses = this.responseText.split("&");
 
             for (var i = 0; i < responses.length - 1; i++) {
@@ -100,8 +101,19 @@ function retrieveStudentList() {
             displayStudents();
         }
     };
-    xmlhttp.open("GET", "StudentList.php", true);
-    xmlhttp.send();
+
+    if (sort !== null) {
+        if (sort === "asc") {
+            xmlhttp.open("GET", "StudentList.php?sort=asc", true);
+            xmlhttp.send();
+        } else if (sort === "desc") {
+            xmlhttp.open("GET", "StudentList.php?sort=desc", true);
+            xmlhttp.send();
+        }
+    } else {
+        xmlhttp.open("GET", "StudentList.php", true);
+        xmlhttp.send();
+    }
 }
 
 function task1_onclick() {
@@ -426,7 +438,7 @@ function studentRow_onblclick() {
         xmlhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 //console.log(this.responseText);
-                retrieveStudentList();
+                retrieveStudentList(null);
                 modal = document.getElementById("editStudentListModal");
                 modal.style.display = "none";
             }
@@ -470,8 +482,8 @@ function studentRow_onblclick() {
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
-                    console.log(this.responseText);
-                    retrieveStudentList();
+                    //console.log(this.responseText);
+                    retrieveStudentList(null);
                     modal = document.getElementById("editStudentListModal");
                     modal.style.display = "none";
                 }
@@ -485,5 +497,15 @@ function studentRow_onblclick() {
             modal = document.getElementById("editStudentListModal");
             modal.style.display = "none";
         }
+    }
+}
+
+function studentPriorityHeading_onclick() {
+    if (studentPriorityHeading.innerHTML === "Priority \u2193") {
+        retrieveStudentList("desc");
+        studentPriorityHeading.innerHTML = "Priority &uarr;";
+    } else {
+        retrieveStudentList("asc");
+        studentPriorityHeading.innerHTML = "Priority &darr;";
     }
 }
