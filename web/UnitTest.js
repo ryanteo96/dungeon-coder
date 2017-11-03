@@ -181,7 +181,7 @@ function testSettingPriority(callback) {
                 testSettingPriorityRes.innerHTML = "FAIL";
             }
 
-            callback();
+            callback(testSettingComment);
         }
     };
 
@@ -189,7 +189,7 @@ function testSettingPriority(callback) {
     xmlhttp.send();
 }
 
-function testSettingLock() {
+function testSettingLock(callback) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -202,6 +202,8 @@ function testSettingLock() {
             } else {
                 testSettingLockRes.innerHTML = "FAIL";
             }
+
+            callback(testSettingPointValue);
         }
     };
 
@@ -209,4 +211,110 @@ function testSettingLock() {
     xmlhttp.send();
 }
 
+function testSettingComment(callback) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("TEST 10");
+            console.log(this.responseText);
+            response = this.responseText;
 
+            if (response === "PASS") {
+                testSettingCommentRes.innerHTML = "PASS";
+            } else {
+                testSettingCommentRes.innerHTML = "FAIL";
+            }
+
+            callback(testSettingDeadline);
+        }
+    };
+
+    xmlhttp.open("GET", "UnitTest.php?test=set_values&mode=comment", true);
+    xmlhttp.send();
+}
+
+function testSettingPointValue(callback) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("TEST 11");
+            console.log(this.responseText);
+            response = this.responseText;
+
+            if (response === "PASS") {
+                testSettingPointValueRes.innerHTML = "PASS";
+            } else {
+                testSettingPointValueRes.innerHTML = "FAIL";
+            }
+
+            callback(testSettingEmail);
+        }
+    };
+
+    xmlhttp.open("GET", "UnitTest.php?test=set_values&mode=points", true);
+    xmlhttp.send();
+}
+
+function testSettingDeadline(callback) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("TEST 12");
+            console.log(this.responseText);
+            response = this.responseText;
+
+            if (response === "PASS") {
+                testSettingDeadlineRes.innerHTML = "PASS";
+            } else {
+                testSettingDeadlineRes.innerHTML = "FAIL";
+            }
+
+            callback(testChangingPassword);
+        }
+    };
+
+    xmlhttp.open("GET", "UnitTest.php?test=set_values&mode=deadline", true);
+    xmlhttp.send();
+}
+
+function testSettingEmail(callback) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("TEST 13");
+            console.log(this.responseText);
+            response = this.responseText;
+
+            if (response === "PASS") {
+                testSettingEmailRes.innerHTML = "PASS";
+            } else {
+                testSettingEmailRes.innerHTML = "FAIL";
+            }
+
+            callback();
+        }
+    };
+
+    xmlhttp.open("GET", "UnitTest.php?test=set_values&mode=email", true);
+    xmlhttp.send();
+}
+
+function testChangingPassword() {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("TEST 14");
+            console.log(this.responseText);
+            response = this.responseText;
+
+            if (response === "PASS") {
+                testChangingPasswordRes.innerHTML = "PASS";
+            } else {
+                testChangingPasswordRes.innerHTML = "FAIL";
+            }
+        }
+    };
+
+    xmlhttp.open("GET", "UnitTest.php?test=set_values&mode=password", true);
+    xmlhttp.send();
+}

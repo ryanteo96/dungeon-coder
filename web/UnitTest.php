@@ -317,6 +317,133 @@ if ($test === "set_values") {
         echo $return;
     }
 
+    if ($mode === "comment") {
+        $sql = "UPDATE Task1 SET Comments='HI' WHERE Student='" . $user ."'" ;
+        $conn->query($sql);
+
+        $sql = "SELECT Student, Comments FROM Task1";
+        $result = $conn->query($sql);
+        $return = "FAIL";
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                if ($user == $row["Student"]) {
+                    if ($row["Comments"] === "HI") {
+                        $return = "PASS";
+                    } else 
+                        $return = "FAIL";
+                }
+            }
+        } else {
+            $return = "FAIL";
+        }
+
+        echo $return;
+    }
+
+    if ($mode === "points") {
+        $sql = "UPDATE Task1 SET PointValue=100 WHERE Student='" . $user ."'" ;
+        $conn->query($sql);
+
+        $sql = "SELECT Student, PointValue FROM Task1";
+        $result = $conn->query($sql);
+        $return = "FAIL";
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                if ($user == $row["Student"]) {
+                    if ($row["PointValue"] === "100") {
+                        $return = "PASS";
+                    } else 
+                        $return = "FAIL";
+                }
+            }
+        } else {
+            $return = "FAIL";
+        }
+
+        echo $return;
+    }
+
+    if ($mode === "deadline") {
+        $sql = "UPDATE Task1 SET Deadline='2017-10-10' WHERE Student='" . $user ."'" ;
+        $conn->query($sql);
+
+        $sql = "SELECT Student, Deadline FROM Task1";
+        $result = $conn->query($sql);
+        $return = "FAIL";
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                if ($user == $row["Student"]) {
+                    if ($row["Deadline"] === "2017-10-10") {
+                        $return = "PASS";
+                    } else 
+                        $return = "FAIL";
+                }
+            }
+        } else {
+            $return = "FAIL";
+        }
+
+        echo $return;
+    }
+
+    if ($mode === "email") {
+        $sql = "UPDATE Users SET Email='test@test.com' WHERE Username='" . $user ."'" ;
+        $conn->query($sql);
+
+        $sql = "SELECT Username, Email FROM Users";
+        $result = $conn->query($sql);
+        $return = "FAIL";
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                if ($user == $row["Username"]) {
+                    if ($row["Email"] === "test@test.com") {
+                        $return = "PASS";
+                    } else 
+                        $return = "FAIL";
+                }
+            }
+        } else {
+            $return = "FAIL";
+        }
+
+        echo $return;
+    }
+
+    if ($mode === "password") {
+        exec($param . "newPass " . $salt , $hashed);
+        $sql = "UPDATE Users SET Hash='" . $hashed[0] . "' WHERE Username='" . $user ."'" ;
+        $conn->query($sql);
+
+        $sql = "SELECT Username, Hash FROM Users";
+        $result = $conn->query($sql);
+        $return = "FAIL";
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                if ($user === $row["Username"]) {
+                    exec($param . "newPass " . $salt , $hashed);
+                    if ($row["Hash"] === $hashed[0]) {
+                        $return = "PASS";
+                    } else 
+                        $return = "FAIL";
+                }
+            }
+        } else {
+            $return = "FAIL";
+        }
+
+        echo $return;
+    }
+
     $sql = "DELETE FROM Users WHERE Username='test'";
     $conn->query($sql);
     $sql = "DELETE FROM Task1 WHERE Student='test'";
