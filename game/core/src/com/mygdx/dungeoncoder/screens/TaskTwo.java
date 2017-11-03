@@ -1,5 +1,8 @@
 package com.mygdx.dungeoncoder.screens;
 
+import java.io.*;
+import java.util.Arrays;
+
 import Scenes.Hud;
 import Sprites.Adventurer;
 import Sprites.Enemy;
@@ -33,6 +36,7 @@ import com.mygdx.dungeoncoder.backgroundElements.Land;
 import com.mygdx.dungeoncoder.utils.B2WorldCreator;
 import com.mygdx.dungeoncoder.utils.WorldContactListener;
 import com.mygdx.dungeoncoder.values.DefaultValues;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import static com.badlogic.gdx.utils.Scaling.fit;
 import static com.mygdx.dungeoncoder.DungeonCoder.V_HEIGHT;
@@ -42,6 +46,12 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
 
 public class TaskTwo implements Screen {
+    //Write files
+    BufferedWriter bw = null;
+    FileWriter fw = null;
+    private static final String FILENAME = "C:\\Users\\LCLY\\Desktop\\Dungeon\\dungeon-coder\\game\\core\\assets\\test.txt";
+    private TextButton saveButton;
+
     private DungeonCoder game;
     private Stage stage;
     Skin backButtonSkin;
@@ -64,8 +74,11 @@ public class TaskTwo implements Screen {
     //sprites
     private Adventurer player;
 
+    //textArea
+    private TextArea textArea;
+    private Skin skin;
 
-    public TaskTwo(DungeonCoder g) {
+    public TaskTwo(DungeonCoder g) throws FileNotFoundException {
         game = g;
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
@@ -102,6 +115,7 @@ public class TaskTwo implements Screen {
 
         //back button
         createBack();
+        createTextArea();
     }
 
     private void createBack() {
@@ -118,6 +132,110 @@ public class TaskTwo implements Screen {
         stage.addActor(btnBack);
     }
 
+    private void createTextArea() throws FileNotFoundException {
+        //to build string into the text file
+        StringBuilder sb = new StringBuilder();
+        // The name of the file to open.
+        String fileName = "test.txt";
+        // This will reference one line at a time
+        String line = null;
+
+        try {
+            // FileReader reads text files in the default encoding.
+            FileReader fileReader = new FileReader(fileName);
+
+            // Always wrap FileReader in BufferedReader.
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+
+            while((line = bufferedReader.readLine()) != null) {
+                System.out.println(line);
+                sb.append(line);
+                sb.append("\n");
+            }
+
+            // Always close files.
+            bufferedReader.close();
+        }
+        catch(FileNotFoundException ex) {
+            System.out.println("Unable to open file '" + fileName + "'");
+        }
+        catch(IOException ex) {
+            System.out.println("Error reading file '"  + fileName + "'");
+            // Or we could just do this:
+            // ex.printStackTrace();
+        }
+
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+        String textFileString = sb.toString();
+        textArea = new TextArea(textFileString,skin);
+        textArea.setX(50);
+        textArea.setY(70);
+        textArea.setWidth(500);
+        textArea.setHeight(500);
+        stage.addActor(textArea);
+
+        skin = new Skin (Gdx.files.internal("UIElements/test.json"));
+        saveButton = new TextButton("Run", skin);
+        saveButton.setPosition(460, 10);
+        saveButton.setSize(100, 50);
+        saveButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                String code = textArea.getText();
+                try {
+                    File file = new File("test.txt");
+                    FileWriter fileWriter = new FileWriter(file);
+                    fileWriter.write(code);
+                    fileWriter.flush();
+                    fileWriter.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                System.out.println("Code saved!");
+                String fileName = "test.txt";
+                // This will reference one line at a time
+                String line = null;
+
+                try {
+                    FileReader fileReader = new FileReader(fileName);
+                    BufferedReader bufferedReader = new BufferedReader(fileReader);
+                    while((line = bufferedReader.readLine()) != null) {
+                        //System.out.println(line);
+                        //testing code function
+                       if(code.contains("moveRight();")){
+                           DefaultValues.WALK_RIGHT = true;
+                       }
+                       if(code.contains("moveLeft();")){
+                           DefaultValues.WALK_LEFT = true;
+                       }
+                       if(code.contains("jump();")){
+                           DefaultValues.JUMP = true;
+                       }
+
+                    }
+                    bufferedReader.close();
+                }
+                catch(FileNotFoundException ex) {
+                    System.out.println("Unable to open file '" + fileName + "'");
+                }
+                catch(IOException ex) {
+                    System.out.println("Error reading file '"  + fileName + "'");
+                }
+
+
+            }
+        });
+
+
+
+
+        //to find the path of the file
+        //System.out.println("File path: " + new File("test.txt").getAbsolutePath());
+        stage.addActor(saveButton);
+    }
+
+
     public TextureAtlas getAtlas(){
         return atlas;
     }
@@ -132,7 +250,7 @@ public class TaskTwo implements Screen {
 
     public void handleinput(float dt){
         //control player using immediate impulses, use world center so the torque wont make the character fly around
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
+       /* if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
             player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
             player.currentState = Adventurer.State.JUMPING;
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.previousState == Adventurer.State.JUMPING){
@@ -142,6 +260,29 @@ public class TaskTwo implements Screen {
             player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)  {
             player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
+        }*/
+
+
+        if (DefaultValues.JUMP) { // for quick tap
+            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
+            player.currentState = Adventurer.State.JUMPING;
+            if(DefaultValues.JUMP && player.previousState == Adventurer.State.JUMPING){
+                player.b2body.applyLinearImpulse(new Vector2(0, -4f), player.b2body.getWorldCenter(), true);
+            }
+            DefaultValues.JUMP = false;
+            System.out.println("Your character jumped!");
+        }
+
+        if (DefaultValues.WALK_RIGHT && player.b2body.getLinearVelocity().x <= 2 ) { //isKeyPressed for holding down keys
+            player.b2body.applyLinearImpulse(new Vector2(1f, 0), player.b2body.getWorldCenter(), true);
+            DefaultValues.WALK_RIGHT = false;
+            System.out.println("Your character moved right!");
+        }
+
+        if (DefaultValues.WALK_LEFT && player.b2body.getLinearVelocity().x >= -2)  {
+            player.b2body.applyLinearImpulse(new Vector2(-1f, 0), player.b2body.getWorldCenter(), true);
+            DefaultValues.WALK_LEFT = false;
+            System.out.println("Your character moved left!");
         }
     }
 
@@ -221,6 +362,7 @@ public class TaskTwo implements Screen {
         stage.dispose();
         b2dr.dispose();
         renderer.dispose();
+
     }
 
 }

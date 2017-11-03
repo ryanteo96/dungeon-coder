@@ -164,10 +164,30 @@ public class ServerThread extends Thread {
 		}
 	}
 
-	// Get the user's code for a specific level
-	private void getUserLevelCode() {
+	private void getMostRecentCodeFile() {
 		String levelName = recieveString();
 		String fileName = connectedUser + levelName;
+		try {
+			if (conn == null) {
+				connectDB();
+			}
+			rs = stmt.executeQuery("SELECT Attempts FROM " + levelName + " WHERE Student = " + connectedUser + "");
+			rs.next();
+			int attempts = rs.getInt("Attempts");
+			fileName += Integer.toString(attempts);	
+		}
+		catch(SQLException e) {
+			sendCode((byte)(0x60));
+			return;
+		}
+		File file = new File(fileName);
+		sendFile(file, fileName);
+		sendCode((byte)(0x10));
+	}
+
+	// Get the user's code for a specific level
+	private void getUserLevelCode() {
+		String fileName = recieveString();
 		File file = new File(fileName);
 		sendFile(file, fileName);
 		sendCode((byte)(0x10));
@@ -584,8 +604,19 @@ public class ServerThread extends Thread {
 	}
 
 	private void pong() {
+		try {
+			if (conn == null) {
+				connectDB();
+			}
+			rs = stmt.executeQuery("SELECT Announcement FROM Announcements");
+			while(rs.next()) {
+				sendString(rs.getString("Announcement"));
+			}			
+		}
+		catch(SQLException e) {
+		}
+
 		sendCode((byte)(0xFF));
-		// Get Messages
 	}
 
 	public void run() {
@@ -621,8 +652,8 @@ public class ServerThread extends Thread {
 		// Stop thread if no code is recieved in the given time frame
 
 		try {
-			// Set timeout time to 1 minute
-			socket.setSoTimeout(60000);
+			// Set timeout time to 30 seconds
+			socket.setSoTimeout(30000);
 		}
 		catch (IOException e) {
 			// Shouldn't happen. Do Nothing
@@ -647,6 +678,10 @@ public class ServerThread extends Thread {
 					sendCode((byte)(0x10));
 					getUserLevelCode();
 				break;
+				case 0x18 :
+					sendCode((byte)(0x10));
+					getMostRecentCodeFile();
+				break;
 				// FETCHLEVELFILE
 				case 0x09 :
 					sendCode((byte)(0x10));
@@ -658,7 +693,7 @@ public class ServerThread extends Thread {
 					getTaskInfo();
 				break;
 				case (byte)(0xFF) :
-					pong();
+					sendCode((byte)(0x10));
 				break;
 				// INVALIDREQUEST
 				default:

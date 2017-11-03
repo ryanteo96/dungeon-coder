@@ -16,7 +16,7 @@ function body_onload() {
 
     currentUser = sessionStorageGet("CurrentUser", null);
 
-    retrieveStudentList();
+    retrieveStudentList(null);
     retrieveAnnouncements();
     task1.onclick = task1_onclick;
     changeDeadlineBtn.onclick = changeDeadlineBtn_onclick;
@@ -24,6 +24,7 @@ function body_onload() {
     saveBtn.onclick = saveBtn_onclick;
     signOutBtn.onclick = signOutBtn_onclick;
     createAnnouncementBtn.onclick = createAnnouncementBtn_onclick;
+    studentPriorityHeading.onclick = studentPriorityHeading_onclick;
 }
 
 function displayStudents() {
@@ -42,6 +43,7 @@ function displayStudents() {
         var col3 = document.createElement("div");
         var col4 = document.createElement("div");
         var col5 = document.createElement("div");
+        var col6 = document.createElement("div");
 
         row.className = "divEntriesRow";
         col1.className = "divEntriesRowCol1";
@@ -49,14 +51,24 @@ function displayStudents() {
         col3.className = "divEntriesRowCol3";
         col4.className = "divEntriesRowCol4";
         col5.className = "divEntriesRowCol5";
+        col6.className = "divEntriesRowCol6";
 
-        col1.innerHTML = entry.studentName;
-        col2.innerHTML = entry.studentID;
-        col3.innerHTML = entry.studentEmail;
-        col4.innerHTML = entry.studentScore;
-        col5.innerHTML = entry.studentTag;
+        col1.innerHTML = entry.username;
+        col2.innerHTML = entry.email;
+        col3.innerHTML = entry.className;
+        col4.innerHTML = entry.grade;
+
+        if (entry.lock === '0')
+            col5.innerHTML = "FALSE";
+        else
+            col5.innerHTML = "TRUE";
+
+        if (entry.priority === '0')
+            col6.innerHTML = "FALSE";
+        else
+            col6.innerHTML = "TRUE";
         
-        /*row.ondblclick = row_onblclick // run corresponding functions when buttons are pressed.
+        row.ondblclick = studentRow_onblclick // run corresponding functions when buttons are pressed.
         row.index = i; 
         row.style.cursor = 'pointer'; // changing the pointer when mouse is hovered over.*/
 
@@ -65,39 +77,43 @@ function displayStudents() {
         row.appendChild(col3);
         row.appendChild(col4);
         row.appendChild(col5);
+        row.appendChild(col6);
 
         studentListDivData.appendChild(row);
     }
 }
 
-function retrieveStudentList() {
+function retrieveStudentList(sort) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            //console.log(this.responseText);
-            var response = this.responseText;
-            var array = response.split("&");
-            parseEntries(array);
+            entries = new Array();
+            console.log(this.responseText);
+            var responses = this.responseText.split("&");
+
+            for (var i = 0; i < responses.length - 1; i++) {
+                //console.log(responses[i]);
+                entry = new Object();
+                entry = JSON.parse(responses[i]);
+                entries.push(entry);
+            }
+
+            displayStudents();
         }
     };
-    xmlhttp.open("GET", "StudentList.php", true);
-    xmlhttp.send();
-}
 
-function parseEntries(array) {
-    entries = new Array();
-    for (var i = 0; i < array.length - 1; i++) {
-        var entry = new Object();
-        entry.studentName = array[i];
-        entry.studentID = "NOTHING";
-        entry.studentEmail = "NOTHING";
-        entry.studentScore = "NOTHING";
-        entry.studentTag = "NOTHING";
-        //console.log(entry);
-        entries.push(entry);
+    if (sort !== null) {
+        if (sort === "asc") {
+            xmlhttp.open("GET", "StudentList.php?sort=asc", true);
+            xmlhttp.send();
+        } else if (sort === "desc") {
+            xmlhttp.open("GET", "StudentList.php?sort=desc", true);
+            xmlhttp.send();
+        }
+    } else {
+        xmlhttp.open("GET", "StudentList.php", true);
+        xmlhttp.send();
     }
-    //console.log(entries);
-    displayStudents();
 }
 
 function task1_onclick() {
@@ -328,34 +344,47 @@ function retrieveStatistics() {
 function taskRow_onblclick() {
     temp = new Object();
     temp = allStudentTask[this.index];
-    showModal("editStudent", "Task1");
+    showModal("editStudentTask", "Task1");
 
-    editStudentName.innerHTML = temp.student;
-    editStudentDeadlineInput.value = temp.deadline;
-    editStudentPointInput.value = temp.pointValue;
-    editStudentCommentInput.value = temp.comments;
+    editStudentTaskName.innerHTML = temp.student;
+    editStudentTaskDeadlineInput.value = temp.deadline;
+    editStudentTaskPointInput.value = temp.pointValue;
+    editStudentTaskCommentInput.value = temp.comments;
 
-    editStudentSaveBtn.onclick = function() {
+    editStudentTaskCodeVal.innerHTML = "";
+    var text = document.createElement("button");
+    text.id = "codeDownload";
+    text.innerHTML = "View Code<br><br>Right click -> Save As to download file.";
+    editStudentTaskCodeVal.appendChild(text);
 
+    editStudentTaskExampleCodeSelect.onclick = function() {
+        alert("Functionality in progress.");
+    }
+
+    codeDownload.onclick = function () {
+        window.open('/files/test.java', '_blank');
+    }
+
+    editStudentTaskSaveBtn.onclick = function() {
         var obj = new Object();
         obj.student = temp.student;
-        obj.deadline = editStudentDeadlineInput.value;
-        obj.pointValue = editStudentPointInput.value;
-        obj.comment = editStudentCommentInput.value;
+        obj.deadline = editStudentTaskDeadlineInput.value;
+        obj.pointValue = editStudentTaskPointInput.value;
+        obj.comment = editStudentTaskCommentInput.value;
 
-        attemptEditUser(currentTask, obj);
+        attemptEditUserTask(currentTask, obj);
 
-        var modal = document.getElementById("editStudentModal");
+        var modal = document.getElementById("editStudentTaskModal");
         modal.style.display = "none";
     }
 }
 
 
-function attemptEditUser(task, obj) {
+function attemptEditUserTask(task, obj) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);  
+            //console.log(this.responseText);  
             attemptRetrieveTask(task);
             retrieveStatistics();
         }
@@ -379,6 +408,104 @@ function attemptEditUser(task, obj) {
         query += "&comment=" + obj.comment;
     }
 
-    xmlhttp.open("GET", "EditStudent.php?user=" + obj.student + query, true);
+    xmlhttp.open("GET", "EditStudentTask.php?user=" + obj.student + query, true);
     xmlhttp.send();
+}
+
+function studentRow_onblclick() {
+    temp = new Object();
+    temp = entries[this.index];
+    showModal("editStudentList", null);
+
+    editStudentListName.innerHTML = temp.username;
+    editStudentListEmail.innerHTML = temp.email;
+    editStudentListClass.innerHTML = temp.className;
+    editStudentListGradeVal.innerHTML = temp.grade;
+    editStudentListGradeInput.value = temp.grade;
+
+    if (temp.lock === '0')
+        editStudentListLockVal.innerHTML = "FALSE";
+    else
+        editStudentListLockVal.innerHTML = "TRUE";
+
+    if (temp.priority === '0')
+        editStudentListPriorityVal.innerHTML = "FALSE";
+    else
+        editStudentListPriorityVal.innerHTML = "TRUE";
+
+    editStudentListSetLock.onclick = function() {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                //console.log(this.responseText);
+                retrieveStudentList(null);
+                modal = document.getElementById("editStudentListModal");
+                modal.style.display = "none";
+            }
+        };
+
+        var query;
+
+        if (temp.lock === '0') 
+            query = "&lock=1";
+        else
+            query = "&lock=0";
+
+        xmlhttp.open("GET", "EditStudentList.php?user=" + temp.username + query, true);
+        xmlhttp.send();
+    }
+
+    editStudentListSetPriority.onclick = function() {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                //console.log(this.responseText);
+                retrieveStudentList();
+                modal = document.getElementById("editStudentListModal");
+                modal.style.display = "none";
+            }
+        };
+
+        var query;
+
+        if (temp.priority === '0') 
+            query = "&priority=1";
+        else
+            query = "&priority=0";
+
+        xmlhttp.open("GET", "EditStudentList.php?user=" + temp.username + query, true);
+        xmlhttp.send();
+    }
+
+    editStudentListSaveBtn.onclick = function() {
+        if (editStudentListGradeInput.value.length > 0) {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    //console.log(this.responseText);
+                    retrieveStudentList(null);
+                    modal = document.getElementById("editStudentListModal");
+                    modal.style.display = "none";
+                }
+            };
+
+            var query = "&grade=" + editStudentListGradeInput.value;
+
+            xmlhttp.open("GET", "EditStudentList.php?user=" + temp.username + query, true);
+            xmlhttp.send();
+        } else {
+            modal = document.getElementById("editStudentListModal");
+            modal.style.display = "none";
+        }
+    }
+}
+
+function studentPriorityHeading_onclick() {
+    if (studentPriorityHeading.innerHTML === "Priority \u2193") {
+        retrieveStudentList("desc");
+        studentPriorityHeading.innerHTML = "Priority &uarr;";
+    } else {
+        retrieveStudentList("asc");
+        studentPriorityHeading.innerHTML = "Priority &darr;";
+    }
 }

@@ -38,17 +38,20 @@ function showModal(type, previousModal) {
     } else if (type === "createAnnouncement") {
         modal = document.getElementById("createAnnouncementModal");
         span = document.getElementById("createAnnouncementClose");
-    } else if (type === "editStudent") {
-        modal = document.getElementById("editStudentModal");
-        span = document.getElementById("editStudentClose");
+    } else if (type === "editStudentTask") {
+        modal = document.getElementById("editStudentTaskModal");
+        span = document.getElementById("editStudentTaskClose");
+    } else if (type === "editStudentList") {
+        modal = document.getElementById("editStudentListModal");
+        span = document.getElementById("editStudentListClose");
     }
 
     modal.style.display = "block";
-    console.log("SET OPEN: " + modal.id);
-    console.log("SET OPEN: " + span.id);
+    //console.log("SET OPEN: " + modal.id);
+    //console.log("SET OPEN: " + span.id);
 
     span.onclick = function() {
-        console.log("PRESS CLOSE: " + span.id);
+        //console.log("PRESS CLOSE: " + span.id);
         modal.style.display = "none";
 
         if (previousModal === "Task1") {
@@ -60,16 +63,19 @@ function showModal(type, previousModal) {
         } else if (previousModal === "createAnnouncement") {
             modal = document.getElementById("createAnnouncementModal");
             span = document.getElementById("createAnnouncementClose");
-        } else if (previousModal === "editStudent") {
-            modal = document.getElementById("editStudentModal");
-            span = document.getElementById("editStudentClose");
+        } else if (previousModal === "editStudentTask") {
+            modal = document.getElementById("editStudentTaskModal");
+            span = document.getElementById("editStudentTaskClose");
+        } else if (previousModal === "editStudentList") {
+            modal = document.getElementById("editStudentListModal");
+            span = document.getElementById("editStudentListClose");
         }
 
     }
 
     window.onclick = function(event) {
         if (event.target == modal) {
-            console.log("PRESS CLOSE: " + modal.id);
+            //console.log("PRESS CLOSE: " + modal.id);
             modal.style.display = "none";
 
             if (previousModal === "Task1") {
@@ -81,9 +87,12 @@ function showModal(type, previousModal) {
             } else if (previousModal === "createAnnouncement") {
                 modal = document.getElementById("createAnnouncementModal");
                 span = document.getElementById("createAnnouncementClose");
-            } else if (previousModal === "editStudent") {
-                modal = document.getElementById("editStudentModal");
-                span = document.getElementById("editStudentClose");
+            } else if (previousModal === "editStudentTask") {
+                modal = document.getElementById("editStudentTaskModal");
+                span = document.getElementById("editStudentTaskClose");
+            } else if (previousModal === "editStudentList") {
+                modal = document.getElementById("editStudentListModal");
+                span = document.getElementById("editStudentListClose");
             }
         }
     }

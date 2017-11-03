@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
@@ -38,7 +39,13 @@ import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.B2WorldCreator;
 import com.mygdx.dungeoncoder.utils.WorldContactListener;
 import com.mygdx.dungeoncoder.values.DefaultValues;
+import com.mygdx.dungeoncoder.values.Item;
+import com.mygdx.dungeoncoder.values.ItemDef;
+import com.mygdx.dungeoncoder.values.Mushroom;
 import org.w3c.dom.css.Rect;
+
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import static com.badlogic.gdx.utils.Scaling.fit;
 import static com.mygdx.dungeoncoder.DungeonCoder.V_HEIGHT;
@@ -74,6 +81,9 @@ public class TaskThree implements Screen {
 
     //music
     private Music music;
+
+    private Array<Item> items;
+    private LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
     public TaskThree(DungeonCoder g) {
         game = g;
@@ -117,11 +127,27 @@ public class TaskThree implements Screen {
         music.setLooping(true);
         music.play();
 
+        items = new Array<Item>();
+        itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
+
         createBack();
     }
 
     public TextureAtlas getAtlas(){
         return atlas;
+    }
+
+    public void spawnItem(ItemDef idef){
+        itemsToSpawn.add(idef);
+    }
+
+    public void handleSpawningItems(){
+        if(!itemsToSpawn.isEmpty()){
+            ItemDef idef = itemsToSpawn.poll();
+            if(idef.type == Mushroom.class){
+                items.add(new Mushroom(this,idef.position.x,idef.position.y));
+            }
+        }
     }
 
     private void createBack() {
@@ -148,23 +174,27 @@ public class TaskThree implements Screen {
     }
 
     public void handleInput(float dt) {
-        //control player using immediate impulses, use world center so the torque wont make the character fly around
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
-            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
-            player.currentState = Mario.State.JUMPING;
-            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.previousState == Mario.State.JUMPING){
-                player.b2body.applyLinearImpulse(new Vector2(0, -4f), player.b2body.getWorldCenter(), true);
+        //if he's dead, dun get any input
+        if(player.currentState != Mario.State.DEAD){
+            //control player using immediate impulses, use world center so the torque wont make the character fly around
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
+                player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
+                player.currentState = Mario.State.JUMPING;
+                if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.previousState == Mario.State.JUMPING){
+                    player.b2body.applyLinearImpulse(new Vector2(0, -4f), player.b2body.getWorldCenter(), true);
+                }
+            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2) { //isKeyPressed for holding down keys
+                player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)  {
+                player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2) { //isKeyPressed for holding down keys
-            player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)  {
-            player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
         }
     }
 
     public void update(float dt){
         //handle user input first
         handleInput(dt);
+        handleSpawningItems();
 
         //takes 1 step in the physics simulation 60 times per second
         world.step(1/60f, 6,2);
@@ -176,9 +206,17 @@ public class TaskThree implements Screen {
                 enemy.b2body.setActive(true);//activate goomba
             }
         }
+
+        for(Item item : items){
+            item.update(dt);
+        }
+
         hud.update(dt);
-        //attach our gamecam to our player's x coordinate
-        gamecam.position.x = player.b2body.getPosition().x;
+
+        //if mario dies, freeze the camera right where he died
+        if(player.currentState != Mario.State.DEAD){
+            gamecam.position.x = player.b2body.getPosition().x;
+        }
 
         //update gamecam with correct corrdinates after changes
         gamecam.update();
@@ -209,6 +247,10 @@ public class TaskThree implements Screen {
         for(Enemy enemy : creator.getGoombas()){
             enemy.draw(game.batch);
         }
+        for(Item item : items){
+            item.draw(game.batch);
+        }
+
         game.batch.end();
 
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);

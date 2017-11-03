@@ -1,5 +1,6 @@
 package Sprites;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.screens.TaskThree;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 
@@ -95,5 +97,6 @@ public class Goomba extends Enemy {
     public void hitOnHead() {
         //what happends when goomba get hit on the head, remove the box2d body after getting hit
         setToDestroy = true;
+        DungeonCoder.manager.get("Mario/sounds/stomp.wav", Sound.class).play();
     }
 }

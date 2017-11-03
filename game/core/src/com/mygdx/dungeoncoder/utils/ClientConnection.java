@@ -1,4 +1,5 @@
 package com.mygdx.dungeoncoder.utils;
+import java.util.ArrayList;
 import java.net.*;
 import java.io.*;
 
@@ -8,12 +9,13 @@ import java.io.*;
  * Handles all requests and responses to and from the server.
  */
 public class ClientConnection {
-	public String ip = "13.59.159.206";
-	int port = 37536;
-	Socket client;
-	DataOutputStream outgoing;
-	DataInputStream incoming;
-
+	private String ip = "13.59.159.206";
+	private int port = 37536;
+	private Socket client;
+	private DataOutputStream outgoing;
+	private DataInputStream incoming;
+	private ArrayList<String> messages = new ArrayList<String>();
+	
 	// Initialize new Client Connection
 	public ClientConnection() {
 		try {
@@ -258,8 +260,24 @@ public class ClientConnection {
 		return "";
 	}
 
-	private synchronized boolean requestCodeFile(String levelName) {
-		sendCode((byte)(0x09));
+	public synchronized boolean requestCodeFile(String fileName) {
+		sendCode((byte)(0x08));
+		if (recieveCode() == 0x10) {
+			try {
+				outgoing.writeUTF(fileName);
+				recieveFile("");
+				return true;
+			}
+			catch (IOException e) {
+				// Do Nothing
+			}
+		}
+		// Server refused file request
+		return false;
+	}
+
+	public synchronized boolean requestMostRecentLevelCode(String levelName) {
+		sendCode((byte)(0x18));
 		if (recieveCode() == 0x10) {
 			try {
 				outgoing.writeUTF(levelName);
@@ -270,15 +288,23 @@ public class ClientConnection {
 				// Do Nothing
 			}
 		}
-		else {
-			// Server refused file request
-			return false;
-		}
+		// Server refused file request
 		return false;
 	}
 
 	public synchronized void ping() {
 		sendCode((byte)(0xFF));
-		recieveCode();
+		while(recieveCode() != 0xFF) {
+			try {
+				messages.add(incoming.readUTF());
+			}
+			catch(IOException e) {
+				// Do Nothing
+			}
+		}
+	}
+
+	public synchronized ArrayList<String> getMessages() {
+		return messages;
 	}
 }
