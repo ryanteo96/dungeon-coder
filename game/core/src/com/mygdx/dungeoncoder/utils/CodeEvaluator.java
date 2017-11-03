@@ -1,3 +1,5 @@
+package com.mygdx.dungeoncoder.utils;
+
 import java.io.*;
 
 public class CodeEvaluator {

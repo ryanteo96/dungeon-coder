@@ -1,5 +1,7 @@
 package Sprites;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -32,29 +34,45 @@ public class Adventurer extends Sprite {
         runningRight = true;
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
+        Texture texture1 = new Texture(Gdx.files.internal("Dungeon/Images/0.png"));
+        Texture texture2 = new Texture(Gdx.files.internal("Dungeon/Images/1.png"));
+        Texture texture3 = new Texture(Gdx.files.internal("Dungeon/Images/2.png"));
+        Texture texture4 = new Texture(Gdx.files.internal("Dungeon/Images/3.png"));
+        Texture texture5 = new Texture(Gdx.files.internal("Dungeon/Images/4.png"));
+        Texture texture6 = new Texture(Gdx.files.internal("Dungeon/Images/5.png"));
+        Texture texture7 = new Texture(Gdx.files.internal("Dungeon/Images/6.png"));
+        Texture texture8 = new Texture(Gdx.files.internal("Dungeon/Images/7.png"));
 
-        frames.add(new TextureRegion(getTexture(), 1 , 50,64,45));
-        frames.add(new TextureRegion(getTexture(), 27 , 50,64,44));
+        frames.add(new TextureRegion(texture1,0,0,63,43));
+        frames.add(new TextureRegion(texture2,0,0,63,44));
+        frames.add(new TextureRegion(texture3,0,0,63,45));
+        frames.add(new TextureRegion(texture4,0,0,63,44));
+        frames.add(new TextureRegion(texture5,0,0,63,43));
+        frames.add(new TextureRegion(texture6,0,0,63,44));
+        frames.add(new TextureRegion(texture7,0,0,63,45));
+        frames.add(new TextureRegion(texture8,0,0,63,44));
+
+        //frames.add(new TextureRegion());
+        /*frames.add(new TextureRegion(getTexture(), 27 , 50,64,44));
         frames.add(new TextureRegion(getTexture(), 50 , 50,64,45));
         frames.add(new TextureRegion(getTexture(), 66 , 50,64,44));
         frames.add(new TextureRegion(getTexture(), 84 , 50,64,43));
         frames.add(new TextureRegion(getTexture(), 110 , 50,64,44));
         frames.add(new TextureRegion(getTexture(), 129 , 50,64,45));
-        frames.add(new TextureRegion(getTexture(), 148 , 50,64,44));
+        frames.add(new TextureRegion(getTexture(), 148 , 50,64,44));*/
 
         //running animation
         adventurerRun = new Animation(0.1f, frames);
         frames.clear();
 
         for(int i = 1; i < 2; i++){
-            frames.add(new TextureRegion(getTexture(), 1 , 0,100,45));
+            frames.add(new TextureRegion(getTexture(), 1 , 0,64,45));
         }
         adventurerJump = new Animation(0.1f, frames);
         frames.clear();
 
         defineAdventurer();
-
-        adventurerStand = new TextureRegion(getTexture(),1,0,64,52);
+        adventurerStand = new TextureRegion(texture1,0,0,64,43);
         setBounds(0,0,20/DefaultValues.PPM,20/DefaultValues.PPM);
         setRegion(adventurerStand);
 
