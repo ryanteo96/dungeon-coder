@@ -176,7 +176,7 @@ public class TaskTwo implements Screen {
         stage.addActor(textArea);
 
         skin = new Skin (Gdx.files.internal("UIElements/test.json"));
-        saveButton = new TextButton("Save", skin);
+        saveButton = new TextButton("Run", skin);
         saveButton.setPosition(460, 10);
         saveButton.setSize(100, 50);
         saveButton.addListener(new ClickListener() {
@@ -201,15 +201,15 @@ public class TaskTwo implements Screen {
                     FileReader fileReader = new FileReader(fileName);
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
                     while((line = bufferedReader.readLine()) != null) {
-                        System.out.println(line);
+                        //System.out.println(line);
                         //testing code function
-                       if(code.contains("right")){
+                       if(code.contains("moveRight();")){
                            DefaultValues.WALK_RIGHT = true;
                        }
-                       if(code.contains("left")){
+                       if(code.contains("moveLeft();")){
                            DefaultValues.WALK_LEFT = true;
                        }
-                       if(code.contains("jump")){
+                       if(code.contains("jump();")){
                            DefaultValues.JUMP = true;
                        }
 
@@ -270,16 +270,19 @@ public class TaskTwo implements Screen {
                 player.b2body.applyLinearImpulse(new Vector2(0, -4f), player.b2body.getWorldCenter(), true);
             }
             DefaultValues.JUMP = false;
+            System.out.println("Your character jumped!");
         }
 
         if (DefaultValues.WALK_RIGHT && player.b2body.getLinearVelocity().x <= 2 ) { //isKeyPressed for holding down keys
             player.b2body.applyLinearImpulse(new Vector2(1f, 0), player.b2body.getWorldCenter(), true);
             DefaultValues.WALK_RIGHT = false;
+            System.out.println("Your character moved right!");
         }
 
         if (DefaultValues.WALK_LEFT && player.b2body.getLinearVelocity().x >= -2)  {
             player.b2body.applyLinearImpulse(new Vector2(-1f, 0), player.b2body.getWorldCenter(), true);
             DefaultValues.WALK_LEFT = false;
+            System.out.println("Your character moved left!");
         }
     }
 

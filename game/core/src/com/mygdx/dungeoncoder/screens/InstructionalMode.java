@@ -276,22 +276,25 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
 
     private void stage_Two(DungeonCoder g) {
         Object[] listEntries = {"Objective",
-                "TASK 2 OBJECTIVE",
+                "Explore the Dungeon World",
                 "===========================================================================================",
                 "Task",
-                "TASK 2 TASK",
+                "Reach the end of the stage with your code input.",
                 "",
                 "===========================================================================================",
                 "Sample Input",
-                "TASK 2 SAMPLE INPUT",
+                "moveRight();",
+                "moveLeft();",
+                "jump();",
                 "--------------------------------------------------------------------------------------------------------------------------------------------",
                 "Sample Output",
-                "TASK 2 SAMPLE OUTPUT",
+                "The console will print \"You character moved DIRECTION!\".",
                 "===========================================================================================",
                 "Explanation",
-                "TASK 2 EXPLANATION",
+                "You should use the functions provided to move the character and everytime you run the code",
+                "your character will move accordingly.",
                 "===========================================================================================",
-                "Difficulty: TASK 2 DIFFICULTY"};
+                "Difficulty: Easy"};
 
         skin = new Skin(Gdx.files.internal("dialogSkins/plain-james-ui.json"));
         testSkin = new Skin(Gdx.files.internal("UIElements/test.json"));
