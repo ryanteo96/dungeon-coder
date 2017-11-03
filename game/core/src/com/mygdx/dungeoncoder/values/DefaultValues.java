@@ -17,6 +17,10 @@ public class DefaultValues {
     public static final short ITEM_BIT = 256;
     public static final short MARIO_HEAD_BIT = 512;
 
+    public static boolean WALK_RIGHT = false;
+    public static boolean WALK_LEFT = false;
+    public static boolean JUMP = false;
+
 
 
 }

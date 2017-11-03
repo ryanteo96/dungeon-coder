@@ -1,5 +1,7 @@
- public class Solution  {
+ public class Solution  { 
     public static void main(String[] args)   {
-      /*Enter your code here...*/        
+      /*Enter your code here...*/ 
+     right       
+    
    }
  }

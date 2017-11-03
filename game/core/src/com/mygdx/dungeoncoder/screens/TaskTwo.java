@@ -1,6 +1,7 @@
 package com.mygdx.dungeoncoder.screens;
 
 import java.io.*;
+import java.util.Arrays;
 
 import Scenes.Hud;
 import Sprites.Adventurer;
@@ -197,11 +198,21 @@ public class TaskTwo implements Screen {
                 String line = null;
 
                 try {
-
                     FileReader fileReader = new FileReader(fileName);
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
                     while((line = bufferedReader.readLine()) != null) {
                         System.out.println(line);
+                        //testing code function
+                       if(code.contains("right")){
+                           DefaultValues.WALK_RIGHT = true;
+                       }
+                       if(code.contains("left")){
+                           DefaultValues.WALK_LEFT = true;
+                       }
+                       if(code.contains("jump")){
+                           DefaultValues.JUMP = true;
+                       }
+
                     }
                     bufferedReader.close();
                 }
@@ -211,8 +222,13 @@ public class TaskTwo implements Screen {
                 catch(IOException ex) {
                     System.out.println("Error reading file '"  + fileName + "'");
                 }
+
+
             }
         });
+
+
+
 
         //to find the path of the file
         //System.out.println("File path: " + new File("test.txt").getAbsolutePath());
@@ -234,7 +250,7 @@ public class TaskTwo implements Screen {
 
     public void handleinput(float dt){
         //control player using immediate impulses, use world center so the torque wont make the character fly around
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
+       /* if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
             player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
             player.currentState = Adventurer.State.JUMPING;
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.previousState == Adventurer.State.JUMPING){
@@ -244,6 +260,26 @@ public class TaskTwo implements Screen {
             player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)  {
             player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
+        }*/
+
+
+        if (DefaultValues.JUMP) { // for quick tap
+            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
+            player.currentState = Adventurer.State.JUMPING;
+            if(DefaultValues.JUMP && player.previousState == Adventurer.State.JUMPING){
+                player.b2body.applyLinearImpulse(new Vector2(0, -4f), player.b2body.getWorldCenter(), true);
+            }
+            DefaultValues.JUMP = false;
+        }
+
+        if (DefaultValues.WALK_RIGHT && player.b2body.getLinearVelocity().x <= 2 ) { //isKeyPressed for holding down keys
+            player.b2body.applyLinearImpulse(new Vector2(1f, 0), player.b2body.getWorldCenter(), true);
+            DefaultValues.WALK_RIGHT = false;
+        }
+
+        if (DefaultValues.WALK_LEFT && player.b2body.getLinearVelocity().x >= -2)  {
+            player.b2body.applyLinearImpulse(new Vector2(-1f, 0), player.b2body.getWorldCenter(), true);
+            DefaultValues.WALK_LEFT = false;
         }
     }
 
