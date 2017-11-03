@@ -34,8 +34,10 @@ import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.backgroundElements.Boxes;
 import com.mygdx.dungeoncoder.backgroundElements.Land;
 import com.mygdx.dungeoncoder.utils.B2WorldCreator;
+import com.mygdx.dungeoncoder.utils.ClientConnection;
 import com.mygdx.dungeoncoder.utils.WorldContactListener;
 import com.mygdx.dungeoncoder.values.DefaultValues;
+import com.sun.deploy.util.SessionState;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import static com.badlogic.gdx.utils.Scaling.fit;
@@ -113,6 +115,7 @@ public class TaskTwo implements Screen {
 
         world.setContactListener(new WorldContactListener());
 
+        shareVariable.connect = new ClientConnection();
         //back button
         createBack();
         createTextArea();
@@ -183,8 +186,8 @@ public class TaskTwo implements Screen {
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 String code = textArea.getText();
+                File file = new File("test.txt");
                 try {
-                    File file = new File("test.txt");
                     FileWriter fileWriter = new FileWriter(file);
                     fileWriter.write(code);
                     fileWriter.flush();
@@ -194,12 +197,16 @@ public class TaskTwo implements Screen {
                 }
                 System.out.println("Code saved!");
                 String fileName = "test.txt";
+
+                shareVariable.connect.sendFile(file,"test.txt");
                 // This will reference one line at a time
                 String line = null;
 
                 try {
+                    shareVariable.connect.requestUpdateProgress(file,"task2",10);
                     FileReader fileReader = new FileReader(fileName);
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
+
                     while((line = bufferedReader.readLine()) != null) {
                         //System.out.println(line);
                         //testing code function

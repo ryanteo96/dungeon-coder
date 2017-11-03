@@ -27,6 +27,7 @@ public class LoginScreen implements Screen {
     private final TextField txfPassword;
     private Skin textSkin;
     private Pinger ping;
+
     public LoginScreen(DungeonCoder g) {
         game = g;
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,

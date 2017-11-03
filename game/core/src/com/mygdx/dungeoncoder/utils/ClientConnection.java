@@ -181,7 +181,7 @@ public class ClientConnection {
 		return false;
 	}
 
-	private synchronized boolean sendFile(File file, String fileName) {
+	public synchronized boolean sendFile(File file, String fileName) {
 		try {
 			outgoing.writeUTF(fileName);
 			long length = file.length();
