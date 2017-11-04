@@ -26,9 +26,12 @@ import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.ClientConnection;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 import com.badlogic.gdx.ApplicationAdapter;
+import com.mygdx.dungeoncoder.utils.SaveProcessor;
+import javax.swing.Timer;
 
 import javax.xml.soap.Text;
 import java.io.File;
+import java.io.IOException;
 
 import static com.badlogic.gdx.utils.Scaling.fit;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
@@ -65,10 +68,19 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     private Box2DDebugRenderer debugRenderer;
     Texture pic1;
     Sprite test;
+    public SaveProcessor s;
+    public Image popupImage;
 
     private TextureAtlas stickman;
 
-    public TaskOne(DungeonCoder g) {
+    public TaskOne(DungeonCoder g){
+        s = new SaveProcessor();
+        Texture popup = new Texture(Gdx.files.internal("UIElements/Accomplished.png"));
+        TextureRegion popupRegion = new TextureRegion(popup);
+        TextureRegionDrawable popupDrawable = new TextureRegionDrawable(popupRegion);
+        popupImage = new Image(popupDrawable);
+        popupImage.setPosition(0, 0);
+        SaveProcessor s = new SaveProcessor();
         pic1 = new Texture("stationaryninja.png");
         game = g;
         box2DCamera = new OrthographicCamera();
@@ -89,6 +101,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         //player = new Player(world,"stationaryninja.png",VIRTUAL_WIDTH/2,VIRTUAL_HEIGHT/2);
         //player.setSize(70,120);
         createBack();
+        popup();
         //createAttempts();
         //createProgress();
         //createTextArea();
@@ -97,6 +110,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         //createDeadline();
         createGame();
         createPause();
+        createTest();
     }
 
    private void createDeadline(){
@@ -140,6 +154,40 @@ public class TaskOne extends ApplicationAdapter implements Screen {
        stage.addActor(task1Image);
        stage.setDebugAll(false);
    }
+
+    private void beat(DungeonCoder g) throws IOException {
+        s.insClear();
+        if (s.autoSave()) {
+            s.Save();
+        }
+    }
+
+    private void createTest() {
+        Texture save = new Texture(Gdx.files.internal("UIElements/freeWin.png"));
+        TextureRegion saveRegion = new TextureRegion(save);
+        TextureRegionDrawable saveDrawable = new TextureRegionDrawable(saveRegion);
+        Image main4Image = new Image(saveDrawable);
+        main4Image.setPosition(500, 500);
+        main4Image.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                try {
+                    beat(game);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (s.checkAchievement()){
+                    stage.addActor(popupImage);
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        stage.addActor(main4Image);
+    }
 
     private void createHint() {
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
@@ -416,5 +464,21 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         player.getTexture().dispose();
     }
 
+    public void popup(){
+            try {
+                Thread.sleep(100);
+                popupImage.moveBy(0,5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+    }
 
+    public void popdown(){
+        try {
+            Thread.sleep(100);
+            popupImage.moveBy(0,-5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

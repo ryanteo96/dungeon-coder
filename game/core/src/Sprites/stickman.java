@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.dungeoncoder.screens.TaskOne;
-import com.mygdx.dungeoncoder.screens.TaskThree;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 
 public class stickman extends Sprite{
@@ -22,7 +21,7 @@ public class stickman extends Sprite{
     public boolean runningRight;
     private float stateTimer;
 
-    public stickman(World world, TaskOne screen){
+    public stickman(TaskOne screen){
         super(screen.getAtlas().findRegion("stickman"));
         this.world = world;
         stateTimer = 0;
@@ -30,22 +29,20 @@ public class stickman extends Sprite{
         setRegion(stickmanStand);
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
-        for(int i = 1; i < 4; i++){
-            frames.add(new TextureRegion(getTexture(), i * 16 , 11,16,16));
+        for(int i = 0; i < 8; i++){
+            frames.add(new TextureRegion(getTexture(), i * 80 , 0,80,100));
         }
         //running animation
         stickmanRun = new Animation(0.1f, frames);
         frames.clear();
 
-        for(int i = 4; i < 6; i++){
-            frames.add(new TextureRegion(getTexture(), i * 16 , 11,16,16));
-        }
+//        for(int i = 4; i < 6; i++){
+        frames.add(new TextureRegion(getTexture(), 3 * 80 , 0,80,100));
+//        }
         stickmanJump = new Animation(0.1f, frames);
         frames.clear();
+        defineStickman();
 
-        defineMario();
-
-        stickmanStand = new TextureRegion(getTexture(),1,11,16,16);
         setBounds(0,0,16/DefaultValues.PPM,16/DefaultValues.PPM);
         setRegion(stickmanStand);
     }
@@ -98,7 +95,7 @@ public class stickman extends Sprite{
         }
     }
 
-    public void defineMario(){
+    public void defineStickman(){
         BodyDef bdef = new BodyDef();
         bdef.position.set(32/DefaultValues.PPM,32/DefaultValues.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;

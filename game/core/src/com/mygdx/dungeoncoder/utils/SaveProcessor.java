@@ -60,19 +60,37 @@ public class SaveProcessor {
         return totalCleared;
     }
 
-    public void insClear(){
+    public boolean insClear(){
         insCleared++;
         totalCleared++;
+        if (checkAchievement()){
+            return true;
+        }
+        if (autoSave == 1) {
+            Save();
+        }
+        return false;
     }
 
-    public void mainClear(){
+    public boolean mainClear(){
         mainCleared++;
         totalCleared++;
+        if (checkAchievement()){
+            return true;
+        }
+        if (autoSave == 1){
+            Save();
+        }
+        return false;
     }
 
-    public void freeClear(){
+    public boolean freeClear(){
         freeCleared++;
         totalCleared++;
+        if (checkAchievement()){
+            return true;
+        }
+        return false;
     }
 
     public void setAutoSave(int i){
@@ -92,4 +110,10 @@ public class SaveProcessor {
         }
     }
 
+    public boolean checkAchievement(){
+        if (totalCleared == 5 || insCleared == 10){
+            return true;
+        }
+        return false;
+    }
 }

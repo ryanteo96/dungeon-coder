@@ -173,6 +173,7 @@ public class AchievementPage implements Screen {
 
     private void Save(DungeonCoder g) throws IOException {
         s.Save();
+            g.setScreen(new AchievementPage(game));
     }
 
     private void createTest() {
@@ -198,9 +199,6 @@ public class AchievementPage implements Screen {
         s.insClear();
         if (s.autoSave()) {
             Save(game);
-        }
-        if (stageC == 5){
-            System.out.println("Achievement 1 completed!!!");
         }
     }
 
