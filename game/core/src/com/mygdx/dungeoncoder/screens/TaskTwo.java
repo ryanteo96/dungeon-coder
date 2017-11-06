@@ -118,8 +118,9 @@ public class TaskTwo implements Screen {
         shareVariable.connect = new ClientConnection();
         //back button
         createBack();
-        createTextArea();
+        //createTextArea();
     }
+
 
     private void createBack() {
         backButtonSkin = new Skin(Gdx.files.internal("comic-ui.json"));
@@ -257,7 +258,7 @@ public class TaskTwo implements Screen {
 
     public void handleinput(float dt){
         //control player using immediate impulses, use world center so the torque wont make the character fly around
-       /* if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
             player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
             player.currentState = Adventurer.State.JUMPING;
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.previousState == Adventurer.State.JUMPING){
@@ -267,10 +268,10 @@ public class TaskTwo implements Screen {
             player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)  {
             player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
-        }*/
+        }
 
 
-        if (DefaultValues.JUMP) { // for quick tap
+       /* if (DefaultValues.JUMP) { // for quick tap
             player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
             player.currentState = Adventurer.State.JUMPING;
             if(DefaultValues.JUMP && player.previousState == Adventurer.State.JUMPING){
@@ -290,7 +291,7 @@ public class TaskTwo implements Screen {
             player.b2body.applyLinearImpulse(new Vector2(-1f, 0), player.b2body.getWorldCenter(), true);
             DefaultValues.WALK_LEFT = false;
             System.out.println("Your character moved left!");
-        }
+        }*/
     }
 
     public void update(float dt){
@@ -300,6 +301,13 @@ public class TaskTwo implements Screen {
         player.update(dt);
         //attach our gamecam to our player's x coordinate
         gamecam.position.x = player.b2body.getPosition().x;
+
+        for(Enemy enemy : creator.getDungeonMonster()){
+            enemy.update(dt);
+            if(enemy.getX() < player.getX() + 220/DefaultValues.PPM){
+                enemy.b2body.setActive(true);//activate goomba
+            }
+        }
 
         //update gamecam with correct corrdinates after changes
         gamecam.update();
@@ -333,6 +341,9 @@ public class TaskTwo implements Screen {
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
         player.draw(game.batch);
+        for(Enemy enemy : creator.getDungeonMonster()){
+            enemy.draw(game.batch);
+        }
         game.batch.end();
 
         stage.act(delta);

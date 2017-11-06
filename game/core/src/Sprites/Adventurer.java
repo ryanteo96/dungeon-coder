@@ -144,11 +144,8 @@ public class Adventurer extends Sprite {
         fdef.filter.categoryBits = DefaultValues.MARIO_BIT;
         //what can mario collide with
         fdef.filter.maskBits = DefaultValues.GROUND_BIT |
-                DefaultValues.COIN_BIT |
-                DefaultValues.BRICK_BIT |
                 DefaultValues.ENEMY_BIT |
-                DefaultValues.OBJECT_BIT|
-                DefaultValues.ENEMY_HEAD_BIT; // | is or
+                DefaultValues.OBJECT_BIT; // | is or
 
         fdef.shape = shape;
         b2body.createFixture(fdef);

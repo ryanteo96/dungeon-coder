@@ -132,7 +132,13 @@ public class TaskThree implements Screen {
 
         createBack();
     }
-
+    public boolean gameOver(){
+        if(player.currentState == Mario.State.DEAD && player.getStateTimer() > 3){
+            return true;
+        }else{
+            return false;
+        }
+    }
     public TextureAtlas getAtlas(){
         return atlas;
     }
@@ -255,7 +261,10 @@ public class TaskThree implements Screen {
 
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
-
+    if(gameOver()){
+        game.setScreen(new GameOverScreen(game));
+        dispose();
+    }
         stage.draw();
         stage.act(delta);
     }

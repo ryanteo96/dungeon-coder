@@ -50,7 +50,7 @@ public class Mario extends Sprite {
         runningRight = true;
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
-        //little mario animation
+        //little ` animation
         for(int i = 1; i < 4; i++){
             frames.add(new TextureRegion(screen.getAtlas().findRegion("little_mario"), i * 16 , 0,16,16));
         }
@@ -116,6 +116,15 @@ public class Mario extends Sprite {
             DungeonCoder.manager.get("Mario/sounds/powerup.wav", Sound.class).play();
         }
     }
+
+    public boolean isDead(){
+        return marioIsDead;
+    }
+
+    public float getStateTimer(){
+        return stateTimer;
+    }
+
 
     public void hit(){
         if(marioIsBig){
