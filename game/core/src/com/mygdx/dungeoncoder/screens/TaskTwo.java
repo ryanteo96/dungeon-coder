@@ -35,6 +35,7 @@ import com.mygdx.dungeoncoder.backgroundElements.Boxes;
 import com.mygdx.dungeoncoder.backgroundElements.Land;
 import com.mygdx.dungeoncoder.utils.B2WorldCreator;
 import com.mygdx.dungeoncoder.utils.ClientConnection;
+import com.mygdx.dungeoncoder.utils.CodeEvaluator;
 import com.mygdx.dungeoncoder.utils.WorldContactListener;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 import com.sun.deploy.util.SessionState;
@@ -49,9 +50,9 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
 public class TaskTwo implements Screen {
     //Write files
+    CodeEvaluator codeevaluator;
     BufferedWriter bw = null;
     FileWriter fw = null;
-    private static final String FILENAME = "C:\\Users\\LCLY\\Desktop\\Dungeon\\dungeon-coder\\game\\core\\assets\\test.txt";
     private TextButton saveButton;
 
     private DungeonCoder game;
@@ -94,6 +95,8 @@ public class TaskTwo implements Screen {
         //create a FitViewport to maintain virtual aspect ratio despite screen size
         gamePort = new FitViewport(V_WIDTH/ DefaultValues.PPM, V_HEIGHT/DefaultValues.PPM, gamecam);
 
+        //get compiling
+        codeevaluator = new CodeEvaluator();
 
         //Load our map and setup our map renderer
         mapLoader = new TmxMapLoader();
@@ -115,10 +118,9 @@ public class TaskTwo implements Screen {
 
         world.setContactListener(new WorldContactListener());
 
-        shareVariable.connect = new ClientConnection();
         //back button
         createBack();
-        //createTextArea();
+        createTextArea();
     }
 
 
@@ -140,7 +142,7 @@ public class TaskTwo implements Screen {
         //to build string into the text file
         StringBuilder sb = new StringBuilder();
         // The name of the file to open.
-        String fileName = "test.txt";
+        String fileName = "TaskTwo.java";
         // This will reference one line at a time
         String line = null;
 
@@ -187,7 +189,7 @@ public class TaskTwo implements Screen {
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 String code = textArea.getText();
-                File file = new File("test.txt");
+                File file = new File("TaskTwo.java");
                 try {
                     FileWriter fileWriter = new FileWriter(file);
                     fileWriter.write(code);
@@ -197,14 +199,15 @@ public class TaskTwo implements Screen {
                     ex.printStackTrace();
                 }
                 System.out.println("Code saved!");
-                String fileName = "test.txt";
-
-                shareVariable.connect.sendFile(file,"test.txt");
+                String fileName = "TaskTwo.java";
                 // This will reference one line at a time
                 String line = null;
 
                 try {
-                    shareVariable.connect.requestUpdateProgress(file,"task2",10);
+                    shareVariable.connect.requestUpdateProgress(file,"Task1",10);
+                    System.out.println("File path: " + new File("TaskTwo.java").getAbsolutePath());
+                    String filepath = new File("TaskTwo.java").getAbsolutePath();
+                    System.out.println(codeevaluator.evaluate(filepath));
                     FileReader fileReader = new FileReader(fileName);
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
 
@@ -212,6 +215,7 @@ public class TaskTwo implements Screen {
                         //System.out.println(line);
                         //testing code function
                        if(code.contains("moveRight();")){
+                           movedRight();
                            DefaultValues.WALK_RIGHT = true;
                        }
                        if(code.contains("moveLeft();")){
@@ -243,6 +247,9 @@ public class TaskTwo implements Screen {
         stage.addActor(saveButton);
     }
 
+    public void movedRight(){
+
+    }
 
     public TextureAtlas getAtlas(){
         return atlas;

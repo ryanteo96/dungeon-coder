@@ -3,7 +3,7 @@ import com.mygdx.dungeoncoder.utils.ClientConnection;
 
 
 public class shareVariable {
-    	public static ClientConnection connect = null;
+    public static ClientConnection connect = null;
 
     public static boolean connected = false;
     public static final int WIDTH = 650;
