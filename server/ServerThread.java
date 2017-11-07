@@ -507,8 +507,14 @@ public class ServerThread extends Thread {
 			if (fileName.equals("")) {
 				fileName = givenFileName;
 			}
-			OutputStream out = new FileOutputStream("~/efs/" + fileName);
 			
+			File f = new File("Files/" + fileName);
+			f.createNewFile();
+
+			OutputStream out = new FileOutputStream(f);
+			
+
+
 			long fileSize = incoming.readLong();
 			byte[] buffer = new byte[16 * 1024];
 			int count;
