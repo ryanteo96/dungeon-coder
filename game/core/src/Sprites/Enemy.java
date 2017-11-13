@@ -33,6 +33,8 @@ public abstract class Enemy extends Sprite {
     }
 
     protected abstract void defineEnemy();
+
+
     public abstract void hitOnHead(); //so world contact can access
     public abstract void update(float dt);
 

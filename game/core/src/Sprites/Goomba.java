@@ -87,6 +87,7 @@ public class Goomba extends Enemy {
         b2body.createFixture(fdef).setUserData(this);
     }
 
+
     public void draw(Batch batch){
         if(!destroyed || stateTime < 1){
             super.draw(batch);

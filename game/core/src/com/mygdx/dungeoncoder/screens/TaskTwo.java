@@ -1,22 +1,15 @@
 package com.mygdx.dungeoncoder.screens;
 
 import java.io.*;
-import java.util.Arrays;
 
-import Scenes.Hud;
-import Sprites.Adventurer;
+import Scenes.AdventurerHud;
+import Sprites.Adventurer.Adventurer;
+import Sprites.Adventurer.AdventurerContactListener;
 import Sprites.Enemy;
-import Sprites.Mario;
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -31,17 +24,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
-import com.mygdx.dungeoncoder.backgroundElements.Boxes;
-import com.mygdx.dungeoncoder.backgroundElements.Land;
-import com.mygdx.dungeoncoder.utils.B2WorldCreator;
-import com.mygdx.dungeoncoder.utils.ClientConnection;
-import com.mygdx.dungeoncoder.utils.CodeEvaluator;
-import com.mygdx.dungeoncoder.utils.WorldContactListener;
+import com.mygdx.dungeoncoder.utils.*;
 import com.mygdx.dungeoncoder.values.DefaultValues;
-import com.sun.deploy.util.SessionState;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
-import static com.badlogic.gdx.utils.Scaling.fit;
 import static com.mygdx.dungeoncoder.DungeonCoder.V_HEIGHT;
 import static com.mygdx.dungeoncoder.DungeonCoder.V_WIDTH;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
@@ -63,6 +48,7 @@ public class TaskTwo implements Screen {
     //basic playscreen variables
     private OrthographicCamera gamecam;
     private Viewport gamePort;
+    private AdventurerHud hud;
 
     //Tiled map variables
     private TmxMapLoader mapLoader;
@@ -116,7 +102,10 @@ public class TaskTwo implements Screen {
         //create adventurer in our world
         player = new Adventurer(this);
 
-        world.setContactListener(new WorldContactListener());
+        //create our game HUD for scores/timers/level info
+        hud = new AdventurerHud(game.batch);
+
+        world.setContactListener(new AdventurerContactListener());
 
         //back button
         createBack();
@@ -308,7 +297,7 @@ public class TaskTwo implements Screen {
         player.update(dt);
         //attach our gamecam to our player's x coordinate
         gamecam.position.x = player.b2body.getPosition().x;
-
+        hud.update(dt);
         for(Enemy enemy : creator.getDungeonMonster()){
             enemy.update(dt);
             if(enemy.getX() < player.getX() + 220/DefaultValues.PPM){
@@ -343,7 +332,6 @@ public class TaskTwo implements Screen {
 
         //render our Box2Ddebuglines
         b2dr.render(world,gamecam.combined);
-
         //set batch to draw what the Hud camera sees.
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
@@ -353,6 +341,8 @@ public class TaskTwo implements Screen {
         }
         game.batch.end();
 
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
         stage.act(delta);
         stage.draw();
     }
@@ -384,6 +374,7 @@ public class TaskTwo implements Screen {
     public void dispose() {
         world.dispose();
         map.dispose();
+        hud.dispose();
         stage.dispose();
         b2dr.dispose();
         renderer.dispose();

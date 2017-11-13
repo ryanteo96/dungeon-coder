@@ -1,4 +1,4 @@
-package Sprites;
+package Sprites.Adventurer;
 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -11,18 +11,17 @@ import com.mygdx.dungeoncoder.screens.TaskThree;
 import com.mygdx.dungeoncoder.screens.TaskTwo;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 
-public abstract class InteractiveTileObject {
+public class AdventurerInteractiveTileObject {
     protected World world;
     protected TiledMap map;
     protected TiledMapTile tile;
     protected Rectangle bounds;
     protected Body body;
     protected Fixture fixture;
-    protected TaskThree screen;
-    protected TaskTwo screen2;
+    protected TaskTwo screen;
     protected MapObject object;
 
-    public InteractiveTileObject(TaskThree screen, MapObject object){
+    public AdventurerInteractiveTileObject(TaskTwo screen, MapObject object){
         this.object = object;
         this.screen = screen;
         this.world = screen.getWorld();
@@ -43,10 +42,6 @@ public abstract class InteractiveTileObject {
         fixture = body.createFixture(fdef);
     }
 
-
-
-    public abstract void onHeadHit(Mario mario);
-
     public void setCategoryFilter(short filterBit){
         Filter filter = new Filter();
         filter.categoryBits = filterBit;
@@ -55,7 +50,7 @@ public abstract class InteractiveTileObject {
 
     public TiledMapTileLayer.Cell getCell(){
         //get the layer first layer 0 or 1 so on and so forth in the Tiled
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(1);
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
         return layer.getCell((int)(body.getPosition().x * DefaultValues.PPM / 16),
                 (int)(body.getPosition().y * DefaultValues.PPM / 16)); //scale it up, box2d body is scaled down
     }

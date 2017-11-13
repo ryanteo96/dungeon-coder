@@ -1,15 +1,13 @@
-package Sprites;
+package Sprites.Adventurer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.dungeoncoder.screens.TaskThree;
 import com.mygdx.dungeoncoder.screens.TaskTwo;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 
@@ -17,13 +15,16 @@ public class Adventurer extends Sprite {
     public World world;
     public Body b2body;
     private TextureRegion adventurerStand;
-    public enum State{FALLING, JUMPING, STANDING, RUNNING};
+
+    public enum State{FALLING, JUMPING, STANDING, RUNNING, DEAD};
     public Adventurer.State currentState;
     public Adventurer.State previousState;
     private Animation <TextureRegion> adventurerRun;
     private Animation <TextureRegion> adventurerJump;
+    private Animation <TextureRegion> adventurerDead;
     private float stateTimer;
     private boolean runningRight;
+    private boolean adventurerIsDead;
 
     public Adventurer(TaskTwo screen){
         super(screen.getAtlas().findRegion("walk"));
@@ -32,57 +33,60 @@ public class Adventurer extends Sprite {
         previousState = Adventurer.State.STANDING;
         stateTimer = 0;
         runningRight = true;
-
+        adventurerIsDead = false;
+        //walk/run
         Array<TextureRegion> frames = new Array<TextureRegion>();
-        Texture texture1 = new Texture(Gdx.files.internal("Dungeon/Images/0.png"));
-        Texture texture2 = new Texture(Gdx.files.internal("Dungeon/Images/1.png"));
-        Texture texture3 = new Texture(Gdx.files.internal("Dungeon/Images/2.png"));
-        Texture texture4 = new Texture(Gdx.files.internal("Dungeon/Images/3.png"));
-        Texture texture5 = new Texture(Gdx.files.internal("Dungeon/Images/4.png"));
-        Texture texture6 = new Texture(Gdx.files.internal("Dungeon/Images/5.png"));
-        Texture texture7 = new Texture(Gdx.files.internal("Dungeon/Images/6.png"));
-        Texture texture8 = new Texture(Gdx.files.internal("Dungeon/Images/7.png"));
+        Texture standTexture = new Texture(Gdx.files.internal("UIElements/Animation/stickstand.png"));
+        Texture jumpTexture = new Texture(Gdx.files.internal("UIElements/Animation/stickjump.png"));
 
-        frames.add(new TextureRegion(texture1,0,0,63,43));
-        frames.add(new TextureRegion(texture2,0,0,63,44));
-        frames.add(new TextureRegion(texture3,0,0,63,45));
-        frames.add(new TextureRegion(texture4,0,0,63,44));
-        frames.add(new TextureRegion(texture5,0,0,63,43));
-        frames.add(new TextureRegion(texture6,0,0,63,44));
-        frames.add(new TextureRegion(texture7,0,0,63,45));
-        frames.add(new TextureRegion(texture8,0,0,63,44));
+        Texture walkTexture1 = new Texture(Gdx.files.internal("UIElements/Animation/stickwalk1.png"));
+        Texture walkTexture2 = new Texture(Gdx.files.internal("UIElements/Animation/stickwalk2.png"));
+        Texture walkTexture3 = new Texture(Gdx.files.internal("UIElements/Animation/stickwalk3.png"));
+        Texture walkTexture4 = new Texture(Gdx.files.internal("UIElements/Animation/stickwalk4.png"));
 
-        //frames.add(new TextureRegion());
-        /*frames.add(new TextureRegion(getTexture(), 27 , 50,64,44));
-        frames.add(new TextureRegion(getTexture(), 50 , 50,64,45));
-        frames.add(new TextureRegion(getTexture(), 66 , 50,64,44));
-        frames.add(new TextureRegion(getTexture(), 84 , 50,64,43));
-        frames.add(new TextureRegion(getTexture(), 110 , 50,64,44));
-        frames.add(new TextureRegion(getTexture(), 129 , 50,64,45));
-        frames.add(new TextureRegion(getTexture(), 148 , 50,64,44));*/
+        Texture deadTexture1 = new Texture(Gdx.files.internal("UIElements/Animation/stickdie1.png"));
+        Texture deadTexture2 = new Texture(Gdx.files.internal("UIElements/Animation/stickdie2.png"));
+        Texture deadTexture3 = new Texture(Gdx.files.internal("UIElements/Animation/stickdie3.png"));
+
+
+        frames.add(new TextureRegion(walkTexture1,0,0,256,256));
+        frames.add(new TextureRegion(walkTexture2,0,0,256,256));
+        frames.add(new TextureRegion(walkTexture3,0,0,256,256));
+        frames.add(new TextureRegion(walkTexture4,0,0,256,256));
 
         //running animation
         adventurerRun = new Animation(0.1f, frames);
         frames.clear();
 
-        for(int i = 1; i < 2; i++){
-            frames.add(new TextureRegion(getTexture(), 1 , 0,64,45));
-        }
+
+        frames.add(new TextureRegion(jumpTexture, 1 , 0,256,256));
+
         adventurerJump = new Animation(0.1f, frames);
         frames.clear();
 
         defineAdventurer();
-        adventurerStand = new TextureRegion(texture1,0,0,64,43);
-        setBounds(0,0,20/DefaultValues.PPM,20/DefaultValues.PPM);
+        adventurerStand = new TextureRegion(standTexture,0,0,256,256);
+
+
+        frames.add(new TextureRegion(deadTexture1,0,0,256,256));
+        frames.add(new TextureRegion(deadTexture2,0,0,256,256));
+        frames.add(new TextureRegion(deadTexture3,0,0,256,256));
+        adventurerDead = new Animation(0.1f,frames);
+
+        frames.clear();
+        setBounds(0,0,30/DefaultValues.PPM,30/DefaultValues.PPM);
         setRegion(adventurerStand);
 
+    }
+    public boolean isDead(){
+        return adventurerIsDead;
     }
 
     public void update(float dt){
         if(runningRight){
-            setPosition(b2body.getPosition().x - getWidth() / 2 + 5/DefaultValues.PPM, b2body.getPosition().y - getHeight() / 2);
+            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         }else{
-            setPosition(b2body.getPosition().x - getWidth() / 2 - 5/DefaultValues.PPM, b2body.getPosition().y - getHeight() / 2);
+            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         }
 
         setRegion(getFrame(dt));
@@ -92,6 +96,9 @@ public class Adventurer extends Sprite {
         currentState = getState();
         TextureRegion region;
         switch(currentState){
+            case DEAD:
+                region = adventurerDead.getKeyFrame(stateTimer);
+                break;
             case JUMPING:
                 region = adventurerJump.getKeyFrame(stateTimer);
                 break;
@@ -119,7 +126,9 @@ public class Adventurer extends Sprite {
     }
 
     public Adventurer.State getState(){
-        if(b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0 && previousState == Adventurer.State.JUMPING))
+        if(adventurerIsDead) {
+            return State.DEAD;
+        }else if(b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0 && previousState == Adventurer.State.JUMPING))
             return Adventurer.State.JUMPING;
         else if(b2body.getLinearVelocity().y < 0)
             return Adventurer.State.FALLING;
@@ -130,34 +139,38 @@ public class Adventurer extends Sprite {
 
     }
 
+    public void hit(){
+           //adventurerIsDead = true;
+            /*Filter filter = new Filter();
+            filter.maskBits = DefaultValues.NOTHING_BIT;
+            for(Fixture fixture : b2body.getFixtureList()){
+                fixture.setFilterData(filter);
+            }
+            b2body.applyLinearImpulse(new Vector2(0,4f),b2body.getWorldCenter(),true);//apply impulse in Y direction*/
+    }
 
-    public void defineAdventurer(){
+
+
+    public void defineAdventurer() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(10/DefaultValues.PPM,100/DefaultValues.PPM);
+        bdef.position.set(10 / DefaultValues.PPM, 100 / DefaultValues.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
         //CircleShape shape = new CircleShape();
-        shape.setAsBox(5/ DefaultValues.PPM,10/DefaultValues.PPM);
-        fdef.filter.categoryBits = DefaultValues.MARIO_BIT;
-        //what can mario collide with
+        shape.setAsBox(5 / DefaultValues.PPM, 10 / DefaultValues.PPM);
+        fdef.filter.categoryBits = DefaultValues.ADVENTURER_BIT;
+        //what can adventurer collide with
         fdef.filter.maskBits = DefaultValues.GROUND_BIT |
-                DefaultValues.ENEMY_BIT |
-                DefaultValues.OBJECT_BIT; // | is or
+                DefaultValues.ENEMY_BIT ;
+                //DefaultValues.OBJECT_BIT; // | is or
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
 
-        //create sensor on mario head
-        //edgeshape line between 2 diff points
-        EdgeShape head = new EdgeShape();
-        head.set(new Vector2(-2 / DefaultValues.PPM, 7 /DefaultValues.PPM), new Vector2(2 / DefaultValues.PPM, 7 /DefaultValues.PPM));
-        fdef.shape = head;
-        fdef.isSensor = true;
+        }
 
-        b2body.createFixture(fdef).setUserData("head");
-    }
 
 }

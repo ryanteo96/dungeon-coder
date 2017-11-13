@@ -2,7 +2,7 @@ package com.mygdx.dungeoncoder.utils;
 
 import Sprites.Brick;
 import Sprites.Coin;
-import Sprites.DungeonMonster;
+import Sprites.Adventurer.DungeonMonster;
 import Sprites.Goomba;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;

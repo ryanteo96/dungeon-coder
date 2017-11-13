@@ -1,5 +1,6 @@
-package Sprites;
+package Sprites.Adventurer;
 
+import Sprites.Enemy;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -40,6 +41,7 @@ public class DungeonMonster extends Enemy {
         destroyed = false;
     }
 
+
     @Override
     public void update(float dt){
         stateTime += dt;
@@ -65,12 +67,12 @@ public class DungeonMonster extends Enemy {
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(6/ DefaultValues.PPM);
-        fdef.filter.categoryBits = DefaultValues.ENEMY_BIT;
-        //what can mario collide with
+        fdef.filter.categoryBits = DefaultValues.SKELETON_BIT;
+        //what can Adventurer collide with
         fdef.filter.maskBits = DefaultValues.GROUND_BIT |
-                DefaultValues.ENEMY_BIT |
+                DefaultValues.SKELETON_BIT |
                 DefaultValues.OBJECT_BIT|
-                DefaultValues.MARIO_BIT; // | is or
+                DefaultValues.ADVENTURER_BIT; // | is or
 
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
