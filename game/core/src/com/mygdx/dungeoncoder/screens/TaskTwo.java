@@ -1,6 +1,7 @@
 package com.mygdx.dungeoncoder.screens;
 
 import java.io.*;
+import java.net.URL;
 
 import Scenes.AdventurerHud;
 import Sprites.Adventurer.Adventurer;
@@ -64,7 +65,7 @@ public class TaskTwo implements Screen {
     private B2WorldCreator creator;
 
     //sprites
-    private Adventurer player;
+    private static Adventurer player;
 
     //textArea
     private TextArea textArea;
@@ -141,16 +142,17 @@ public class TaskTwo implements Screen {
         //to build string into the text file
         StringBuilder sb = new StringBuilder();
         // The name of the file to open.
-        String fileName = "TaskTwo.java";
+        String fileName = "StageTwo.java";
+
         // This will reference one line at a time
         String line = null;
 
         try {
             // FileReader reads text files in the default encoding.
-            FileReader fileReader = new FileReader(fileName);
+            //FileReader fileReader = new FileReader(fileName);
 
             // Always wrap FileReader in BufferedReader.
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("C:/Users/LCLY/Desktop/Dungeon/dungeon-coder/game/core/src/com/mygdx/dungeoncoder/screens/StageTwo.java"));
 
 
             while((line = bufferedReader.readLine()) != null) {
@@ -163,10 +165,10 @@ public class TaskTwo implements Screen {
             bufferedReader.close();
         }
         catch(FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + fileName + "'");
+            System.out.println("Unable to open file when screen is loading'" + fileName + "'");
         }
         catch(IOException ex) {
-            System.out.println("Error reading file '"  + fileName + "'");
+            System.out.println("Error reading file when screen is loading'"  + fileName + "'");
             // Or we could just do this:
             // ex.printStackTrace();
         }
@@ -188,7 +190,7 @@ public class TaskTwo implements Screen {
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 String code = textArea.getText();
-                File file = new File("TaskTwo.java");
+                File file = new File("C:\\Users\\LCLY\\Desktop\\Dungeon\\dungeon-coder\\game\\core\\src\\com\\mygdx\\dungeoncoder\\screens\\StageTwo.java");
                 try {
                     FileWriter fileWriter = new FileWriter(file);
                     fileWriter.write(code);
@@ -198,14 +200,14 @@ public class TaskTwo implements Screen {
                     ex.printStackTrace();
                 }
                 System.out.println("Code saved!");
-                String fileName = "TaskTwo.java";
+                String fileName = "StageTwo.java";
                 // This will reference one line at a time
                 String line = null;
 
                 try {
+                    String filepath = file.getAbsolutePath();
+                    System.out.println(filepath);
                     shareVariable.connect.requestUpdateProgress(file,"Task1",10);
-                    System.out.println("File path: " + new File("TaskTwo.java").getAbsolutePath());
-                    String filepath = new File("TaskTwo.java").getAbsolutePath();
                     System.out.println(codeevaluator.evaluate(filepath));
                     FileReader fileReader = new FileReader(fileName);
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -217,10 +219,10 @@ public class TaskTwo implements Screen {
                     bufferedReader.close();
                 }
                 catch(FileNotFoundException ex) {
-                    System.out.println("Unable to open file '" + fileName + "'");
+                    System.out.println("Unable to open file when run is being clicked'" + fileName + "'");
                 }
                 catch(IOException ex) {
-                    System.out.println("Error reading file '"  + fileName + "'");
+                    System.out.println("Error reading file when run is being clicked'"  + fileName + "'");
                 }
 
 
