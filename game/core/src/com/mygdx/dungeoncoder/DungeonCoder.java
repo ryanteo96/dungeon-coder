@@ -39,6 +39,8 @@ public class DungeonCoder extends Game {
 		manager.load("Mario/sounds/powerdown.wav", Sound.class);
 		manager.load("Mario/sounds/stomp.wav", Sound.class);
 		manager.load("Mario/sounds/mariodie.wav", Sound.class);
+		manager.load("UIElements/Animation/pain.mp3",Sound.class);
+		manager.load("UIElements/Animation/backgroundmusic.mp3",Music.class);
 		manager.finishLoading(); //Asynchronous loading, blocks everything and ask every assets to load first
 		this.setScreen(new SplashScreen(this));
 	}

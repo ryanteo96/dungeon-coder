@@ -8,6 +8,7 @@ import Sprites.Adventurer.AdventurerContactListener;
 import Sprites.Enemy;
 import Sprites.Mario;
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -68,6 +69,10 @@ public class TaskTwo implements Screen {
     private TextArea textArea;
     private Skin skin;
 
+    //music
+    private Music music;
+
+
     public TaskTwo(DungeonCoder g) throws FileNotFoundException {
         game = g;
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
@@ -108,6 +113,9 @@ public class TaskTwo implements Screen {
 
         world.setContactListener(new AdventurerContactListener());
 
+        music = DungeonCoder.manager.get("UIElements/Animation/backgroundmusic.mp3", Music.class);
+        music.setLooping(true);
+        music.play();
         //back button
         createBack();
         createTextArea();
@@ -253,6 +261,7 @@ public class TaskTwo implements Screen {
 
     private void backToInstructionalMode(DungeonCoder g) {
         g.setScreen(new InstructionalMode(g));
+        music.stop();
     }
     @Override
     public void show() {

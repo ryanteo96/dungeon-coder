@@ -1,6 +1,8 @@
 package Sprites.Adventurer;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -8,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.screens.TaskTwo;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 
@@ -140,7 +143,9 @@ public class Adventurer extends Sprite {
     }
 
     public void getHit(){
-           adventurerIsDead = true;
+        adventurerIsDead = true;
+        DungeonCoder.manager.get("UIElements/Animation/pain.mp3", Sound.class).play();
+        DungeonCoder.manager.get("UIElements/Animation/backgroundmusic.mp3", Music.class).stop();
     }
 
     public float getStateTimer(){
