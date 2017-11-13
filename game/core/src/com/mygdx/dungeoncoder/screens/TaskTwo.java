@@ -213,17 +213,6 @@ public class TaskTwo implements Screen {
                     while((line = bufferedReader.readLine()) != null) {
                         //System.out.println(line);
                         //testing code function
-                       if(code.contains("moveRight();")){
-                           movedRight();
-                           DefaultValues.WALK_RIGHT = true;
-                       }
-                       if(code.contains("moveLeft();")){
-                           DefaultValues.WALK_LEFT = true;
-                       }
-                       if(code.contains("jump();")){
-                           DefaultValues.JUMP = true;
-                       }
-
                     }
                     bufferedReader.close();
                 }
@@ -245,6 +234,35 @@ public class TaskTwo implements Screen {
     }
 
     public void movedRight(){
+        DefaultValues.WALK_RIGHT = true;
+        if (DefaultValues.WALK_RIGHT && player.b2body.getLinearVelocity().x <= 2 ) { //isKeyPressed for holding down keys
+            player.b2body.applyLinearImpulse(new Vector2(1f, 0), player.b2body.getWorldCenter(), true);
+            DefaultValues.WALK_RIGHT = false;
+            System.out.println("Your character moved right!");
+        }
+    }
+
+    public void movedLeft(){
+        DefaultValues.WALK_LEFT = true;
+        if (DefaultValues.WALK_LEFT && player.b2body.getLinearVelocity().x >= -2)  {
+            player.b2body.applyLinearImpulse(new Vector2(-1f, 0), player.b2body.getWorldCenter(), true);
+            DefaultValues.WALK_LEFT = false;
+            System.out.println("Your character moved left!");
+        }
+
+    }
+
+    public void jump(){
+        DefaultValues.JUMP = true;
+        if (DefaultValues.JUMP) { // for quick tap
+            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
+            player.currentState = Adventurer.State.JUMPING;
+            if(DefaultValues.JUMP && player.previousState == Adventurer.State.JUMPING){
+                player.b2body.applyLinearImpulse(new Vector2(0, -4f), player.b2body.getWorldCenter(), true);
+            }
+            DefaultValues.JUMP = false;
+            System.out.println("Your character jumped!");
+        }
 
     }
 
@@ -271,7 +289,7 @@ public class TaskTwo implements Screen {
 
     public void handleinput(float dt){
         //control player using immediate impulses, use world center so the torque wont make the character fly around
-        if(player.currentState != Adventurer.State.DEAD){
+        /*if(player.currentState != Adventurer.State.DEAD){
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
                 player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
                 player.currentState = Adventurer.State.JUMPING;
@@ -285,10 +303,7 @@ public class TaskTwo implements Screen {
                 player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
                 DungeonCoder.manager.get("UIElements/Animation/footstep.wav", Music.class).play();
             }
-        }
-
-
-
+        }*/
        /* if (DefaultValues.JUMP) { // for quick tap
             player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
             player.currentState = Adventurer.State.JUMPING;
@@ -313,7 +328,7 @@ public class TaskTwo implements Screen {
     }
 
     public void update(float dt){
-        handleinput(dt);
+        //handleinput(dt);
         //takes 1 step in the physics simulation 60 times per second
         world.step(1/60f, 6,2);
         player.update(dt);

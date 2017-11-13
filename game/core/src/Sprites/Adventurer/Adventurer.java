@@ -167,7 +167,7 @@ public class Adventurer extends Sprite {
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
         //CircleShape shape = new CircleShape();
-        shape.setAsBox(5 / DefaultValues.PPM, 12 / DefaultValues.PPM);
+        shape.setAsBox(5 / DefaultValues.PPM, 10 / DefaultValues.PPM);
         fdef.filter.categoryBits = DefaultValues.ADVENTURER_BIT;
         //what can adventurer collide with
         fdef.filter.maskBits = DefaultValues.GROUND_BIT |
