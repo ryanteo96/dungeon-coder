@@ -42,10 +42,12 @@ public class Adventurer extends Sprite {
         Texture standTexture = new Texture(Gdx.files.internal("UIElements/Animation/stickstand.png"));
         Texture jumpTexture = new Texture(Gdx.files.internal("UIElements/Animation/stickjump.png"));
 
-        Texture walkTexture1 = new Texture(Gdx.files.internal("UIElements/Animation/stickwalk1.png"));
-        Texture walkTexture2 = new Texture(Gdx.files.internal("UIElements/Animation/stickwalk2.png"));
-        Texture walkTexture3 = new Texture(Gdx.files.internal("UIElements/Animation/stickwalk3.png"));
-        Texture walkTexture4 = new Texture(Gdx.files.internal("UIElements/Animation/stickwalk4.png"));
+        Texture walkTexture1 = new Texture(Gdx.files.internal("UIElements/Animation/walk1.png"));
+        Texture walkTexture2 = new Texture(Gdx.files.internal("UIElements/Animation/walk2.png"));
+        Texture walkTexture3 = new Texture(Gdx.files.internal("UIElements/Animation/walk3.png"));
+        Texture walkTexture4 = new Texture(Gdx.files.internal("UIElements/Animation/walk4.png"));
+        Texture walkTexture5 = new Texture(Gdx.files.internal("UIElements/Animation/walk5.png"));
+        Texture walkTexture6 = new Texture(Gdx.files.internal("UIElements/Animation/walk6.png"));
 
         Texture deadTexture1 = new Texture(Gdx.files.internal("UIElements/Animation/stickdie1.png"));
         Texture deadTexture2 = new Texture(Gdx.files.internal("UIElements/Animation/stickdie2.png"));
@@ -56,6 +58,8 @@ public class Adventurer extends Sprite {
         frames.add(new TextureRegion(walkTexture2,0,0,256,256));
         frames.add(new TextureRegion(walkTexture3,0,0,256,256));
         frames.add(new TextureRegion(walkTexture4,0,0,256,256));
+        frames.add(new TextureRegion(walkTexture5,0,0,256,256));
+        frames.add(new TextureRegion(walkTexture6,0,0,256,256));
 
         //running animation
         adventurerRun = new Animation(0.1f, frames);
@@ -135,8 +139,9 @@ public class Adventurer extends Sprite {
             return Adventurer.State.JUMPING;
         else if(b2body.getLinearVelocity().y < 0)
             return Adventurer.State.FALLING;
-        else if(b2body.getLinearVelocity().x != 0)
+        else if(b2body.getLinearVelocity().x != 0){
             return Adventurer.State.RUNNING;
+        }
         else
             return Adventurer.State.STANDING;
 

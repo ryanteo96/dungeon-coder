@@ -9,6 +9,7 @@ import Sprites.Enemy;
 import Sprites.Mario;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -279,8 +280,10 @@ public class TaskTwo implements Screen {
                 }
             } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2) { //isKeyPressed for holding down keys
                 player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
+                DungeonCoder.manager.get("UIElements/Animation/footstep.wav", Music.class).play();
             } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)  {
                 player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
+                DungeonCoder.manager.get("UIElements/Animation/footstep.wav", Music.class).play();
             }
         }
 
