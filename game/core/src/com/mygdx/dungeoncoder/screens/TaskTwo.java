@@ -6,6 +6,7 @@ import Scenes.AdventurerHud;
 import Sprites.Adventurer.Adventurer;
 import Sprites.Adventurer.AdventurerContactListener;
 import Sprites.Enemy;
+import Sprites.Mario;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -229,8 +230,6 @@ public class TaskTwo implements Screen {
         });
 
 
-
-
         //to find the path of the file
         //System.out.println("File path: " + new File("test.txt").getAbsolutePath());
         stage.addActor(saveButton);
@@ -238,6 +237,14 @@ public class TaskTwo implements Screen {
 
     public void movedRight(){
 
+    }
+
+    public boolean gameOver(){
+        if(player.currentState == Adventurer.State.DEAD && player.getStateTimer() > 3){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public TextureAtlas getAtlas(){
@@ -254,17 +261,20 @@ public class TaskTwo implements Screen {
 
     public void handleinput(float dt){
         //control player using immediate impulses, use world center so the torque wont make the character fly around
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
-            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
-            player.currentState = Adventurer.State.JUMPING;
-            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.previousState == Adventurer.State.JUMPING){
-                player.b2body.applyLinearImpulse(new Vector2(0, -4f), player.b2body.getWorldCenter(), true);
+        if(player.currentState != Adventurer.State.DEAD){
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
+                player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
+                player.currentState = Adventurer.State.JUMPING;
+                if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.previousState == Adventurer.State.JUMPING){
+                    player.b2body.applyLinearImpulse(new Vector2(0, -4f), player.b2body.getWorldCenter(), true);
+                }
+            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2) { //isKeyPressed for holding down keys
+                player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)  {
+                player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2) { //isKeyPressed for holding down keys
-            player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)  {
-            player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
         }
+
 
 
        /* if (DefaultValues.JUMP) { // for quick tap
@@ -295,9 +305,14 @@ public class TaskTwo implements Screen {
         //takes 1 step in the physics simulation 60 times per second
         world.step(1/60f, 6,2);
         player.update(dt);
-        //attach our gamecam to our player's x coordinate
-        gamecam.position.x = player.b2body.getPosition().x;
+
+        //if mario dies, freeze the camera right where he died
+        if(player.currentState != Adventurer.State.DEAD){
+            gamecam.position.x = player.b2body.getPosition().x;
+        }
+
         hud.update(dt);
+
         for(Enemy enemy : creator.getDungeonMonster()){
             enemy.update(dt);
             if(enemy.getX() < player.getX() + 220/DefaultValues.PPM){
@@ -343,6 +358,12 @@ public class TaskTwo implements Screen {
 
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
+
+        if(gameOver()){
+            game.setScreen(new AdventurerGameOver(game));
+            dispose();
+        }
+
         stage.act(delta);
         stage.draw();
     }

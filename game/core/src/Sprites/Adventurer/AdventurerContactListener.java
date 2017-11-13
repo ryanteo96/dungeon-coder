@@ -30,14 +30,10 @@ public class AdventurerContactListener implements ContactListener{
                 break;
             case DefaultValues.ADVENTURER_BIT | DefaultValues.SKELETON_BIT:
                 if(fixA.getFilterData().categoryBits == DefaultValues.ADVENTURER_BIT){
-                    //((Adventurer)fixA.getUserData()).hit();
-                    Gdx.app.log("Adventurer", "DIED");
+                    ((Adventurer)fixA.getUserData()).getHit();
                 }else{
-                    //((Adventurer)fixB.getUserData()).hit();
-                    Gdx.app.log("Not Adventurer Died", "DIED");
+                    ((Adventurer)fixB.getUserData()).getHit();
                 }
-
-
                 break;
         }
     }

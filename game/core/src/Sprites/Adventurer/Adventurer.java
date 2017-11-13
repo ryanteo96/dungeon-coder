@@ -139,16 +139,13 @@ public class Adventurer extends Sprite {
 
     }
 
-    public void hit(){
-           //adventurerIsDead = true;
-            /*Filter filter = new Filter();
-            filter.maskBits = DefaultValues.NOTHING_BIT;
-            for(Fixture fixture : b2body.getFixtureList()){
-                fixture.setFilterData(filter);
-            }
-            b2body.applyLinearImpulse(new Vector2(0,4f),b2body.getWorldCenter(),true);//apply impulse in Y direction*/
+    public void getHit(){
+           adventurerIsDead = true;
     }
 
+    public float getStateTimer(){
+        return stateTimer;
+    }
 
 
     public void defineAdventurer() {
@@ -164,11 +161,11 @@ public class Adventurer extends Sprite {
         fdef.filter.categoryBits = DefaultValues.ADVENTURER_BIT;
         //what can adventurer collide with
         fdef.filter.maskBits = DefaultValues.GROUND_BIT |
-                DefaultValues.ENEMY_BIT ;
+                            DefaultValues.SKELETON_BIT ;
                 //DefaultValues.OBJECT_BIT; // | is or
 
         fdef.shape = shape;
-        b2body.createFixture(fdef);
+        b2body.createFixture(fdef).setUserData(this);
 
         }
 
