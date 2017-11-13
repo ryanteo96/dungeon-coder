@@ -88,19 +88,14 @@ public class TaskOne extends ApplicationAdapter implements Screen {
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
 
         Gdx.input.setInputProcessor(stage);
-        //set the gravity, true to let the body inside to sleep so its
-        // more efficient, only calculate when the body move so wont stress the processor
-        //world = new World(new Vector2(0,-9.8f),true);
-        //player = new Player(world,"stationaryninja.png",VIRTUAL_WIDTH/2,VIRTUAL_HEIGHT/2);
-        //player.setSize(70,120);
         createBack();
         popup();
-        //createAttempts();
-        //createProgress();
+        createAttempts();
+        createProgress();
         //createTextArea();
         //createHint();
-        //createTaskOneTextImage();
-        //createDeadline();
+        createTaskOneTextImage();
+        createDeadline();
         createGame();
         createPause();
         createTest();
@@ -309,11 +304,11 @@ public class TaskOne extends ApplicationAdapter implements Screen {
                 }catch(NumberFormatException ex){
 
                 }
-                /*if(shareVariable.connect.requestUpdateProgress(file,module,progress_Percent)){
+                if(shareVariable.connect.requestUpdateProgress(file,module,progress_Percent)){
                     System.out.println("Connected");
                 }else{
                     System.out.println("Not Connected");
-                }*/
+                }
             }
         });
 

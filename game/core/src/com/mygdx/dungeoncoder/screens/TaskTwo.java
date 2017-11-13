@@ -39,7 +39,7 @@ public class TaskTwo implements Screen {
     CodeEvaluator codeevaluator;
     BufferedWriter bw = null;
     FileWriter fw = null;
-    private TextButton saveButton;
+    private TextButton runButton;
 
     private DungeonCoder game;
     private Stage stage;
@@ -68,8 +68,14 @@ public class TaskTwo implements Screen {
     private TextArea textArea;
     private Skin skin;
 
+    //buttons
+    private TextButton codeButton;
+
     //music
     private Music music;
+
+    //boolean
+    private boolean codeOn;
 
 
     public TaskTwo(DungeonCoder g) throws FileNotFoundException {
@@ -77,6 +83,8 @@ public class TaskTwo implements Screen {
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
         Gdx.input.setInputProcessor(stage);
+
+        codeOn = false;
 
         atlas = new TextureAtlas("Dungeon/Adventurer.pack");
 
@@ -108,18 +116,18 @@ public class TaskTwo implements Screen {
         player = new Adventurer(this);
 
         //create our game HUD for scores/timers/level info
-        hud = new AdventurerHud(game.batch);
+        hud = new AdventurerHud(game.batch, this);
 
         world.setContactListener(new AdventurerContactListener());
 
-        music = DungeonCoder.manager.get("UIElements/Animation/backgroundmusic.mp3", Music.class);
-        music.setLooping(true);
-        music.play();
         //back button
         createBack();
         createTextArea();
     }
 
+    public DungeonCoder getGame(){
+        return game;
+    }
 
     private void createBack() {
         backButtonSkin = new Skin(Gdx.files.internal("comic-ui.json"));
@@ -177,15 +185,24 @@ public class TaskTwo implements Screen {
         textArea.setY(70);
         textArea.setWidth(500);
         textArea.setHeight(500);
-        stage.addActor(textArea);
+
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+        codeButton = new TextButton("Code Here", skin);
+        codeButton.setPosition(50, 10);
+        codeButton.setSize(130, 50);
+        stage.addActor(codeButton);
+
+        final int percentage = Integer.parseInt(hud.getProgressInfo()); // to update the database
 
         skin = new Skin (Gdx.files.internal("UIElements/test.json"));
-        saveButton = new TextButton("Run", skin);
-        saveButton.setPosition(460, 10);
-        saveButton.setSize(100, 50);
-        saveButton.addListener(new ClickListener() {
+        runButton = new TextButton("Run", skin);
+        runButton.setPosition(460, 10);
+        runButton.setSize(100, 50);
+        runButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
+
+
                 String code = textArea.getText();
                 File file = new File("C:\\Users\\LCLY\\Desktop\\Dungeon\\dungeon-coder\\game\\core\\src\\com\\mygdx\\dungeoncoder\\screens\\StageTwo.java");
                 try {
@@ -222,14 +239,29 @@ public class TaskTwo implements Screen {
                     System.out.println("Error reading file when run is being clicked'"  + fileName + "'");
                 }
 
+                //shareVariable.connect.requestUpdateProgress(file,"Task1",percentage);
+
+            }
+        });
+        codeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                if(codeOn == false){
+                    stage.addActor(textArea);
+                    stage.addActor(runButton);
+                    codeOn = true;
+                }else{
+                    textArea.remove();
+                    runButton.remove();
+                    codeOn = false;
+                }
 
             }
         });
 
-
         //to find the path of the file
         //System.out.println("File path: " + new File("test.txt").getAbsolutePath());
-        stage.addActor(saveButton);
+
     }
 
     public void movedRight(){
@@ -279,7 +311,7 @@ public class TaskTwo implements Screen {
 
     private void backToInstructionalMode(DungeonCoder g) {
         g.setScreen(new InstructionalMode(g));
-        music.stop();
+        hud.stopMusic();
     }
     @Override
     public void show() {
@@ -288,7 +320,7 @@ public class TaskTwo implements Screen {
 
     public void handleinput(float dt){
         //control player using immediate impulses, use world center so the torque wont make the character fly around
-        /*if(player.currentState != Adventurer.State.DEAD){
+        if(player.currentState != Adventurer.State.DEAD){
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
                 player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
                 player.currentState = Adventurer.State.JUMPING;
@@ -302,7 +334,7 @@ public class TaskTwo implements Screen {
                 player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
                 DungeonCoder.manager.get("UIElements/Animation/footstep.wav", Music.class).play();
             }
-        }*/
+        }
        /* if (DefaultValues.JUMP) { // for quick tap
             player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
             player.currentState = Adventurer.State.JUMPING;
@@ -327,7 +359,7 @@ public class TaskTwo implements Screen {
     }
 
     public void update(float dt){
-        //handleinput(dt);
+        handleinput(dt);
         //takes 1 step in the physics simulation 60 times per second
         world.step(1/60f, 6,2);
         player.update(dt);
