@@ -1,13 +1,10 @@
 package com.mygdx.dungeoncoder.screens;
 
 import java.io.*;
-import java.net.URL;
-
 import Scenes.AdventurerHud;
 import Sprites.Adventurer.Adventurer;
 import Sprites.Adventurer.AdventurerContactListener;
 import Sprites.Enemy;
-import Sprites.Mario;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;

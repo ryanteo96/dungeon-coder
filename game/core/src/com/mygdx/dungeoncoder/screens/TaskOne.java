@@ -53,19 +53,14 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     private TextButton quitButton;
     private TextButton continueButton;
     private TextButton hintButton;
-    private boolean paused = false;
     private Label fpslabel;
     private Image pauseImage;
-    private Player player;
-    private TextureAtlas walkingAtlas, ninjaAtlas;
     private float timePassed = 0;
-    private Animation<TextureRegion> walkAnimation, ninjaAnimation;
-    private SpriteBatch walkingBatch, ninjaBatch, backgroundBatch;
+    private SpriteBatch backgroundBatch;
     private Texture bg;
     private Window window;
     private World world;
     private OrthographicCamera box2DCamera;
-    private Box2DDebugRenderer debugRenderer;
     Texture pic1;
     Sprite test;
     public SaveProcessor s;
@@ -81,15 +76,13 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         popupImage = new Image(popupDrawable);
         popupImage.setPosition(0, 0);
         SaveProcessor s = new SaveProcessor();
-        pic1 = new Texture("stationaryninja.png");
+        pic1 = new Texture("Dungeon/Enemies/1.png");
         game = g;
         box2DCamera = new OrthographicCamera();
         box2DCamera.setToOrtho(false,VIRTUAL_WIDTH/shareVariable.PPM,VIRTUAL_HEIGHT/shareVariable.PPM);
         box2DCamera.position.set(0,0,0);
 
         stickman = new TextureAtlas("chara/stickman.atlas");
-
-        debugRenderer = new Box2DDebugRenderer();
 
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
@@ -129,13 +122,6 @@ public class TaskOne extends ApplicationAdapter implements Screen {
    private void createGame(){
        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
        fpslabel = new Label("fps: ", skin);
-       walkingBatch = new SpriteBatch();
-       walkingAtlas = new TextureAtlas(Gdx.files.internal("walking.atlas"));
-       walkAnimation = new Animation<TextureRegion>(1/5f,walkingAtlas.getRegions()); //getRegions get all the location for you
-       ninjaBatch = new SpriteBatch();
-       ninjaAtlas = new TextureAtlas(Gdx.files.internal("ninja.atlas"));
-       ninjaAnimation = new Animation<TextureRegion>(1/5f,ninjaAtlas.getRegions());
-       skin = new Skin(Gdx.files.internal("UIElements/test.json"));
        window = new Window("", skin);
        window.setPosition(580,50);
        window.setSize(650,500);
@@ -237,7 +223,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         continueButton = new TextButton("Continue", skin);
         pauseImage.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y) {
-                paused = true;
+
                 Gdx.app.getApplicationListener().pause();
                 new Dialog("Paused", skin,"dialog"){
                     protected void result (Object object){
@@ -251,7 +237,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
 
         continueButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-             paused = false;
+
             }
         });
 
@@ -408,23 +394,6 @@ public class TaskOne extends ApplicationAdapter implements Screen {
 
         stage.draw();
         stage.act(delta);
-        //begin walk
-
-        if(paused){
-            walkingBatch.begin();
-            //walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),VIRTUAL_WIDTH/2-60/2,VIRTUAL_HEIGHT/2-60/2,60,60);
-            walkingBatch.end();
-        }else{
-            walkingBatch.begin();
-            timePassed += Gdx.graphics.getDeltaTime();
-            //walkingBatch.draw(walkAnimation.getKeyFrame(timePassed,true),VIRTUAL_WIDTH/2-60/2,VIRTUAL_HEIGHT/2-60/2,60,60);
-            walkingBatch.end();
-        }
-
-        //begin ninja
-        //ninjaBatch.begin();
-        //ninjaBatch.draw(ninjaAnimation.getKeyFrame(timePassed,true),590,130,70,70);
-        //ninjaBatch.end();
     }
 
     @Override
@@ -452,16 +421,12 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        ninjaAtlas.dispose();
-        walkingAtlas.dispose();
         backButtonSkin.dispose();
         backgroundBatch.dispose();
-        walkingBatch.dispose();
         skin.dispose();
         bg.dispose();
         world.dispose();
         pic1.dispose();
-        player.getTexture().dispose();
     }
 
     public void popup(){
