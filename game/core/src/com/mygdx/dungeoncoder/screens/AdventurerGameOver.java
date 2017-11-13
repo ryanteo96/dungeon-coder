@@ -51,9 +51,11 @@ public class AdventurerGameOver implements Screen {
     @Override
     public void render(float delta) {
         if(Gdx.input.justTouched()){
-
+            try {
                 game.setScreen(new TaskTwo((DungeonCoder)game));
-            
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
             dispose();
         }
         Gdx.gl.glClearColor(0,0,0,1);
