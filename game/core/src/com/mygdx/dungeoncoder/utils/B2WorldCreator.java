@@ -97,9 +97,21 @@ public class B2WorldCreator {
 
         //create all skeleton
         skeleton = new Array<DungeonMonster>();
-        for(MapObject object: map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){ // look into the Tiled
+        for(MapObject object: map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)){ // look into the Tiled
             Rectangle rect = ((RectangleMapObject)object).getRectangle();
             skeleton.add(new DungeonMonster(screen, rect.getX()/DefaultValues.PPM, rect.getY() /DefaultValues.PPM));
+        }
+
+        //create pipe bodies/fixtures
+        for(MapObject object: map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject)object).getRectangle();
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth()/2)/DefaultValues.PPM , (rect.getY() + rect.getHeight()/2)/DefaultValues.PPM);
+            body = world.createBody(bdef);
+            shape.setAsBox((rect.getWidth()/2)/DefaultValues.PPM,(rect.getHeight()/2)/DefaultValues.PPM);
+            fdef.shape = shape;
+            fdef.filter.categoryBits = DefaultValues.OBJECT_BIT; //when enemy collide pipe, it will turn around
+            body.createFixture(fdef);
         }
 
 

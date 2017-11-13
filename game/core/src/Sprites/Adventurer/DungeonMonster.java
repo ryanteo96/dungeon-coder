@@ -44,6 +44,7 @@ public class DungeonMonster extends Enemy {
 
     @Override
     public void update(float dt){
+
         stateTime += dt;
         if(setToDestroy && !destroyed){
             world.destroyBody(b2body);
@@ -68,7 +69,7 @@ public class DungeonMonster extends Enemy {
         CircleShape shape = new CircleShape();
         shape.setRadius(6/ DefaultValues.PPM);
         fdef.filter.categoryBits = DefaultValues.SKELETON_BIT;
-        //what can Adventurer collide with
+        //what can enemy collide with
         fdef.filter.maskBits = DefaultValues.GROUND_BIT |
                 DefaultValues.SKELETON_BIT |
                 DefaultValues.OBJECT_BIT|
