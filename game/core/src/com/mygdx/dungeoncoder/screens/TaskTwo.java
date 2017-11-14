@@ -70,7 +70,7 @@ public class TaskTwo implements Screen {
 
     //buttons
     private TextButton codeButton;
-    
+
     //boolean
     private boolean codeOn;
 
