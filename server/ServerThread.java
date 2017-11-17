@@ -373,18 +373,46 @@ public class ServerThread extends Thread {
 			}
 			try {
 				if (changeEmail) {
-					stmt.executeUpdate("UPDATE Users SET email='" + newEmail + "' WHERE username='" + username + "'");
+					stmt.executeUpdate("UPDATE Users SET email='" + newEmail + "' WHERE Username='" + username + "'");
 				}
 				if (changePassword) {
 					byte[] salt = salt();
 					String hash = hash(newPass, salt);
 					String hexSalt = saltyString(salt);
-					stmt.executeUpdate("UPDATE Users SET hash='" + hash + "' WHERE username='" + username + "'");
-					stmt.executeUpdate("UPDATE Users SET salt='" + hexSalt + "' WHERE username='" + username + "'");
+					stmt.executeUpdate("UPDATE Users SET hash='" + hash + "' WHERE Username='" + username + "'");
+					stmt.executeUpdate("UPDATE Users SET salt='" + hexSalt + "' WHERE Username='" + username + "'");
 				}
 				if (changeUsername) {
-					stmt.executeUpdate("UPDATE Users SET username='" + newUsername + "' WHERE username='" + username + "'");
-					stmt.executeUpdate("UPDATE Task1 SET Student='" + newUsername + "' WHERE username='" + username + "'");
+					stmt.executeUpdate("UPDATE Users SET Username='" + newUsername + "' WHERE Username='" + username + "'");
+					stmt.executeUpdate("UPDATE Task1 SET Student='" + newUsername + "' WHERE Username='" + username + "'");
+					
+					rs = stmt.executeQuery("SELECT Attempts FROM Task1 WHERE Student='" + username + "'");
+					rs.next();
+					int attempts1 = rs.getInt("Attempts");
+					for (int i = 0; i < attempts1; i++) {
+						File file = new File("Files/" + username + "Task1" + Integer.toString(attempts1));
+						File newFile = new File("Files/+" + newUsername + "Task1" + Integer.toString(attempts1));
+						file.renameTo(newFile);
+					}
+
+					rs = stmt.executeQuery("SELECT Attempts FROM Task2 WHERE Student='" + username + "'");
+					rs.next();
+					int attempts2 = rs.getInt("Attempts");
+					for (int i = 0; i < attempts2; i++) {
+						File file = new File("Files/" + username + "Task2" + Integer.toString(attempts2));
+						File newFile = new File("Files/" + newUsername + "Task2" + Integer.toString(attempts2));
+						file.renameTo(newFile);
+					}
+
+					rs = stmt.executeQuery("SELECT Attempts FROM Task3 WHERE Student='" + username + "'");
+					rs.next();
+					int attempts3 = rs.getInt("Attempts");
+					for (int i = 0; i < attempts3; i++) {
+						File file = new File("Files/" + username + "Task3" + Integer.toString(attempts3));
+						File newFile = new File("Files/" + newUsername + "Task3" + Integer.toString(attempts3));
+						file.renameTo(newFile);
+					}
+					
 					connectedUser = newUsername;
 				}
 				sendCode((byte)(0x10));
@@ -426,14 +454,17 @@ public class ServerThread extends Thread {
 	// Update the user's saved code and attempts.
 	private byte updateUserCode(String task) {
 		try {
-			String fileName = connectedUser + task;
-			recieveFile(fileName);
 			if (conn == null) {
 				connectDB();
 			}
 			rs = stmt.executeQuery("SELECT Attempts FROM " + task + " WHERE Student='" + connectedUser + "'");
 			rs.next();
 			int currentAttempts = rs.getInt("Attempts");
+			
+			String attempts = Integer.toString(currentAttempts);
+			String fileName = connectedUser + task + attempts;
+			recieveFile(fileName);
+
 			currentAttempts++;
 			stmt.executeUpdate("UPDATE " + task + " SET Attempts='" + currentAttempts + "' WHERE Student='" + connectedUser + "'");
 			stmt.executeUpdate("UPDATE " + task + " Set Code='" + fileName + "' WHERE Student='" + connectedUser + "'");
