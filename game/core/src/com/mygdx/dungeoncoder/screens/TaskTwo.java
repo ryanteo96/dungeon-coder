@@ -155,8 +155,6 @@ public class TaskTwo implements Screen {
 
             // Always wrap FileReader in BufferedReader.
             BufferedReader bufferedReader = new BufferedReader(new FileReader("C:/Users/LCLY/Desktop/Dungeon/dungeon-coder/game/core/src/com/mygdx/dungeoncoder/screens/StageTwo.java"));
-
-
             while((line = bufferedReader.readLine()) != null) {
                 System.out.println(line);
                 sb.append(line);
@@ -198,10 +196,16 @@ public class TaskTwo implements Screen {
         runButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-
-
                 String code = textArea.getText();
-                File file = new File("C:\\Users\\LCLY\\Desktop\\Dungeon\\dungeon-coder\\game\\core\\src\\com\\mygdx\\dungeoncoder\\screens\\StageTwo.java");
+                File test = new File("test.txt");
+                String path = test.getAbsolutePath();
+                System.out.println("The file path of test file is "+path);
+                if(path.indexOf(0) == 'C'){
+                    File file = new File("C:\\Users\\LCLY\\Desktop\\Dungeon\\dungeon-coder\\game\\core\\src\\com\\mygdx\\dungeoncoder\\screens\\StageTwo.java");
+                }else{
+                    File file = new File("C:\\Users\\LCLY\\Desktop\\Dungeon\\dungeon-coder\\game\\core\\src\\com\\mygdx\\dungeoncoder\\screens\\StageTwo.java");
+                }
+
                 try {
                     FileWriter fileWriter = new FileWriter(file);
                     fileWriter.write(code);
@@ -210,6 +214,8 @@ public class TaskTwo implements Screen {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+
+
                 System.out.println("Code saved!");
                 String fileName = "StageTwo.java";
                 // This will reference one line at a time
