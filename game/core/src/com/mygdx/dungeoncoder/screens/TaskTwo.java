@@ -200,10 +200,11 @@ public class TaskTwo implements Screen {
                 File test = new File("test.txt");
                 String path = test.getAbsolutePath();
                 System.out.println("The file path of test file is "+path);
+                File file;
                 if(path.indexOf(0) == 'C'){
-                    File file = new File("C:\\Users\\LCLY\\Desktop\\Dungeon\\dungeon-coder\\game\\core\\src\\com\\mygdx\\dungeoncoder\\screens\\StageTwo.java");
+                     file = new File("C:\\Users\\LCLY\\Desktop\\Dungeon\\dungeon-coder\\game\\core\\src\\com\\mygdx\\dungeoncoder\\screens\\StageTwo.java");
                 }else{
-                    File file = new File("C:\\Users\\LCLY\\Desktop\\Dungeon\\dungeon-coder\\game\\core\\src\\com\\mygdx\\dungeoncoder\\screens\\StageTwo.java");
+                     file = new File("/Users/xs/Documents/dungeon-coder/game/core/src/com/mygdx/dungeoncoder/screens/StageTwo.java");
                 }
 
                 try {
