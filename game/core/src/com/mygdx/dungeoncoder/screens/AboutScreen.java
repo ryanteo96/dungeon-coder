@@ -16,12 +16,12 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
 
-public class MainStory1 implements Screen {
+public class AboutScreen implements Screen {
     private DungeonCoder game;
     private Stage stage;
     private Skin backButtonSkin;
 
-    public MainStory1(DungeonCoder g){
+    public AboutScreen (DungeonCoder g){
         game = g;
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
@@ -43,6 +43,7 @@ public class MainStory1 implements Screen {
         });
         stage.addActor(btnBack);
     }
+
 
     @Override
     public void show() {
