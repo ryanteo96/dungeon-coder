@@ -1,11 +1,15 @@
 package com.mygdx.dungeoncoder.screens;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
@@ -20,13 +24,37 @@ public class AboutScreen implements Screen {
     private DungeonCoder game;
     private Stage stage;
     private Skin backButtonSkin;
+    private Label titleLabel;
+    private Label infoLabel;
+    private Label creatorLabel;
 
     public AboutScreen (DungeonCoder g){
         game = g;
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
         Gdx.input.setInputProcessor(stage);
+
+        Table table = new Table();
+        table.top();
+        table.setFillParent(true);
+
         createBack();
+
+        titleLabel = new Label("About DungeonCoder",new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+        titleLabel.setFontScale(3);
+        infoLabel = new Label("This is an educational game aimed towards students and coding beginners.\n\n" +
+                "Learning how to code is rarely considered easy and interesting and\nit is one of the biggest " +
+                "problem for learners.\n\nThis game will provide an interesting way for experienced programmers " +
+                "\nto apply their skills and idea as well",new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+        infoLabel.setFontScale(2);
+        creatorLabel = new Label("Game Creator:\nRyan, Henry, Devon, Gary",new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+        table.add(titleLabel).padTop(50).padBottom(20);
+        table.row();
+        table.add(infoLabel).left();
+        table.row();
+        table.add(creatorLabel).right().padTop(300);
+        table.setDebug(false);
+        stage.addActor(table);
     }
 
 

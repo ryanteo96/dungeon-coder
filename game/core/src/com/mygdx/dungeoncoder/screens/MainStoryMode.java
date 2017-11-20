@@ -65,7 +65,7 @@ public class MainStoryMode implements Screen {
         TextureRegion startRegion = new TextureRegion(start);
         TextureRegionDrawable startDrawable = new TextureRegionDrawable(startRegion);
         startImage = new Image(startDrawable);
-        startImage.setPosition(180,300);
+        startImage.setPosition(180,450);
         startImage.addListener(new ClickListener(){
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
@@ -77,7 +77,7 @@ public class MainStoryMode implements Screen {
         TextureRegion aboutRegion = new TextureRegion(about);
         TextureRegionDrawable aboutDrawable = new TextureRegionDrawable(aboutRegion);
         aboutImage = new Image(aboutDrawable);
-        aboutImage.setPosition(180,250);
+        aboutImage.setPosition(180,400);
         aboutImage.addListener(new ClickListener(){
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
@@ -89,7 +89,7 @@ public class MainStoryMode implements Screen {
         TextureRegion quitRegion = new TextureRegion(quit);
         TextureRegionDrawable quitDrawable = new TextureRegionDrawable(quitRegion);
         quitImage = new Image(quitDrawable);
-        quitImage.setPosition(180,200);
+        quitImage.setPosition(180,350);
         quitImage.addListener(new ClickListener(){
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
