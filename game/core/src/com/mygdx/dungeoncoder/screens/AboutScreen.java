@@ -44,15 +44,15 @@ public class AboutScreen implements Screen {
         titleLabel.setFontScale(3);
         infoLabel = new Label("This is an educational game aimed towards students and coding beginners.\n\n" +
                 "Learning how to code is rarely considered easy and interesting and\nit is one of the biggest " +
-                "problem for learners.\n\nThis game will provide an interesting way for experienced programmers " +
-                "\nto apply their skills and idea as well",new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+                "problem for learners.\n\nThis game will provide an interesting way for beginner and experienced" +
+                "\nprogrammers to apply their skills and idea as well.",new Label.LabelStyle(new BitmapFont(), Color.BLACK));
         infoLabel.setFontScale(2);
         creatorLabel = new Label("Game Creator:\nRyan, Henry, Devon, Gary",new Label.LabelStyle(new BitmapFont(), Color.BLACK));
         table.add(titleLabel).padTop(50).padBottom(20);
         table.row();
         table.add(infoLabel).left();
         table.row();
-        table.add(creatorLabel).right().padTop(300);
+        table.add(creatorLabel).right().padTop(250);
         table.setDebug(false);
         stage.addActor(table);
     }
