@@ -154,7 +154,9 @@ public class TaskTwo implements Screen {
             //FileReader fileReader = new FileReader(fileName);
 
             // Always wrap FileReader in BufferedReader.
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("C:/Users/LCLY/Desktop/Dungeon/dungeon-coder/game/core/src/com/mygdx/dungeoncoder/screens/StageTwo.java"));
+            //BufferedReader bufferedReader = new BufferedReader(new FileReader("C:/Users/LCLY/Desktop/Dungeon/dungeon-coder/game/core/src/com/mygdx/dungeoncoder/screens/StageTwo.java"));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("code.java"));
+
             while((line = bufferedReader.readLine()) != null) {
                 System.out.println(line);
                 sb.append(line);
@@ -197,15 +199,16 @@ public class TaskTwo implements Screen {
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 String code = textArea.getText();
-                File test = new File("test.txt");
-                String path = test.getAbsolutePath();
+                File file = new File("code.java");
+                String path = file.getAbsolutePath();
                 System.out.println("The file path of test file is "+path);
-                File file;
+
+                /*File file;
                 if(path.indexOf(0) == 'C'){
                      file = new File("C:\\Users\\LCLY\\Desktop\\Dungeon\\dungeon-coder\\game\\core\\src\\com\\mygdx\\dungeoncoder\\screens\\StageTwo.java");
                 }else{
                      file = new File("/Users/xs/Documents/dungeon-coder/game/core/src/com/mygdx/dungeoncoder/screens/StageTwo.java");
-                }
+                }*/
 
                 try {
                     FileWriter fileWriter = new FileWriter(file);
@@ -218,7 +221,7 @@ public class TaskTwo implements Screen {
 
 
                 System.out.println("Code saved!");
-                String fileName = "StageTwo.java";
+                String fileName = "code.java";
                 // This will reference one line at a time
                 String line = null;
 

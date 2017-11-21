@@ -1,26 +1,26 @@
 package com.mygdx.dungeoncoder.screens;
 
-public class StageTwo{
-     public static void main(String args[]){
+public class code{
+    public static void main(String args[]){
 
 
         for (int i = 0; i < 10; i++) {
-             right();
-         }
+            right();
+        }
 
 
     }
 
     public static void right() {
-         // Print right to file
+        // Print right to file
     }
     public static void left() {
-         // Print left to file
+        // Print left to file
     }
     public static void up() {
-         // Print up to file
+        // Print up to file
     }
     public static void down() {
-         // Print down to file
+        // Print down to file
     }
 }
