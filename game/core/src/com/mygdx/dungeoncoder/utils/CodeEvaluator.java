@@ -8,6 +8,7 @@ public class CodeEvaluator {
 	public CodeEvaluator() {
 	}
 
+	// Attempt to compile a given java file and return its success
     	public static boolean evaluate(String filePath) {
         	boolean compiled = false;
 		try {
@@ -17,6 +18,7 @@ public class CodeEvaluator {
 		return compiled;
     	}
 
+	// Print and input stream.
 	private static void printLines(String name, InputStream ins) throws Exception {
 		String line = null;
 		BufferedReader in = new BufferedReader(new InputStreamReader(ins));
@@ -25,6 +27,7 @@ public class CodeEvaluator {
 		}
 	}
 
+	// Execute the compile command.
       	private static boolean compile(String command) throws Exception {
         	Process pro = Runtime.getRuntime().exec(command);
 		printLines(command + " stdout:", pro.getInputStream());
@@ -37,6 +40,7 @@ public class CodeEvaluator {
 		return false;
 	}
 
+	// Attempt to run a java class file.
 	private static boolean run(String filePath) throws Exception {
 		String command = "java " + filePath;
 		Process pro = Runtime.getRuntime().exec(command);

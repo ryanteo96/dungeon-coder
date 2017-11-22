@@ -230,10 +230,8 @@ public class ServerThread extends Thread {
 				if (username.equals(rs.getString("username"))) {
 					String knownHash = rs.getString("hash");
 					String hexSalt = rs.getString("salt");
-					//System.out.println("known hash is " + knownHash);
 					byte[] salt = hexToSalt(hexSalt);
 					String checkHash = hash(password, salt);
-					//System.out.println("check hash is " + checkHash);
 					if (knownHash.equals(checkHash)) {
 						goodCheck = true;
 						System.out.println("password is good");
@@ -657,8 +655,7 @@ public class ServerThread extends Thread {
 	}
 
 	public void run() {
-		// Set socket to timeout after a second if no login/account creation request
-		
+		// Set socket to timeout after a second if no login/account creation request	
 		// Wait a max of 5 seconds for login or account creation instruction
 		try {
 			socket.setSoTimeout(5000);

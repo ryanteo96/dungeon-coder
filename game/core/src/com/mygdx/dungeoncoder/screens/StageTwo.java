@@ -1,26 +1,37 @@
 package com.mygdx.dungeoncoder.screens;
+import java.io.*;
 
 public class StageTwo{
-     public static void main(String args[]){
+	private static PrintWriter out;
+	
+	public static void main(String args[]){
+		try {
+			out = new PrintWriter(new FileWriter("code.txt"));
+		}
+		catch (Exception e) {
+			// Shouldn't happen.
+		}
+		// USER WRITE CODE HERE
 
 
-        for (int i = 0; i < 10; i++) {
-             right();
-         }
 
+		// DO NOT WRITE CODE PAST THIS POINT
+		out.close();
+	}
 
-    }
-
-    public static void right() {
-         // Print right to file
-    }
-    public static void left() {
-         // Print left to file
-    }
-    public static void up() {
-         // Print up to file
-    }
-    public static void down() {
-         // Print down to file
-    }
+	private void right() {
+		out.print("right\n");
+	}
+	private void left() {
+		out.print("left\n");
+	}
+	private void up() {
+		out.print("up\n");
+	}
+	private void down() {
+		out.print("down\n");
+	}
+	private void delay(int duration) {
+		out.print("wait," + duration + "\n");	
+	}
 }
