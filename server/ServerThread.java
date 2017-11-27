@@ -533,16 +533,21 @@ public class ServerThread extends Thread {
 	private void recieveFile(String fileName) {
 		try {
 			String givenFileName = incoming.readUTF();
+			boolean levelFile = true;
 			if (fileName.equals("")) {
 				fileName = givenFileName;
+				levelFile = false;
 			}
-			
-			File f = new File("Files/" + fileName);
+			File f = null;
+			if (!levelFile) {
+				f = new File("Files/" + fileName);
+			}
+			else {
+				f = new File("Files/Levels/" + fileName);
+			}
 			f.createNewFile();
 
 			OutputStream out = new FileOutputStream(f);
-			
-
 
 			long fileSize = incoming.readLong();
 			byte[] buffer = new byte[16 * 1024];
@@ -612,6 +617,21 @@ public class ServerThread extends Thread {
 		catch (SQLException e) {
 		}
 		return deadline;
+	}
+
+	private void levelUpload() {
+		String name = recieveString();
+		recieveFile(name);
+		try {
+			FileWriter fw = new FileWriter("Files/Levels/LevelList.txt", true);
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter out = new PrintWriter(bw);
+			out.print(name + "\n");
+			out.close();
+		}
+		catch (IOException e) {
+			// Shouldn't happen
+		} 
 	}
 
 	// Check to see if date1 is before, after, or on date2.
@@ -725,6 +745,11 @@ public class ServerThread extends Thread {
 				case 0x0A :
 					sendCode((byte)(0x10));
 					getTaskInfo();
+				break;
+				// UPLOADLEVEL
+				case 0x0B :
+					sendCode((byte)(0x10));
+					levelUpload();
 				break;
 				case (byte)(0xFF) :
 					sendCode((byte)(0x10));

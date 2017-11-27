@@ -304,6 +304,21 @@ public class ClientConnection {
 		}
 	}
 
+	public synchronized boolean uploadLevel(String levelName, File level) {
+		sendCode((byte)(0x0B));
+		if (recieveCode() == 0x10) {
+			try {
+				outgoing.writeUTF(levelName);
+				sendFile(level, "");
+			}
+			catch (IOException e) {
+				// Do Nothing
+			}
+		}
+		//Server refused level upload
+		return false;
+	}
+
 	public synchronized ArrayList<String> getMessages() {
 		return messages;
 	}
