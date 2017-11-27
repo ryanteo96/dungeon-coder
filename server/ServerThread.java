@@ -623,15 +623,39 @@ public class ServerThread extends Thread {
 		String name = recieveString();
 		recieveFile(name);
 		try {
-			FileWriter fw = new FileWriter("Files/Levels/LevelList.txt", true);
-			BufferedWriter bw = new BufferedWriter(fw);
-			PrintWriter out = new PrintWriter(bw);
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("Files/Levels/LevelList.txt", true)));
 			out.print(name + "\n");
 			out.close();
 		}
 		catch (IOException e) {
 			// Shouldn't happen
 		} 
+	}
+
+	private void sendCustomLevel() {
+		String levelName = recieveString();
+		File level = new File("Files/Levels/" + levelName);
+		if (!level.exists()) {
+			// Level does not exist
+			sendCode((byte)(0x60));
+			return;
+		}
+		sendFile(level, levelName);
+	}
+
+	private void sendLevelList() {
+		try {
+			File levels = new File("Files/Levels/LevelList.txt");
+			BufferedReader br = new BufferedReader(new FileReader(levels));
+			String level;
+			while((level = br.readLine()) != null) {
+				sendString(level);
+			}
+			sendString("\r\n");
+		}
+		catch (IOException e) {
+			// Shouldn't happen
+		}
 	}
 
 	// Check to see if date1 is before, after, or on date2.
@@ -721,39 +745,61 @@ public class ServerThread extends Thread {
 				case 0x03 :
 					sendCode((byte)(0x10));
 					updateAccount();
-				break;
+					break;
+				
 				// UPDATEMODULECOMPLETION
 				case 0x04 :
 					sendCode((byte)(0x10));
 					updateProgress();	
-				break;
+					break;
+				
 				// FETCHCODEFILE
 				case 0x08 :
 					sendCode((byte)(0x10));
 					getUserLevelCode();
-				break;
+					break;
+				
+				// FETCHMOSTRECENTATTENPT
 				case 0x18 :
 					sendCode((byte)(0x10));
 					getMostRecentCodeFile();
-				break;
+					break;
+				
 				// FETCHLEVELFILE
 				case 0x09 :
 					sendCode((byte)(0x10));
 					getLevelFile();
-				break;
+					break;
+				
 				// FETCHTASKINFO
 				case 0x0A :
 					sendCode((byte)(0x10));
 					getTaskInfo();
-				break;
+					break;
+				
 				// UPLOADLEVEL
 				case 0x0B :
 					sendCode((byte)(0x10));
 					levelUpload();
-				break;
+					break;
+				
+				// FETCHCUSTOMLEVELLIST
+				case 0x0C :
+					sendCode((byte)(0x10));
+					sendLevelList();
+					break;
+				
+				// FETCHCUSTOMLEVEL
+				case 0x0D :
+					sendCode((byte)(0x10));
+					sendCustomLevel();
+					break;
+				
+				// PING
 				case (byte)(0xFF) :
 					sendCode((byte)(0x10));
-				break;
+					break;
+				
 				// INVALIDREQUEST
 				default:
 					sendCode((byte)(0xF0));

@@ -319,6 +319,33 @@ public class ClientConnection {
 		return false;
 	}
 
+	public synchronized ArrayList<String> requestLevelList() {
+		ArrayList<String> levels = new ArrayList<String>();
+		sendCode((byte)(0x0C));
+		if (recieveCode() == 0x10) {
+			String levelName = "";
+			while(levelName != "\r\n") {
+				try {
+					levelName = incoming.readUTF();
+				}
+				catch (IOException e) {
+				// Do Nothing
+				}
+				levels.add(levelName);
+			}
+		}
+		return levels;
+	}
+
+	public synchronized boolean requestCustomLevel(String levelName) {
+		sendCode((byte)(0x0D));
+		if (recieveCode() == 0x10) {
+			recieveFile(levelName);
+		}
+		// Server refused level transfer
+		return false;
+	}
+
 	public synchronized ArrayList<String> getMessages() {
 		return messages;
 	}
