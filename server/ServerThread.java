@@ -166,7 +166,7 @@ public class ServerThread extends Thread {
 
 	private void getMostRecentCodeFile() {
 		String levelName = recieveString();
-		String fileName = connectedUser + levelName;
+		String fileName = connectedUser + levelName + "|";
 		try {
 			if (conn == null) {
 				connectDB();
@@ -180,7 +180,7 @@ public class ServerThread extends Thread {
 			sendCode((byte)(0x60));
 			return;
 		}
-		File file = new File(fileName);
+		File file = new File("Files/" + fileName);
 		sendFile(file, fileName);
 		sendCode((byte)(0x10));
 	}
@@ -188,7 +188,7 @@ public class ServerThread extends Thread {
 	// Get the user's code for a specific level
 	private void getUserLevelCode() {
 		String fileName = recieveString();
-		File file = new File(fileName);
+		File file = new File("Files/" + fileName);
 		sendFile(file, fileName);
 		sendCode((byte)(0x10));
 	}
@@ -460,7 +460,7 @@ public class ServerThread extends Thread {
 			int currentAttempts = rs.getInt("Attempts");
 			
 			String attempts = Integer.toString(currentAttempts);
-			String fileName = connectedUser + task + attempts;
+			String fileName = connectedUser + task + "|" + attempts;
 			recieveFile(fileName);
 
 			currentAttempts++;
@@ -531,18 +531,21 @@ public class ServerThread extends Thread {
 
 	// Recieve data for a file from the client and write it.
 	private void recieveFile(String fileName) {
+		System.out.println("recieving file");
 		try {
 			String givenFileName = incoming.readUTF();
-			boolean levelFile = true;
+			boolean levelFile = false;
 			if (fileName.equals("")) {
 				fileName = givenFileName;
-				levelFile = false;
+				levelFile = true;
 			}
 			File f = null;
 			if (!levelFile) {
+				System.out.println("Saving to Files/" + fileName);
 				f = new File("Files/" + fileName);
 			}
 			else {
+				System.out.println("Saving to Files/Levels/" + fileName);
 				f = new File("Files/Levels/" + fileName);
 			}
 			f.createNewFile();
