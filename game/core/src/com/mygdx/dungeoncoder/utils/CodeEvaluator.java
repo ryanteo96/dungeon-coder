@@ -41,8 +41,8 @@ public class CodeEvaluator {
 	}
 
 	// Attempt to run a java class file.
-	private static boolean run(String filePath) throws Exception {
-		String command = "java " + filePath;
+	public static boolean run(String classpath, String classname) throws Exception {
+		String command = "java -cp " + classpath + " " + classname;
 		Process pro = Runtime.getRuntime().exec(command);
 		printLines(command + " stdout: ", pro.getInputStream());
 		printLines(command + " stderr: ", pro.getErrorStream());

@@ -27,6 +27,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.*;
 import com.mygdx.dungeoncoder.values.DefaultValues;
+import com.sun.org.apache.xpath.internal.SourceTree;
 
 import static com.mygdx.dungeoncoder.DungeonCoder.V_HEIGHT;
 import static com.mygdx.dungeoncoder.DungeonCoder.V_WIDTH;
@@ -158,7 +159,7 @@ public class TaskTwo implements Screen {
             BufferedReader bufferedReader = new BufferedReader(new FileReader("StageTwo.java"));
 
             while((line = bufferedReader.readLine()) != null) {
-                System.out.println(line);
+                //System.out.println(line);
                 sb.append(line);
                 sb.append("\n");
             }
@@ -199,7 +200,7 @@ public class TaskTwo implements Screen {
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 String code = textArea.getText();
-                System.out.println("textarea:" + code);
+                //System.out.println("textarea:" + code);
                 File file = new File("StageTwo.java");
                 String path = file.getAbsolutePath();
                 System.out.println("The file path of test file is "+path);
@@ -215,19 +216,51 @@ public class TaskTwo implements Screen {
 
                 System.out.println("Code saved!");
                 String fileName = "StageTwo.java";
+                String className = "StageTwo.class";
+                String runName = className.substring(0, className.length() - 6);
+                File classFile = new File(className);
+                String classPath = classFile.getAbsolutePath();
+                classPath = classPath.substring(0, classPath.length() - (className.length()));
+                System.out.println("classPath is: "+classPath);
+
                 // This will reference one line at a time
-                String line = null;
+                String line = "";
 
                 try {
                     String filepath = file.getAbsolutePath();
                     System.out.println(filepath);
                     shareVariable.connect.requestUpdateProgress(file,"Task1",10);
+                    if(codeevaluator.evaluate(filepath) == true){
+                        System.out.println("it gets in the if statement");
+                        codeevaluator.run(classPath, runName);
+                    }
                     System.out.println(codeevaluator.evaluate(filepath));
-                    FileReader fileReader = new FileReader(fileName);
+                    FileReader fileReader = new FileReader("code.txt");
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
 
                     while((line = bufferedReader.readLine()) != null) {
-                        //System.out.println(line);
+                        System.out.println("line is: " + line);
+
+                        long start = System.currentTimeMillis();
+                        long end = start;
+                        while(end - start < 2000) {
+                            end = System.currentTimeMillis();
+                            System.out.println("here");
+                            render(Gdx.graphics.getDeltaTime());
+                        }
+
+                        if(line.equals("right")){
+                            movedRight();
+                            //render(Gdx.graphics.getDeltaTime());
+                            //update(Gdx.graphics.getDeltaTime());
+                        }
+                        if(line.equals("left")){
+                            movedLeft();
+                            //render(Gdx.graphics.getDeltaTime());
+                        }
+                        if(line.equals("up")){
+                            DefaultValues.JUMP = true;
+                        }
                         //testing code function
                     }
                     bufferedReader.close();
@@ -237,6 +270,8 @@ public class TaskTwo implements Screen {
                 }
                 catch(IOException ex) {
                     System.out.println("Error reading file when run is being clicked'"  + fileName + "'");
+                } catch (Exception e1) {
+                    e1.printStackTrace();
                 }
 
                 //shareVariable.connect.requestUpdateProgress(file,"Task1",percentage);
@@ -269,6 +304,7 @@ public class TaskTwo implements Screen {
         if (DefaultValues.WALK_RIGHT && player.b2body.getLinearVelocity().x <= 2 ) { //isKeyPressed for holding down keys
             player.b2body.applyLinearImpulse(new Vector2(1f, 0), player.b2body.getWorldCenter(), true);
             DefaultValues.WALK_RIGHT = false;
+            System.out.println("RIGHT METHOD CALLED");
             System.out.println("Your character moved right!");
         }
     }
@@ -278,6 +314,7 @@ public class TaskTwo implements Screen {
         if (DefaultValues.WALK_LEFT && player.b2body.getLinearVelocity().x >= -2)  {
             player.b2body.applyLinearImpulse(new Vector2(-1f, 0), player.b2body.getWorldCenter(), true);
             DefaultValues.WALK_LEFT = false;
+            System.out.println("LEFT METHOD CALLED");
             System.out.println("Your character moved left!");
         }
 
@@ -320,7 +357,7 @@ public class TaskTwo implements Screen {
 
     public void handleinput(float dt){
         //control player using immediate impulses, use world center so the torque wont make the character fly around
-        if(player.currentState != Adventurer.State.DEAD){
+        /*if(player.currentState != Adventurer.State.DEAD){
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
                 player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
                 player.currentState = Adventurer.State.JUMPING;
@@ -334,8 +371,9 @@ public class TaskTwo implements Screen {
                 player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
                 DungeonCoder.manager.get("UIElements/Animation/footstep.wav", Music.class).play();
             }
-        }
-       /* if (DefaultValues.JUMP) { // for quick tap
+        }*/
+
+        if (DefaultValues.JUMP) { // for quick tap
             player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
             player.currentState = Adventurer.State.JUMPING;
             if(DefaultValues.JUMP && player.previousState == Adventurer.State.JUMPING){
@@ -355,16 +393,18 @@ public class TaskTwo implements Screen {
             player.b2body.applyLinearImpulse(new Vector2(-1f, 0), player.b2body.getWorldCenter(), true);
             DefaultValues.WALK_LEFT = false;
             System.out.println("Your character moved left!");
-        }*/
+        }
     }
 
     public void update(float dt){
-        handleinput(dt);
+        //System.out.println("update");
+        //handleinput(dt);
+        //movedRight(dt);
         //takes 1 step in the physics simulation 60 times per second
         world.step(1/60f, 6,2);
         player.update(dt);
 
-        //if mario dies, freeze the camera right where he died
+        //if character dies, freeze the camera right where he died
         if(player.currentState != Adventurer.State.DEAD){
             gamecam.position.x = player.b2body.getPosition().x;
         }
@@ -396,7 +436,10 @@ public class TaskTwo implements Screen {
 
     @Override
     public void render(float delta) {
+        //System.out.println("render");
+
         update(delta);
+
         Gdx.gl.glClearColor(172/255f, 115/255f, 57/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
