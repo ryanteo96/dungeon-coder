@@ -1,7 +1,7 @@
 package com.mygdx.dungeoncoder.screens;
 import java.io.*;
 
-public class StageTwo{
+public class StageTwo {
 	private static PrintWriter out;
 	
 	public static void main(String args[]){
@@ -19,19 +19,19 @@ public class StageTwo{
 		out.close();
 	}
 
-	private void right() {
+	private static void right() {
 		out.print("right\n");
 	}
-	private void left() {
+	private static void left() {
 		out.print("left\n");
 	}
-	private void up() {
+	private static void up() {
 		out.print("up\n");
 	}
-	private void down() {
+	private static void down() {
 		out.print("down\n");
 	}
-	private void delay(int duration) {
-		out.print("wait," + duration + "\n");	
+	private static void delay(int duration) {
+		out.print("delay," + duration + "\n");	
 	}
 }
