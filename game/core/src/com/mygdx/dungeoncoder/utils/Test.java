@@ -1,6 +1,5 @@
-package com.mygdx.dungeoncoder.utils;
-
-import com.mygdx.dungeoncoder.utils.ClientConnection;
+//package com.mygdx.dungeoncoder.utils;
+//import com.mygdx.dungeoncoder.utils.ClientConnection;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -11,11 +10,96 @@ public class Test {
 	
 	public static void main(String[] args) {
 		conn = new ClientConnection();
-		conn.requestLogin("Devon", "Password");
+		conn.requestAccountCreation("Devon1", "Password");
+		conn.requestLogin("Devon1", "Password");
+		incorrectUsername();
+		incorrectPassword();
+		accountUpdateSingle();
+		accountUpdateDouble();
+		accountUpdateTriple();
 		codeTransfer();
 		levelTransfer();
 	}
+
+	private static void incorrectUsername() {
+		ClientConnection newConn = new ClientConnection();
+		if (newConn.requestLogin("BADUSER", "Password")) {
+			System.out.println("Incorrect Username Failed");
+		}
+		else {
+			System.out.println("Incorrect Username Passed");
+		}
+	}
+
+	private static void incorrectPassword() {
+		ClientConnection newConn = new ClientConnection();
+		if (newConn.requestLogin("Devon1", "BADPASS")) {
+			System.out.println("Incorrect Password Failed");
+		}
+		else {
+			System.out.println("Incorrect Username Passed");
+		}
+	}	
+
+	private static void accountUpdateSingle() {
+		String[] newInfo = new String[1];
+		newInfo[0] = "pa55w0rd";
+		conn.requestAccountUpdate("Devon1", "Password", "password", ",", newInfo);
+		ClientConnection newConn = new ClientConnection();
+		if (newConn.requestLogin("Devon1", "pa55w0rd")) {
+			System.out.println("Update only Password Passed");
+			accountReset("Devon1", newInfo[0]);
+		}
+		else {
+			System.out.println("Upadate only Password Failed");
+		}
+	}
+
+	private static void accountUpdateDouble() {
+		String[] newInfo = new String[2];
+		newInfo[0] = "Noved";
+		newInfo[1] = "AnotherPass";
+		conn.requestAccountUpdate("Devon1", "Password", "username,password", ",", newInfo);
+		ClientConnection newConn = new ClientConnection();
+		if (newConn.requestLogin("Noved", "AnotherPass")) {
+			System.out.println("Update Username and Password Passed");
+			accountReset(newInfo[0], newInfo[1]);
+		}
+		else {
+			System.out.println("Update Username and Password Failed");
+		}
+	}
+
+	private static void accountUpdateTriple() {
+		String[] newInfo = new String[3];
+		newInfo[0] = "CoolCatz";
+		newInfo[1] = "CoolCat83xx@catzRus.com";
+		newInfo[2] = "KATZRULE!";
+		conn.requestAccountUpdate("Devon1", "Password", "username,email,password", ",", newInfo);
+		ClientConnection newConn = new ClientConnection();
+		if (newConn.requestLogin("CoolCatz", "KATZRULE!")) {
+			String returnedEmail = newConn.requestAccountEmail();
+			if (returnedEmail.equals("CoolCat83xx@catzRus.com")) {
+				System.out.println("Update Username, Password, and Email Passed");
+			}
+			else {
+				System.out.println("Update Username, Password, and Email Failed");
+			}
+			accountReset(newInfo[0], newInfo[2]);
+		}
+		else {
+			System.out.println("Update Username, Password, and Email Failed");
+		}	
+	}
 	
+	private static void accountReset(String username, String password) {
+		String[] newInfo = new String[3];
+		newInfo[0] = "Devon1";
+		newInfo[2] = "Password";
+		newInfo[1] = "Devon@dungeoncoder.com";
+		conn.requestAccountUpdate(username, password, "username,email,password", ",", newInfo);
+	}
+
 	private static void codeTransfer() {
 		File temp = new File("original.txt");
 		byte[] data = new byte[128];

@@ -130,6 +130,9 @@ public class ClientConnection {
 				}
 				outgoing.writeUTF(username);
 				outgoing.writeUTF(password);
+				if (recieveCode() == 0x40) {
+					return false;
+				}
 				//byte outcome = recieveCode();
 				if (recieveCode() == 0x10) {
 					return true;
@@ -152,6 +155,23 @@ public class ClientConnection {
 			// Do nothing
 		}	
 		return false;
+	}
+
+	public synchronized String requestAccountEmail() {
+		try {
+			sendCode((byte)(0x13));
+			if (recieveCode() == 0x10) {
+				String emailAddress = incoming.readUTF();
+				return emailAddress;
+			}
+			else {
+				return "";
+			}
+		}
+		catch (IOException e) {
+			// Do nothing
+		}
+		return "";
 	}
 
 	public synchronized boolean requestUpdateProgress(File file, String task, int percentage) {
@@ -210,16 +230,13 @@ public class ClientConnection {
 
 	private synchronized void recieveFile(String fileName) {
 		try {
-			System.out.println("recieving file name");
 			String givenFileName = incoming.readUTF();
 			if (fileName.equals("")) {
 				fileName = givenFileName;
 			}
-			System.out.println("file name is " + fileName);
 			OutputStream out = new FileOutputStream(fileName);
 
 			long fileSize = incoming.readLong();
-			System.out.println("Size is " + fileSize);
 			byte[] buffer = new byte[16 * 1024];
 			int count;
 
@@ -342,10 +359,8 @@ public class ClientConnection {
 
 	public synchronized boolean requestCustomLevel(String levelName) {
 		sendCode((byte)(0x0D));
-		System.out.println("requesting custom level");
 		if (recieveCode() == 0x10) {
 			try {
-				System.out.println("Writing level name " + levelName);
 				outgoing.writeUTF(levelName);
 			}
 			catch (IOException e) {
@@ -355,7 +370,6 @@ public class ClientConnection {
 			recieveFile(levelName);
 			return true;
 		}
-		System.out.println("Server refused");
 		// Server refused level transfer
 		return false;
 	}
