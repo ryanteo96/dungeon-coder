@@ -28,6 +28,7 @@ public class Adventurer extends Sprite {
     private float stateTimer;
     private boolean runningRight;
     private boolean adventurerIsDead;
+    private boolean gameCompleted;
 
     public Adventurer(TaskTwo screen){
         super(screen.getAtlas().findRegion("walk"));
@@ -153,6 +154,10 @@ public class Adventurer extends Sprite {
         DungeonCoder.manager.get("UIElements/Animation/backgroundmusic.mp3", Music.class).stop();
     }
 
+    public void gameCompleted(){
+        gameCompleted = true;
+    }
+
     public float getStateTimer(){
         return stateTimer;
     }
@@ -172,7 +177,8 @@ public class Adventurer extends Sprite {
         //what can adventurer collide with
         fdef.filter.maskBits = DefaultValues.GROUND_BIT |
                             DefaultValues.SKELETON_BIT |
-                            DefaultValues.OBJECT_BIT; // | is or
+                            DefaultValues.OBJECT_BIT|
+                            DefaultValues.END_BIT; // | is or
 
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);

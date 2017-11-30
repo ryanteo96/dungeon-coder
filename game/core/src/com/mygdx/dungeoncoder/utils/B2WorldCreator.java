@@ -114,6 +114,19 @@ public class B2WorldCreator {
             body.createFixture(fdef);
         }
 
+        //create endpoint
+        for (MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
+            //new GameComplete(screen ,object);
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / DefaultValues.PPM, (rect.getY() + rect.getHeight() / 2) / DefaultValues.PPM);
+            body = world.createBody(bdef);
+            shape.setAsBox((rect.getWidth() / 2) / DefaultValues.PPM, (rect.getHeight() / 2) / DefaultValues.PPM);
+            fdef.shape = shape;
+            fdef.filter.categoryBits = DefaultValues.END_BIT;
+            fdef.isSensor = true;
+            body.createFixture(fdef);
+        }
 
 
     }

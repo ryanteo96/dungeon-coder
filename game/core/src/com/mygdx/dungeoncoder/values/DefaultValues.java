@@ -19,6 +19,7 @@ public class DefaultValues {
 
     //for adventurer
     public static final short ADVENTURER_BIT = 2;
+    public static final short END_BIT = 1024;
     public static final short SKELETON_BIT = 64;
 
     public static boolean WALK_RIGHT = false;

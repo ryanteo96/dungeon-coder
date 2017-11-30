@@ -35,6 +35,15 @@ public class AdventurerContactListener implements ContactListener{
                     ((Adventurer)fixB.getUserData()).getHit();
                 }
                 break;
+            case DefaultValues.ADVENTURER_BIT | DefaultValues.END_BIT:
+                if(fixA.getFilterData().categoryBits == DefaultValues.ADVENTURER_BIT){
+                    ((Adventurer)fixA.getUserData()).gameCompleted();
+                    Gdx.app.log("ADVENTURER", "GAME COMPLETED");
+                }else{
+                    ((Adventurer)fixB.getUserData()).gameCompleted();
+                    Gdx.app.log("ADVENTURER", "GAME FUCKING COMPLETED");
+                }
+                break;
         }
     }
 

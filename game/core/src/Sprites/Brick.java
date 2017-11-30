@@ -14,6 +14,7 @@ import com.mygdx.dungeoncoder.values.DefaultValues;
 import java.awt.*;
 
 public class Brick extends InteractiveTileObject {
+
     public Brick(TaskThree screen, MapObject object){
         super(screen, object);
         fixture.setUserData(this);
