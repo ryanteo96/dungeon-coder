@@ -1,4 +1,4 @@
-package com.mygdx.dungeoncoder.utils;
+//package com.mygdx.dungeoncoder.utils;
 import java.util.ArrayList;
 import java.net.*;
 import java.io.*;
@@ -19,7 +19,7 @@ public class ClientConnection {
 	// Initialize new Client Connection
 	public ClientConnection() {
 		try {
-			Socket client = new Socket(ip, port);
+			client = new Socket(ip, port);
 			client.setSoTimeout(1000);	
 			OutputStream toServer = client.getOutputStream();
 			outgoing = new DataOutputStream(toServer);
@@ -130,18 +130,18 @@ public class ClientConnection {
 				}
 				outgoing.writeUTF(username);
 				outgoing.writeUTF(password);
-				byte outcome = recieveCode();
-				if (outcome == 0x10) {
+				//byte outcome = recieveCode();
+				if (recieveCode() == 0x10) {
 					return true;
 				}
-				else if (outcome == 0x60) {
+				/*else if (outcome == 0x60) {
 					// Database failure
 					return false;
 				}
 				else if (outcome == 0x40) {
 					// Account authentication failed
 					return false;
-				}
+				}*/
 			}
 			else {
 				// Server refused account update
@@ -161,14 +161,14 @@ public class ClientConnection {
 				outgoing.writeUTF(task);
 				outgoing.writeInt(percentage);
 				sendFile(file, "");
-				byte outcome = recieveCode();
-				if (outcome == 0x10) {
+				//byte outcome = recieveCode();
+				if (recieveCode() == 0x10) {
 					return true;
-				}
+				}/*
 				else if (outcome == 0x60) {
 					// Database failure
 					return false;
-				}
+				}*/
 			}
 			else {
 				// Server refused update progress
@@ -193,14 +193,14 @@ public class ClientConnection {
 				outgoing.write(buffer, 0, count);
 			}
 			in.close();
-			byte outcome = recieveCode();
-			if (outcome == 0x10) {
+			//byte outcome = recieveCode();
+			if (recieveCode() == 0x10) {
 				return true;
-			}
+			}/*
 			else if (outcome == 0x40) {
 				// Something failed (probably io)
 				return false;
-			}				
+			}*/				
 		}
 		catch (IOException e) {
 			// Do Nothing
@@ -208,15 +208,18 @@ public class ClientConnection {
 		return false;
 	}
 
-	private synchronized boolean recieveFile(String fileName) {
+	private synchronized void recieveFile(String fileName) {
 		try {
+			System.out.println("recieving file name");
 			String givenFileName = incoming.readUTF();
 			if (fileName.equals("")) {
 				fileName = givenFileName;
 			}
+			System.out.println("file name is " + fileName);
 			OutputStream out = new FileOutputStream(fileName);
 
 			long fileSize = incoming.readLong();
+			System.out.println("Size is " + fileSize);
 			byte[] buffer = new byte[16 * 1024];
 			int count;
 
@@ -225,12 +228,11 @@ public class ClientConnection {
 				fileSize -= count;
 			}
 			out.close();
-			sendCode((byte)(0x10));
 		}
 		catch(IOException e) {
 			// Do Nothing
+			e.printStackTrace();
 		}
-		return false;
 	}
 
 	// Request the specific information for the user on the specific task
@@ -240,14 +242,14 @@ public class ClientConnection {
 			try {
 				outgoing.writeUTF(task);
 				outgoing.writeUTF(information);
-				byte outcome = recieveCode();
-				if (outcome == 0x10) {
+				//byte outcome = recieveCode();
+				if (recieveCode() == 0x10) {
 					return incoming.readUTF();
-				}
+				}/*
 				else if (outcome == 0x60) {
 					// Database error.
 					return "";
-				}
+				}*/
 			}
 			catch (IOException e) {
 				// Do Nothing
@@ -265,10 +267,11 @@ public class ClientConnection {
 		if (recieveCode() == 0x10) {
 			try {
 				outgoing.writeUTF(fileName);
-				recieveFile("");
+				recieveFile("fileName");
 				return true;
 			}
 			catch (IOException e) {
+				e.printStackTrace();
 				// Do Nothing
 			}
 		}
@@ -276,12 +279,12 @@ public class ClientConnection {
 		return false;
 	}
 
-	public synchronized boolean requestMostRecentLevelCode(String levelName) {
+	public synchronized boolean requestMostRecentLevelCode(String levelName, String fileName) {
 		sendCode((byte)(0x18));
 		if (recieveCode() == 0x10) {
 			try {
 				outgoing.writeUTF(levelName);
-				recieveFile("");
+				recieveFile(fileName);
 				return true;
 			}
 			catch (IOException e) {
@@ -339,9 +342,20 @@ public class ClientConnection {
 
 	public synchronized boolean requestCustomLevel(String levelName) {
 		sendCode((byte)(0x0D));
+		System.out.println("requesting custom level");
 		if (recieveCode() == 0x10) {
+			try {
+				System.out.println("Writing level name " + levelName);
+				outgoing.writeUTF(levelName);
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			}
 			recieveFile(levelName);
+			return true;
 		}
+		System.out.println("Server refused");
 		// Server refused level transfer
 		return false;
 	}
