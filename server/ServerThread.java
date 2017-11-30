@@ -103,7 +103,7 @@ public class ServerThread extends Thread {
 			// IO failure. Shut down
 			shutdown(false);
 		}
-	}
+	}	
 
 	// Recieve an OPCODE from the client
 	private byte recieveCode() {
@@ -165,24 +165,27 @@ public class ServerThread extends Thread {
 	}
 
 	private void getMostRecentCodeFile() {
+		System.out.println("getting most recent code file");
 		String levelName = recieveString();
-		String fileName = connectedUser + levelName + "|";
+		String fileName;
 		try {
 			if (conn == null) {
 				connectDB();
 			}
-			rs = stmt.executeQuery("SELECT Attempts FROM " + levelName + " WHERE Student = " + connectedUser + "");
+			rs = stmt.executeQuery("SELECT Code FROM " + levelName + " WHERE Student='" + connectedUser + "'");
 			rs.next();
-			int attempts = rs.getInt("Attempts");
-			fileName += Integer.toString(attempts);	
+			fileName = rs.getString("Code");	
 		}
 		catch(SQLException e) {
+			e.printStackTrace();
+			System.out.println("database failure");
 			sendCode((byte)(0x60));
 			return;
 		}
+		System.out.println("most recent code file is " + fileName);
 		File file = new File("Files/" + fileName);
 		sendFile(file, fileName);
-		sendCode((byte)(0x10));
+		//sendCode((byte)(0x10));
 	}
 
 	// Get the user's code for a specific level
@@ -190,7 +193,7 @@ public class ServerThread extends Thread {
 		String fileName = recieveString();
 		File file = new File("Files/" + fileName);
 		sendFile(file, fileName);
-		sendCode((byte)(0x10));
+		//sendCode((byte)(0x10));
 	}
 
 	private void getLevelFile() {
@@ -213,7 +216,7 @@ public class ServerThread extends Thread {
 		catch(SQLException e) {
 			System.out.println("Something went wrong while fetching users");
 			e.printStackTrace();
-			sendCode((byte)(0x60));
+			//sendCode((byte)(0x60));
 		}
 		return false;
 	}
@@ -417,11 +420,11 @@ public class ServerThread extends Thread {
 			}
 			catch (SQLException e) {
 				e.printStackTrace();
-				sendCode((byte)(0x60));
+				//sendCode((byte)(0x60));
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				sendCode((byte)(0x60));
+				//sendCode((byte)(0x60));
 			}
 		}
 	}
@@ -441,11 +444,11 @@ public class ServerThread extends Thread {
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
-			sendCode((byte)(0x60));
+			//sendCode((byte)(0x60));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			sendCode((byte)(0x60));
+			//sendCode((byte)(0x60));
 		}
 	}
 
@@ -461,7 +464,7 @@ public class ServerThread extends Thread {
 			
 			String attempts = Integer.toString(currentAttempts);
 			String fileName = connectedUser + task + "|" + attempts;
-			recieveFile(fileName);
+			recieveFile(fileName, false);
 
 			currentAttempts++;
 			stmt.executeUpdate("UPDATE " + task + " SET Attempts='" + currentAttempts + "' WHERE Student='" + connectedUser + "'");
@@ -497,7 +500,7 @@ public class ServerThread extends Thread {
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
-			sendCode((byte)(0x60));
+			//sendCode((byte)(0x60));
 		}
 	}
 
@@ -509,11 +512,15 @@ public class ServerThread extends Thread {
 
 	// To Be Implemented
 	private void sendFile(File file, String fileName) {
+		System.out.println("sending file " + fileName);
 		try {
-			outgoing.writeUTF(fileName);
+			System.out.println("sending file name");
+			sendString(fileName);
+			System.out.println("sending file length");
 			long length = file.length();
 			outgoing.writeLong(length);
 			byte[] buffer = new byte[16 * 1024];
+			System.out.println("sending file contents");
 			FileInputStream in = new FileInputStream(file);
 	
 			int count;
@@ -521,26 +528,24 @@ public class ServerThread extends Thread {
 				outgoing.write(buffer, 0, count);
 			}
 			in.close();
-			sendCode((byte)(0x10));
+			//sendCode((byte)(0x10));
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-			sendCode((byte)(0x40));
+			//sendCode((byte)(0x40));
 		}
 	}
 
 	// Recieve data for a file from the client and write it.
-	private void recieveFile(String fileName) {
+	private void recieveFile(String fileName, boolean level) {
 		System.out.println("recieving file");
 		try {
 			String givenFileName = incoming.readUTF();
-			boolean levelFile = false;
 			if (fileName.equals("")) {
 				fileName = givenFileName;
-				levelFile = true;
 			}
 			File f = null;
-			if (!levelFile) {
+			if (!level) {
 				System.out.println("Saving to Files/" + fileName);
 				f = new File("Files/" + fileName);
 			}
@@ -565,7 +570,7 @@ public class ServerThread extends Thread {
 		}
 		catch(IOException e) {
 			e.printStackTrace();
-			sendCode((byte)(0x40));
+			//sendCode((byte)(0x40));
 			shutdown(false);
 		}
 	}
@@ -624,15 +629,34 @@ public class ServerThread extends Thread {
 
 	private void levelUpload() {
 		String name = recieveString();
-		recieveFile(name);
-		try {
-			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("Files/Levels/LevelList.txt", true)));
-			out.print(name + "\n");
-			out.close();
+		recieveFile(name, true);
+		if (!levelExists(name)) {
+			try {
+				PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("Files/Levels/LevelList.txt", true)));
+				out.print(name + "\n");
+				out.close();
+			}
+			catch (IOException e) {
+				// Shouldn't happen
+			}
 		}
-		catch (IOException e) {
+	}
+
+	private boolean levelExists(String levelName) {
+		try {
+			File levels = new File("Files/Levels/LevelList.txt");
+			BufferedReader br = new BufferedReader(new FileReader(levels));
+			String level;
+			while((level = br.readLine()) != null) {
+				if (level.equals(levelName)) {
+					return true;
+				}
+			}
+		}
+		catch(IOException e) {
 			// Shouldn't happen
-		} 
+		}
+		return false;
 	}
 
 	private void sendCustomLevel() {
@@ -643,6 +667,7 @@ public class ServerThread extends Thread {
 			sendCode((byte)(0x60));
 			return;
 		}
+		System.out.println("Requested level " + levelName);
 		sendFile(level, levelName);
 	}
 
