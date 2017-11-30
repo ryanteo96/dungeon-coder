@@ -403,27 +403,30 @@ public class ServerThread extends Thread {
 					rs = stmt.executeQuery("SELECT Attempts FROM Task1 WHERE Student='" + newUsername + "'");
 					rs.next();
 					int attempts1 = rs.getInt("Attempts");
-					for (int i = 0; i < attempts1; i++) {
-						File file = new File("Files/" + username + "Task1" + Integer.toString(attempts1));
-						File newFile = new File("Files/+" + newUsername + "Task1" + Integer.toString(attempts1));
-						file.renameTo(newFile);
+					for (int i = 0; i < (attempts1 - 1); i++) {
+						File file = new File("Files/" + username + "Task1|" + Integer.toString(i));
+						
+						System.out.println("Files/" + username + "Task1|" + Integer.toString(attempts1) + " " + file.exists());
+						File newFile = new File("Files/" + newUsername + "Task1|" + Integer.toString(i));
+						//System.out.println(newFile.exists());
+						System.out.println(file.renameTo(newFile));
 					}
 
 					rs = stmt.executeQuery("SELECT Attempts FROM Task2 WHERE Student='" + newUsername + "'");
 					rs.next();
 					int attempts2 = rs.getInt("Attempts");
-					for (int i = 0; i < attempts2; i++) {
-						File file = new File("Files/" + username + "Task2" + Integer.toString(attempts2));
-						File newFile = new File("Files/" + newUsername + "Task2" + Integer.toString(attempts2));
+					for (int i = 0; i < (attempts2 - 1); i++) {
+						File file = new File("Files/" + username + "Task2|" + Integer.toString(i));
+						File newFile = new File("Files/" + newUsername + "Task2|" + Integer.toString(i));
 						file.renameTo(newFile);
 					}
 
 					rs = stmt.executeQuery("SELECT Attempts FROM Task3 WHERE Student='" + newUsername + "'");
 					rs.next();
 					int attempts3 = rs.getInt("Attempts");
-					for (int i = 0; i < attempts3; i++) {
-						File file = new File("Files/" + username + "Task3" + Integer.toString(attempts3));
-						File newFile = new File("Files/" + newUsername + "Task3" + Integer.toString(attempts3));
+					for (int i = 0; i < (attempts3 - 1); i++) {
+						File file = new File("Files/" + username + "Task3|" + Integer.toString(i));
+						File newFile = new File("Files/" + newUsername + "Task3|" + Integer.toString(i));
 						file.renameTo(newFile);
 					}
 					

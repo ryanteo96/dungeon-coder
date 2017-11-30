@@ -86,6 +86,12 @@ public class Test {
 			else {
 				System.out.println("Update Username, Password, and Email Failed");
 			}
+			try {
+				Thread.sleep(10000);
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			accountReset(newInfo[0], newInfo[2]);
 		}
 		else {

@@ -1,5 +1,5 @@
 #!/bin/bash
-rm original.txt returned.txt original2.txt Devon\'s\ Level 
+rm original.txt returned.txt original2.txt Devon\'s\ Level SpecificB.txt
 javac Test.java
 java Test
 DIFF=$(diff original.txt returned.txt)
