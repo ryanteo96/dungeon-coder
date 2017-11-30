@@ -1,3 +1,7 @@
+package com.mygdx.dungeoncoder.utils;
+
+import com.mygdx.dungeoncoder.utils.ClientConnection;
+
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.io.*;

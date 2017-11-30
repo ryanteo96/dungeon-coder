@@ -42,6 +42,7 @@ public class DungeonCoder extends Game {
 		manager.load("UIElements/Animation/pain.mp3",Sound.class);
 		manager.load("UIElements/Animation/footstep.wav",Music.class);
 		manager.load("UIElements/Animation/backgroundmusic.mp3",Music.class);
+		manager.load("UIElements/Animation/stagecomplete.mp3",Sound.class);
 		manager.finishLoading(); //Asynchronous loading, blocks everything and ask every assets to load first
 		this.setScreen(new SplashScreen(this));
 	}

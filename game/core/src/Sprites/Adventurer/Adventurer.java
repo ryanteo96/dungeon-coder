@@ -28,7 +28,6 @@ public class Adventurer extends Sprite {
     private float stateTimer;
     private boolean runningRight;
     private boolean adventurerIsDead;
-    private boolean gameCompleted;
 
     public Adventurer(TaskTwo screen){
         super(screen.getAtlas().findRegion("walk"));
@@ -155,7 +154,7 @@ public class Adventurer extends Sprite {
     }
 
     public void gameCompleted(){
-        gameCompleted = true;
+        DefaultValues.gameComplete = true;
     }
 
     public float getStateTimer(){

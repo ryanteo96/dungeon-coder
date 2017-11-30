@@ -25,6 +25,7 @@ public class DefaultValues {
     public static boolean WALK_RIGHT = false;
     public static boolean WALK_LEFT = false;
     public static boolean JUMP = false;
+    public static boolean gameComplete = false;
 
 
 

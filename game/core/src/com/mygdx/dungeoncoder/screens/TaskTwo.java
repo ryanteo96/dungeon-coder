@@ -33,6 +33,7 @@ import static com.mygdx.dungeoncoder.DungeonCoder.V_HEIGHT;
 import static com.mygdx.dungeoncoder.DungeonCoder.V_WIDTH;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
+import static com.mygdx.dungeoncoder.values.DefaultValues.gameComplete;
 
 
 public class TaskTwo implements Screen {
@@ -463,6 +464,13 @@ public class TaskTwo implements Screen {
         if(gameOver()){
             game.setScreen(new AdventurerGameOver(game));
             dispose();
+        }
+
+        if(gameComplete == true && player.getStateTimer() > 0.7){
+            DungeonCoder.manager.get("UIElements/Animation/stagecomplete.mp3", Sound.class).play();
+            game.setScreen(new StageTwoComplete(game));
+            hud.stopMusic();
+            gameComplete = false;
         }
 
         stage.act(delta);

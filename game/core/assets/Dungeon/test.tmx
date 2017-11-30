@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" nextobjectid="169">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" nextobjectid="171">
  <tileset firstgid="1" name="PlayStation - Castlevania Symphony of the Night - Abandoned Mine Entrance" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="38957" columns="239">
   <image source="test.png" width="4317" height="2949"/>
   <terraintypes>
@@ -138,6 +138,7 @@
   <object id="143" x="720" y="192" width="656" height="16"/>
   <object id="146" x="1376" y="192" width="576" height="16"/>
   <object id="147" x="1952" y="192" width="112" height="16"/>
+  <object id="169" x="-23" y="-5" width="22" height="214"/>
  </objectgroup>
  <objectgroup name="Wall" offsetx="443.39" offsety="-107.09">
   <object id="131" x="3002.61" y="133.09" width="23.3333" height="32"/>
@@ -154,7 +155,6 @@
  <objectgroup name="Endpoint" offsetx="443.39" offsety="-107.09">
   <object id="164" x="1997.73" y="-4.34476" width="61.0147" height="89.787"/>
   <object id="165" x="2131.37" y="192.157"/>
-  <object id="166" x="1562.7" y="123.904" width="37.831" height="68.306"/>
-  <object id="168" x="282.755" y="154.379" width="42.0345" height="36.7802"/>
+  <object id="166" x="1560.03" y="106.571" width="40.4977" height="85.6393"/>
  </objectgroup>
 </map>
