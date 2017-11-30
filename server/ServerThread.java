@@ -405,11 +405,8 @@ public class ServerThread extends Thread {
 					int attempts1 = rs.getInt("Attempts");
 					for (int i = 0; i < (attempts1 - 1); i++) {
 						File file = new File("Files/" + username + "Task1|" + Integer.toString(i));
-						
-						System.out.println("Files/" + username + "Task1|" + Integer.toString(attempts1) + " " + file.exists());
 						File newFile = new File("Files/" + newUsername + "Task1|" + Integer.toString(i));
-						//System.out.println(newFile.exists());
-						System.out.println(file.renameTo(newFile));
+						file.renameTo(newFile);
 					}
 
 					rs = stmt.executeQuery("SELECT Attempts FROM Task2 WHERE Student='" + newUsername + "'");
