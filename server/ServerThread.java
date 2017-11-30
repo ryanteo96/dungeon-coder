@@ -244,11 +244,11 @@ public class ServerThread extends Thread {
 			}
 		}
 		catch (SQLException e) {
-			sendCode((byte)(0x60));
+			//sendCode((byte)(0x60));
 			shutdown(false);
 		}
 		catch (Exception e) {
-			sendCode((byte)(0x60));
+			//sendCode((byte)(0x60));
 			shutdown(false);
 		}
 		return goodCheck;
@@ -301,6 +301,8 @@ public class ServerThread extends Thread {
 		try {
 			stmt.executeUpdate("INSERT INTO Users (Username, Hash, Salt)" + "VALUES ('" + username + "','" + hash + "','" + hexSalt + "')");
 			stmt.executeUpdate("INSERT INTO Task1 (Student)" + "VALUES ('" + username + "')");
+			stmt.executeUpdate("INSERT INTO Task2 (Student)" + "VALUES ('" + username + "')");
+			stmt.executeUpdate("INSERT INTO Task3 (Student)" + "VALUES ('" + username + "')");
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -336,14 +338,15 @@ public class ServerThread extends Thread {
 
 	// Allow users to update their account information.
 	private void updateAccount() {
+		System.out.println("User requested account update");
 		boolean changeUsername = false;
 		boolean changePassword = false;
 		boolean changeEmail = false;
 		
 		String list = recieveString();
+		System.out.println("recieved list: " + list);
 		String token = recieveString();
 		String[] updateList = parseList(list, token);
-		
 		String newUsername = "";
 		String newEmail = "";
 		String newPass = "";
@@ -351,32 +354,39 @@ public class ServerThread extends Thread {
       		if (Arrays.asList(updateList).contains("username")) {
 			changeUsername = true;
 			newUsername = recieveString();
+			System.out.println("new username: " + newUsername);
 		}
 		if (Arrays.asList(updateList).contains("email")) {
 			changeEmail = true;
 			newEmail = recieveString();
+			System.out.println("new email: " + newEmail);
 		}
 		if (Arrays.asList(updateList).contains("password")) {
 			changePassword = true;
 			newPass = recieveString();
+			System.out.println("new password: " + newPass);
 		}
 		String username = recieveString();
 		String password = recieveString();
+		System.out.println("User is attempting to log in with username: " + username + " and password: " + password);
 		boolean update = checkAccount(username, password);
-		System.out.println(update);
+		System.out.println("account verified: " + update);
 		if (update == false) {
 			sendCode((byte)(0x40));
 			return;
 		}
 		else {
+			sendCode((byte)(0x10));
 			if (conn == null) {
 				connectDB();		
 			}
 			try {
 				if (changeEmail) {
+					System.out.println("updating email to " + newEmail);
 					stmt.executeUpdate("UPDATE Users SET email='" + newEmail + "' WHERE Username='" + username + "'");
 				}
 				if (changePassword) {
+					System.out.println("updating password to " + newPass);
 					byte[] salt = salt();
 					String hash = hash(newPass, salt);
 					String hexSalt = saltyString(salt);
@@ -384,10 +394,13 @@ public class ServerThread extends Thread {
 					stmt.executeUpdate("UPDATE Users SET salt='" + hexSalt + "' WHERE Username='" + username + "'");
 				}
 				if (changeUsername) {
+					System.out.println("updating username to " + newUsername);
 					stmt.executeUpdate("UPDATE Users SET Username='" + newUsername + "' WHERE Username='" + username + "'");
-					stmt.executeUpdate("UPDATE Task1 SET Student='" + newUsername + "' WHERE Username='" + username + "'");
+					stmt.executeUpdate("UPDATE Task1 SET Student='" + newUsername + "' WHERE Student='" + username + "'");
+					stmt.executeUpdate("UPDATE Task2 SET Student='" + newUsername + "' WHERE Student='" + username + "'");
+					stmt.executeUpdate("UPDATE Task3 SET Student='" + newUsername + "' WHERE Student='" + username + "'");
 					
-					rs = stmt.executeQuery("SELECT Attempts FROM Task1 WHERE Student='" + username + "'");
+					rs = stmt.executeQuery("SELECT Attempts FROM Task1 WHERE Student='" + newUsername + "'");
 					rs.next();
 					int attempts1 = rs.getInt("Attempts");
 					for (int i = 0; i < attempts1; i++) {
@@ -396,7 +409,7 @@ public class ServerThread extends Thread {
 						file.renameTo(newFile);
 					}
 
-					rs = stmt.executeQuery("SELECT Attempts FROM Task2 WHERE Student='" + username + "'");
+					rs = stmt.executeQuery("SELECT Attempts FROM Task2 WHERE Student='" + newUsername + "'");
 					rs.next();
 					int attempts2 = rs.getInt("Attempts");
 					for (int i = 0; i < attempts2; i++) {
@@ -405,7 +418,7 @@ public class ServerThread extends Thread {
 						file.renameTo(newFile);
 					}
 
-					rs = stmt.executeQuery("SELECT Attempts FROM Task3 WHERE Student='" + username + "'");
+					rs = stmt.executeQuery("SELECT Attempts FROM Task3 WHERE Student='" + newUsername + "'");
 					rs.next();
 					int attempts3 = rs.getInt("Attempts");
 					for (int i = 0; i < attempts3; i++) {
@@ -416,7 +429,7 @@ public class ServerThread extends Thread {
 					
 					connectedUser = newUsername;
 				}
-				sendCode((byte)(0x10));
+				//sendCode((byte)(0x10));
 			}
 			catch (SQLException e) {
 				e.printStackTrace();
@@ -426,6 +439,20 @@ public class ServerThread extends Thread {
 				e.printStackTrace();
 				//sendCode((byte)(0x60));
 			}
+		}
+	}
+
+	private void sendUserEmailAddress() {
+		try {
+			System.out.println("getting email for " + connectedUser);
+			rs = stmt.executeQuery("SELECT Email From Users WHERE Username='" + connectedUser + "'");
+			rs.next();
+			String emailAddress = rs.getString("Email");
+			System.out.println("Sending email address: " + emailAddress);
+			sendString(emailAddress);
+		}
+		catch (SQLException e) {
+			// Do nothing
 		}
 	}
 
@@ -775,6 +802,12 @@ public class ServerThread extends Thread {
 					updateAccount();
 					break;
 				
+				// SENDUSERAMILADDRESS
+				case 0x13 :
+					sendCode((byte)(0x10));
+					sendUserEmailAddress();
+					break;
+
 				// UPDATEMODULECOMPLETION
 				case 0x04 :
 					sendCode((byte)(0x10));
