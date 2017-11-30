@@ -27,11 +27,13 @@ public class CodeTransfer {
 				outgoing.writeUTF(password);
 				byte outcome = recieveCode();
 				if (outcome != 0x10) {
+					System.out.println("false");
 					return;
 				}
 			}
 			sendCode((byte)(0x08));
 			if (recieveCode() != 0x10) {
+				System.out.println("false");
 				return;
 			}
 			outgoing.writeUTF(fileName);
@@ -47,8 +49,10 @@ public class CodeTransfer {
 			out.close();
 		}
 		catch (IOException e) {
+			System.out.println("false");
 			// Do Nothing
 		}
+		System.out.println("true");
 	}
 
 	private static void sendCode(byte code) {
