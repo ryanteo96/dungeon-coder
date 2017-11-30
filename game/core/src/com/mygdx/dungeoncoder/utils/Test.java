@@ -18,6 +18,7 @@ public class Test {
 		accountUpdateDouble();
 		accountUpdateTriple();
 		codeTransfer();
+		specificCodeTransfer();
 		levelTransfer();
 	}
 
@@ -115,6 +116,10 @@ public class Test {
 		}
 		conn.requestUpdateProgress(temp, "Task1", 100);
 		conn.requestMostRecentLevelCode("Task1", "returned.txt");
+	}
+
+	private static void specificCodeTransfer() {
+		conn.requestCodeFile("SpecificB.txt");
 	}
 
 	private static void levelTransfer() {

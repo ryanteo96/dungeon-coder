@@ -1,4 +1,4 @@
-package com.mygdx.dungeoncoder.utils;
+//package com.mygdx.dungeoncoder.utils;
 import java.util.ArrayList;
 import java.net.*;
 import java.io.*;
@@ -284,7 +284,7 @@ public class ClientConnection {
 		if (recieveCode() == 0x10) {
 			try {
 				outgoing.writeUTF(fileName);
-				recieveFile("fileName");
+				recieveFile(fileName);
 				return true;
 			}
 			catch (IOException e) {

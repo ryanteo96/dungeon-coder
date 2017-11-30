@@ -17,3 +17,11 @@ then
 else
 	echo "Code Transfer Test Failed"
 fi
+
+DIFF=$(diff SpecificA.txt SpecificB.txt)
+if [ "$DIFF" == "" ]
+then
+	echo "Specific Code Transfer Test Passed"
+else
+	echo "Specific Code Transfer Test Failed"
+fi
