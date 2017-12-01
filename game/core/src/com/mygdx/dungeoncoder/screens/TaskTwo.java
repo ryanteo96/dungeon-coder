@@ -8,9 +8,12 @@ import Sprites.Enemy;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -22,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
@@ -39,6 +43,7 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.*;
 public class  TaskTwo implements Screen {
     //Write files
     CodeEvaluator codeevaluator;
+    SaveProcessor saveProcessor;
     BufferedWriter bw = null;
     FileWriter fw = null;
     private TextButton runButton;
@@ -78,6 +83,8 @@ public class  TaskTwo implements Screen {
     private TextButton comeBackNextTimeButton;
     private TextButton viewTaskButton;
 
+    public Image popupImage;
+
     //boolean
     private boolean codeOn;
 
@@ -85,13 +92,19 @@ public class  TaskTwo implements Screen {
 
     private Dialog dialog;
 
+    public GifRecorder gifRecorder;
+
+
     public TaskTwo(DungeonCoder g) throws FileNotFoundException {
         game = g;
+        saveProcessor = new SaveProcessor();
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
         Gdx.input.setInputProcessor(stage);
 
         codeOn = false;
+
+        gifRecorder = new GifRecorder(g.batch);
 
         atlas = new TextureAtlas("Dungeon/Adventurer.pack");
 
@@ -126,6 +139,19 @@ public class  TaskTwo implements Screen {
         hud = new AdventurerHud(game.batch, this);
 
         world.setContactListener(new AdventurerContactListener());
+
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+        Label gifInstruction = new Label("To use the GIF recording function, press O to open and\n press P to start recording and end recording",skin); //display deadline from the database
+        gifInstruction.setFontScale(1f,1f);
+        gifInstruction.setPosition(850, 7);
+        gifInstruction.setColor(Color.WHITE);
+        stage.addActor(gifInstruction);
+
+        Texture popup = new Texture(Gdx.files.internal("UIElements/Accomplished.png"));
+        TextureRegion popupRegion = new TextureRegion(popup);
+        TextureRegionDrawable popupDrawable = new TextureRegionDrawable(popupRegion);
+        popupImage = new Image(popupDrawable);
+        popupImage.setPosition(700, VIRTUAL_WIDTH/2);
 
         //back button
         createBack();
@@ -396,7 +422,7 @@ public class  TaskTwo implements Screen {
                     e1.printStackTrace();
                 }
 
-                //shareVariable.connect.requestUpdateProgress(file,"Task1",percentage);
+                shareVariable.connect.requestUpdateProgress(file,"Task1",percentage);
 
             }
         });
@@ -582,6 +608,9 @@ public class  TaskTwo implements Screen {
         //render game map
         renderer.render();
 
+        //update gif
+        gifRecorder.update();
+
         //render our Box2Ddebuglines
         //b2dr.render(world,gamecam.combined);
 
@@ -601,13 +630,18 @@ public class  TaskTwo implements Screen {
             game.setScreen(new AdventurerGameOver(game));
             dispose();
         }
+            if(gameComplete == true && player.getStateTimer() > 0.7) {
+                DungeonCoder.manager.get("UIElements/Animation/stagecomplete.mp3", Sound.class).play();
+                game.setScreen(new StageTwoComplete(game));
+                hud.stopMusic();
+                gameComplete = false;
+                saveProcessor.insClear();
+                System.out.printf("You have cleared %d instructional stages.", saveProcessor.getInsCleared());
+                if (saveProcessor.checkAchievement()) {
+                    stage.addActor(popupImage);
+                }
 
-        if(gameComplete == true && player.getStateTimer() > 0.7){
-            DungeonCoder.manager.get("UIElements/Animation/stagecomplete.mp3", Sound.class).play();
-            game.setScreen(new StageTwoComplete(game));
-            hud.stopMusic();
-            gameComplete = false;
-        }
+            }
 
         stage.act(delta);
         stage.draw();
@@ -644,7 +678,8 @@ public class  TaskTwo implements Screen {
         stage.dispose();
         b2dr.dispose();
         renderer.dispose();
-
+        gifRecorder.clearFrames();
+        gifRecorder.close();
     }
 
 }
