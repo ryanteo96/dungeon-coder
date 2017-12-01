@@ -37,6 +37,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.B2WorldCreator;
+import com.mygdx.dungeoncoder.utils.GifRecorder;
 import com.mygdx.dungeoncoder.utils.WorldContactListener;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 import com.mygdx.dungeoncoder.values.Item;
@@ -84,9 +85,11 @@ public class TaskThree implements Screen {
 
     private Array<Item> items;
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
+    public GifRecorder gifRecorder;
 
     public TaskThree(DungeonCoder g) {
         game = g;
+        gifRecorder = new GifRecorder(game.batch);
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
         Gdx.input.setInputProcessor(stage);
@@ -267,6 +270,7 @@ public class TaskThree implements Screen {
     }
         stage.draw();
         stage.act(delta);
+        gifRecorder.update();
     }
 
     @Override
