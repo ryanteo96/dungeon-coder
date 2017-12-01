@@ -31,4 +31,6 @@ public class DefaultValues {
     public static boolean JUMP = false;
     public static boolean gameComplete = false;
     public static boolean questActivated = false;
+
+    public static String username = "";
 }

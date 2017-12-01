@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
@@ -242,7 +243,7 @@ public class MainMenuScreen implements Screen {
         stage.addActor(freeBattleModeImage);
     }
 
-    private void freeBattleMode(DungeonCoder g) {
+    private void freeBattleMode(DungeonCoder g) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         g.setScreen(new FreeBattleMode(g));
     }
 
@@ -321,7 +322,17 @@ public class MainMenuScreen implements Screen {
                     continueButton.addListener(new ClickListener(){
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
-                            freeBattleMode(game);
+                            try {
+                                freeBattleMode(game);
+                            } catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (UnsupportedLookAndFeelException e) {
+                                e.printStackTrace();
+                            } catch (InstantiationException e) {
+                                e.printStackTrace();
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            }
                         }
                     });
 

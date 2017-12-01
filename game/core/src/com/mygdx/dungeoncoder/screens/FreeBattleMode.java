@@ -11,16 +11,24 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
+import com.mygdx.dungeoncoder.values.DefaultValues;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.Scanner;
 
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
@@ -32,9 +40,12 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
     private Skin backButtonSkin;
     private Skin skin;
     private TextButton uploadButton;
+    private   Object[] listEntries = {};
+    private boolean open = false;
 
     public FreeBattleMode (DungeonCoder g) {
         game = g;
+
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
 
@@ -42,7 +53,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
 
         createBack();
         createUploadButton();
-
+        createTable();
     }
 
     @Override
@@ -83,6 +94,28 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
     public void dispose() {
         stage.dispose();
     }
+    private void createTable(){
+        if(open){
+            listEntries[0] = DefaultValues.username;
+            listEntries[1] = DefaultValues.username;
+            listEntries[2] = DefaultValues.username;
+            listEntries[3] = DefaultValues.username;
+        }
+
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+        Table table = new Table(skin);
+        com.badlogic.gdx.scenes.scene2d.ui.List list = new List(skin);
+        list.setItems(listEntries);
+        ScrollPane scrollPane = new ScrollPane(list, skin);
+        scrollPane.setSize(0,0);
+        scrollPane.setFlickScroll(false);
+        scrollPane.setScrollingDisabled(true,false);
+        table.add().growX().row();
+        table.add(scrollPane).grow();
+        table.setSize(700,600);
+        table.setPosition(130,50);
+        stage.addActor(table);
+    }
 
     private void createBack() {
         backButtonSkin = new Skin(Gdx.files.internal("comic-ui.json"));
@@ -98,21 +131,51 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         stage.addActor(btnBack);
     }
 
-    public void create () {
+    public void createFileChooser () throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        JFrame window = new JFrame("Upload TMX file");
+        JPanel topPanel = new JPanel();
+        final JButton openFileChooser = new JButton("Find your file");
+        //window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        final JFileChooser fc = new JFileChooser();
+        openFileChooser.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                fc.setCurrentDirectory(new java.io.File("user.home"));
+                fc.setDialogTitle("Choose your TMX file");
+                fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                if (fc.showOpenDialog(openFileChooser) == JFileChooser.APPROVE_OPTION) {
+                    JOptionPane.showMessageDialog(null, fc.getSelectedFile().getAbsolutePath());
+                    System.out.println("APPROVE OPTION " + JFileChooser.APPROVE_OPTION);
+                    open = true;
+                }
+            }
+        });
+        window.add(BorderLayout.NORTH, topPanel);
+        topPanel.add(openFileChooser);
+        window.setSize(400, 100);
+        window.setVisible(true);
+        window.setLocationRelativeTo(null);
     }
-
-
-
 
     private void createUploadButton() {
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
-        uploadButton = new TextButton("Code Here", skin);
-        uploadButton.setPosition(50, 10);
+        uploadButton = new TextButton("UPLOAD", skin);
+        uploadButton.setPosition(1000, 500);
         uploadButton.setSize(130, 50);
         uploadButton.addListener(new ClickListener() {
-            @Override
+           @Override
             public void clicked(InputEvent e, float x, float y) {
-                create();
+               try {
+                    createFileChooser();
+                } catch (ClassNotFoundException e1) {
+                    e1.printStackTrace();
+                } catch (InstantiationException e1) {
+                    e1.printStackTrace();
+                } catch (IllegalAccessException e1) {
+                    e1.printStackTrace();
+                } catch (UnsupportedLookAndFeelException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
         stage.addActor(uploadButton);

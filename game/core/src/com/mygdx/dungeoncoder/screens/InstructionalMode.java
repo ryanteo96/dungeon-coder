@@ -197,7 +197,6 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         table.add().growX().row();
         table.add(scrollPane).grow();
 
-
         //Repeat Button
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle(testSkin.get(Button.ButtonStyle.class));
         style.imageUp = new TextureRegionDrawable(repeatRegion);

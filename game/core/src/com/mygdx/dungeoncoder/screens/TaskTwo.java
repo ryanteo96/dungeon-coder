@@ -423,7 +423,7 @@ public class  TaskTwo implements Screen {
 
         //if character dies, freeze the camera right where he died
         if(player.currentState != Adventurer.State.DEAD){
-            gamecam.position.x = player.b2body.getPosition().x;
+            gamecam.position.x = player.b2body.getPosition().x + 190/DefaultValues.PPM;
         }
 
         hud.update(dt);
@@ -434,7 +434,7 @@ public class  TaskTwo implements Screen {
                 enemy.b2body.setActive(true);//activate goomba
             }
         }
-        System.out.println("quest activated: " + DefaultValues.questActivated);
+        //System.out.println("quest activated: " + DefaultValues.questActivated);
         if(DefaultValues.questActivated){
             stage.addActor(dialog);
         }

@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.ClientConnection;
+import com.mygdx.dungeoncoder.values.DefaultValues;
 import com.sun.deploy.util.SessionState;
 
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
@@ -161,6 +162,7 @@ public class LoginScreen implements Screen {
             shareVariable.connected = true;
             ping.start();
             System.out.println(ping);
+            DefaultValues.username = txfUsername.getText();
             g.setScreen(new MainMenuScreen(g));
             //System.out.println(shareVariable.connect);
         } else {
