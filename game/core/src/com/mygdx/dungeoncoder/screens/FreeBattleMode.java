@@ -36,6 +36,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
@@ -128,6 +130,28 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         // requesting level list.
 
         ArrayList<String> levels = shareVariable.connect.requestLevelList();
+
+        if (order == 0) {
+            sort = 0;
+            Collections.sort(levels,new Comparator<String>() {
+                @Override
+                public int compare(String s1, String s2) {
+                    return s1.compareToIgnoreCase(s2);
+                }
+            });
+        } else {
+            sort = 1;
+            Collections.sort(levels, new Comparator<String>() {
+                @Override
+                public int compare(String s1, String s2) {
+                    return s1.compareToIgnoreCase(s2);
+                }
+            });
+
+            Collections.sort(levels, Collections.<String>reverseOrder());
+        }
+
+
         String[] strings = new String[levels.size()];
         for (int i = 0; i < levels.size(); i++) {
             System.out.println(levels.get(i));
@@ -256,6 +280,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         downloadButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
+                Gdx.net.openURI("http://18.221.243.28/DownloadLevelPage.html");
             }
         });
         stage.addActor(downloadButton);
