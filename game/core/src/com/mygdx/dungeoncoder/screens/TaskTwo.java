@@ -248,18 +248,19 @@ public class  TaskTwo implements Screen {
                 window.getTitleTable().add(closeButton).height(window.getPadTop());
                 window.setPosition(555,70);
                 //window.defaults().spaceBottom(10);//not sure what does this do
-                window.setSize(700,550);
+                window.setSize(700,600);
                 window.add(scrollPane).colspan(3).left().expand().fillY();
                 window.row();
                 window.right().bottom();
                 window.add(closeButtonToo).right().padLeft(600);
                 stage.addActor(window);
-
+                viewTaskButton.remove();
                 //close button on top 'X' button
                 closeButton.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
                         window.remove();
+                        stage.addActor(viewTaskButton);
                     }
                 });
 
@@ -268,6 +269,7 @@ public class  TaskTwo implements Screen {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
                         window.remove();
+                        stage.addActor(viewTaskButton);
                     }
                 });
             }
@@ -455,6 +457,7 @@ public class  TaskTwo implements Screen {
             }
             DefaultValues.JUMP = false;
             System.out.println("Your character jumped!");
+
         }
 
     }
@@ -484,6 +487,7 @@ public class  TaskTwo implements Screen {
         //control player using immediate impulses, use world center so the torque wont make the character fly around
         if(player.currentState != Adventurer.State.DEAD){
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
+                DungeonCoder.manager.get("UIElements/Animation/jump.wav", Sound.class).play();
                 player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
                 player.currentState = Adventurer.State.JUMPING;
                 if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.previousState == Adventurer.State.JUMPING){
