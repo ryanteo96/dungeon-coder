@@ -59,6 +59,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
     private Object[] listEntries = {};
     private boolean open = false;
     private int result;
+    private int sort = 0;
 
     private ClientConnection clientConnection;
     public FreeBattleMode (DungeonCoder g) {
@@ -72,7 +73,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         createUploadButton();
         createDownloadButton();
         createSortButton();
-        createTable();
+        createTable(sort);
         createBack();
     }
 
@@ -115,7 +116,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
     }
 
 
-    private void createTable() {
+    private void createTable(int order) {
         gameWidth = 400;
         gameHeight = 225;
         atlas = new TextureAtlas(Gdx.files.internal("comic-ui.atlas"));
@@ -126,7 +127,9 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
 
         // requesting level list.
         /*ArrayList<String> levels = clientConnection.requestLevelList();
-        String[] strings = new String[levels.size()];
+        for (int i = 0; i < levels.size(); i++) {
+            System.out.println(levels.get(i));
+        }
 
         for (int i = 0, k = 0; i < levels.size(); i++) {
             strings[k++] = "Level: " + levels.get(i);
@@ -144,6 +147,18 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         String[] strings = new String[30];
         for (int i = 0, k = 0; i < 30; i++) {
             strings[k++] = "TestFile" + i;
+        }
+
+        if (order == 0) {
+            sort = 0;
+            for (int i = 0, k = 0; i < 30; i++) {
+                strings[k++] = "TestFile" + i;
+            }
+        } else {
+            sort = 1;
+            for (int i = 29, k = 0; i >= 0; i--) {
+                strings[k++] = "TestFile" + i;
+            }
         }
 
         list.setItems(strings);
@@ -252,6 +267,13 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         sortButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
+               scrollPane.remove();
+                if (sort == 0) {
+                    createTable(1);
+                } else {
+                    createTable(0);
+                }
+
             }
         });
         stage.addActor(sortButton);
