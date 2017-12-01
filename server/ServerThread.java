@@ -594,7 +594,7 @@ public class ServerThread extends Thread {
 				fileSize -= count;
 			}
 			out.close();
-			sendCode((byte)(0x10));
+			//sendCode((byte)(0x10));
 		}
 		catch(IOException e) {
 			e.printStackTrace();
@@ -661,12 +661,15 @@ public class ServerThread extends Thread {
 		if (!levelExists(name)) {
 			try {
 				PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("Files/Levels/LevelList.txt", true)));
-				out.print("\n" + name);
+				out.println(name);
 				out.close();
 			}
 			catch (IOException e) {
 				// Shouldn't happen
 			}
+		}
+		else {
+			System.out.println("level already exists: new file not saved");
 		}
 	}
 
