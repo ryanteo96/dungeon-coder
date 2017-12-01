@@ -140,6 +140,9 @@ public class B2WorldCreator {
             fdef.shape = shape;
             fdef.isSensor = true;
             body.createFixture(fdef);
+           if(DefaultValues.npcDestroyed == true){
+               world.destroyBody(body);
+           }
         }
 
 

@@ -16,9 +16,11 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -67,13 +69,19 @@ public class  TaskTwo implements Screen {
     //textArea
     private TextArea textArea;
     private Skin skin;
+    private Skin cancelButtonSkin;
 
     //buttons
     private TextButton codeButton;
+    private TextButton okButton;
+    private TextButton noButton;
+    private TextButton comeBackNextTimeButton;
+    private TextButton viewTaskButton;
 
     //boolean
     private boolean codeOn;
 
+    private Window window;
 
     private Dialog dialog;
 
@@ -142,10 +150,6 @@ public class  TaskTwo implements Screen {
         stage.addActor(btnBack);
     }
 
-
-
-
-
     private void createTextArea() throws FileNotFoundException {
         //to build string into the text file
         StringBuilder sb = new StringBuilder();
@@ -189,28 +193,129 @@ public class  TaskTwo implements Screen {
         textArea.setWidth(500);
         textArea.setHeight(500);
 
-        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
-        codeButton = new TextButton("Code Here", skin);
-        codeButton.setPosition(50, 10);
-        codeButton.setSize(50, 50);
-        //stage.addActor(codeButton);
+        //
+        okButton = new TextButton(" I am ready! ", skin);
+        okButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                DefaultValues.questActivated = false;
+                stage.addActor(viewTaskButton);
+                stage.addActor(codeButton);
+            }
+        });
 
-        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
-        dialog = new Dialog("Warning", skin, "dialog"){
+        viewTaskButton = new TextButton("View your mission", skin);
+        viewTaskButton.setHeight(50);
+        viewTaskButton.setPosition(200,10);
+        viewTaskButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                Object[] listEntries = {"Objective",
+                        "Explore the Dungeon World",
+                        "===========================================================================================",
+                        "Task",
+                        "Reach the end of the stage and solve the problems along the way.",
+                        "",
+                        "===========================================================================================",
+                        "To move the character",
+                        "Use the Left Right arrow key on your keyboard to move towards left and right",
+                        "Use spacebar to jump",
+                        "",
+                        "===========================================================================================",
+                        "When you approach a NPC, you will receive your mission",
+                        "Good luck Dungeon Coder!",
+                        "May the odds be in your favor!",
+                        "",
+                        "===========================================================================================",
+                        "Difficulty: Easy"};
+                //create Text using lists and scrollpane
+                List list = new List(skin);
+                list.setItems(listEntries);
+                ScrollPane scrollPane = new ScrollPane(list, skin);
+                scrollPane.setSize(0,0);
+                scrollPane.setFlickScroll(false);
+                scrollPane.setScrollingDisabled(true,false);
+                Table table = new Table(skin);
+                table.add().growX().row();
+                table.add(scrollPane).grow();
+                int i = 88;
+                char p = (char)i;
+                cancelButtonSkin = new Skin(Gdx.files.internal("dialogSkins/plain-james-ui.json"));
+                TextButton closeButton = new TextButton(String.valueOf(p), skin);
+                TextButton closeButtonToo = new TextButton("Close", cancelButtonSkin, "default");
+                window = new Window("Task 2", skin);
+                window.setDebug(true);
+                window.getTitleTable().add(closeButton).height(window.getPadTop());
+                window.setPosition(555,70);
+                //window.defaults().spaceBottom(10);//not sure what does this do
+                window.setSize(700,550);
+                window.add(scrollPane).colspan(3).left().expand().fillY();
+                window.row();
+                window.right().bottom();
+                window.add(closeButtonToo).right().padLeft(600);
+                stage.addActor(window);
+
+                //close button on top 'X' button
+                closeButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        window.remove();
+                    }
+                });
+
+                //close button
+                closeButtonToo.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        window.remove();
+                    }
+                });
+            }
+        });
+
+        //No and then show another dialog and then go back to instructional mode
+        noButton = new TextButton(" No, I need more time! ", skin);
+        noButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                DefaultValues.questActivated = false;
+                new Dialog("Dr.Robot NPC", skin,"dialog"){
+                    protected void result (Object object){
+                        System.out.println("Result: "+ object);
+                    }
+                }.text("    I guess you are not ready yet, come back next time  ").button( comeBackNextTimeButton, true).
+                        key(Input.Keys.ENTER, true).show(stage);
+
+            }
+        });
+        //return to instructional
+        comeBackNextTimeButton = new TextButton("Ok", skin);
+        comeBackNextTimeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                hud.stopMusic();
+                game.setScreen(new InstructionalMode(game));
+            }
+        });
+
+
+
+
+        dialog = new Dialog("Dr.Robot NPC", skin, "dialog"){
             public void result(Object obj) {
-                System.out.println("result "+obj);
+                System.out.println("result "+ obj);
             }
         };
-        dialog.text("Print something");
-        dialog.button(codeButton, true); //sends "true" as the result
-        dialog.button("  Cancel  ", false);  //sends "false" as the result
-        dialog.setPosition(V_WIDTH/2,100);
-        dialog.setHeight(500);
-        dialog.setWidth(800);
+        //when ok is clicked  DefaultValues.questActivated = false;
+        dialog.text("Hi, "+ DefaultValues.username + ", Welcome to the Dungeon!\nTo gain points and complete the stage,you\n will need to solve these problems by using\n Java programming, Are you ready?");
+        dialog.button(okButton, true); //sends "true" as the result
+        dialog.button(noButton, false);
+        dialog.setPosition(500,300);
+        dialog.setHeight(150);
+        dialog.setWidth(380);
 
         final int percentage = Integer.parseInt(hud.getProgressInfo()); // to update the database
 
-        skin = new Skin (Gdx.files.internal("UIElements/test.json"));
         runButton = new TextButton("Run", skin);
         runButton.setPosition(460, 10);
         runButton.setSize(100, 50);
@@ -239,7 +344,7 @@ public class  TaskTwo implements Screen {
                 File classFile = new File(className);
                 String classPath = classFile.getAbsolutePath();
                 classPath = classPath.substring(0, classPath.length() - (className.length()));
-                System.out.println("classPath is: "+classPath);
+                System.out.println("classPath is: " + classPath);
 
                 // This will reference one line at a time
                 String line = "";
@@ -252,7 +357,7 @@ public class  TaskTwo implements Screen {
                         System.out.println("it gets in the if statement");
                         codeevaluator.run(classPath, runName);
                     }
-                    System.out.println(codeevaluator.evaluate(filepath));
+                    System.out.println("Code Evaluator: "+codeevaluator.evaluate(filepath));
                     FileReader fileReader = new FileReader("code.txt");
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
 
@@ -295,13 +400,13 @@ public class  TaskTwo implements Screen {
 
             }
         });
+        codeButton = new TextButton("Code Here", skin);
+        codeButton.setPosition(50, 10);
+        codeButton.setSize(130, 50);
         codeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                DefaultValues.questActivated = false;
-                stage.addActor(textArea);
-                stage.addActor(runButton);
-                /*if(codeOn == false){
+                if(codeOn == false){
                     stage.addActor(textArea);
                     stage.addActor(runButton);
                     codeOn = true;
@@ -309,7 +414,7 @@ public class  TaskTwo implements Screen {
                     textArea.remove();
                     runButton.remove();
                     codeOn = false;
-                }*/
+                }
 
             }
         });
@@ -438,11 +543,14 @@ public class  TaskTwo implements Screen {
             }
         }
         //System.out.println("quest activated: " + DefaultValues.questActivated);
-        if(DefaultValues.questActivated == true){
-            stage.addActor(dialog);
-        }else{
-            dialog.remove();
+
+            if(DefaultValues.questActivated == true){
+                DefaultValues.npcDestroyed = true;
+                stage.addActor(dialog);
+                DungeonCoder.manager.get("UIElements/Animation/robottalking.wav", Music.class).play();
+
         }
+
 
         //update gamecam with correct corrdinates after changes
         gamecam.update();
@@ -473,7 +581,7 @@ public class  TaskTwo implements Screen {
         renderer.render();
 
         //render our Box2Ddebuglines
-        //b2dr.render(world,gamecam.combined);
+        b2dr.render(world,gamecam.combined);
         //set batch to draw what the Hud camera sees.
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();

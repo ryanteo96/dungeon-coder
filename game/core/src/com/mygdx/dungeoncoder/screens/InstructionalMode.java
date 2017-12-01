@@ -278,20 +278,18 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
                 "Explore the Dungeon World",
                 "===========================================================================================",
                 "Task",
-                "Reach the end of the stage with your code input.",
+                "Reach the end of the stage and solve the problems along the way.",
                 "",
                 "===========================================================================================",
-                "Sample Input",
-                "moveRight();",
-                "moveLeft();",
-                "jump();",
-                "--------------------------------------------------------------------------------------------------------------------------------------------",
-                "Sample Output",
-                "The console will print \"You character moved DIRECTION!\".",
+                "To move the character",
+                "Use the Left Right arrow key on your keyboard to move towards left and right",
+                "Use spacebar to jump",
+                "",
                 "===========================================================================================",
-                "Explanation",
-                "You should use the functions provided to move the character and everytime you run the code",
-                "your character will move accordingly.",
+                "When you approach a NPC, you will receive your mission",
+                "Good luck Dungeon Coder!",
+                "May the odds be in your favor!",
+                "",
                 "===========================================================================================",
                 "Difficulty: Easy"};
 
@@ -318,11 +316,14 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         style.imageUp = new TextureRegionDrawable(repeatRegion);
         ImageButton repeatButton = new ImageButton(style);
         table.add(repeatButton);
+
         int i = 88;
         char x = (char)i;
+
         TextButton closeButton = new TextButton(String.valueOf(x), testSkin);
         TextButton startButton = new TextButton("Start", skin, "default");
         TextButton cancelButton = new TextButton("Cancel", skin, "default");
+
         window = new Window("Task 2", testSkin);
         window.setDebug(false);
         window.getTitleTable().add(closeButton).height(window.getPadTop());
