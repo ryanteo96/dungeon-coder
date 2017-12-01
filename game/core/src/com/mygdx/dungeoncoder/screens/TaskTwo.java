@@ -74,6 +74,7 @@ public class  TaskTwo implements Screen {
     //boolean
     private boolean codeOn;
 
+
     private Dialog dialog;
 
     public TaskTwo(DungeonCoder g) throws FileNotFoundException {
@@ -121,7 +122,6 @@ public class  TaskTwo implements Screen {
         //back button
         createBack();
         createTextArea();
-        createCodeQuestion();
     }
 
     public DungeonCoder getGame(){
@@ -142,21 +142,8 @@ public class  TaskTwo implements Screen {
         stage.addActor(btnBack);
     }
 
-    private void createCodeQuestion(){
-        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
-        dialog = new Dialog("Warning", skin, "dialog"){
-            public void result(Object obj) {
-                System.out.println("result "+obj);
-            }
-        };
-        dialog.text("Are you sure you want to quit?");
-        dialog.button("Yes", true); //sends "true" as the result
-        dialog.button("No", false);  //sends "false" as the result
-        dialog.key(Input.Keys.ENTER, true); //sends "true" when the ENTER key is pressed
-        dialog.setPosition(V_WIDTH/2,100);
-        dialog.setHeight(500);
-        dialog.setWidth(800);
-    }
+
+
 
 
     private void createTextArea() throws FileNotFoundException {
@@ -205,8 +192,21 @@ public class  TaskTwo implements Screen {
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
         codeButton = new TextButton("Code Here", skin);
         codeButton.setPosition(50, 10);
-        codeButton.setSize(130, 50);
-        stage.addActor(codeButton);
+        codeButton.setSize(50, 50);
+        //stage.addActor(codeButton);
+
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+        dialog = new Dialog("Warning", skin, "dialog"){
+            public void result(Object obj) {
+                System.out.println("result "+obj);
+            }
+        };
+        dialog.text("Print something");
+        dialog.button(codeButton, true); //sends "true" as the result
+        dialog.button("  Cancel  ", false);  //sends "false" as the result
+        dialog.setPosition(V_WIDTH/2,100);
+        dialog.setHeight(500);
+        dialog.setWidth(800);
 
         final int percentage = Integer.parseInt(hud.getProgressInfo()); // to update the database
 
@@ -298,7 +298,10 @@ public class  TaskTwo implements Screen {
         codeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                if(codeOn == false){
+                DefaultValues.questActivated = false;
+                stage.addActor(textArea);
+                stage.addActor(runButton);
+                /*if(codeOn == false){
                     stage.addActor(textArea);
                     stage.addActor(runButton);
                     codeOn = true;
@@ -306,7 +309,7 @@ public class  TaskTwo implements Screen {
                     textArea.remove();
                     runButton.remove();
                     codeOn = false;
-                }
+                }*/
 
             }
         });
@@ -435,8 +438,10 @@ public class  TaskTwo implements Screen {
             }
         }
         //System.out.println("quest activated: " + DefaultValues.questActivated);
-        if(DefaultValues.questActivated){
+        if(DefaultValues.questActivated == true){
             stage.addActor(dialog);
+        }else{
+            dialog.remove();
         }
 
         //update gamecam with correct corrdinates after changes
