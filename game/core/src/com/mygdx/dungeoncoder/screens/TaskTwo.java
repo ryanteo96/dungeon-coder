@@ -31,12 +31,10 @@ import com.sun.org.apache.xpath.internal.SourceTree;
 
 import static com.mygdx.dungeoncoder.DungeonCoder.V_HEIGHT;
 import static com.mygdx.dungeoncoder.DungeonCoder.V_WIDTH;
-import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
-import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
-import static com.mygdx.dungeoncoder.values.DefaultValues.gameComplete;
+import static com.mygdx.dungeoncoder.values.DefaultValues.*;
 
 
-public class TaskTwo implements Screen {
+public class  TaskTwo implements Screen {
     //Write files
     CodeEvaluator codeevaluator;
     BufferedWriter bw = null;
@@ -76,6 +74,7 @@ public class TaskTwo implements Screen {
     //boolean
     private boolean codeOn;
 
+    private Dialog dialog;
 
     public TaskTwo(DungeonCoder g) throws FileNotFoundException {
         game = g;
@@ -122,6 +121,7 @@ public class TaskTwo implements Screen {
         //back button
         createBack();
         createTextArea();
+        createCodeQuestion();
     }
 
     public DungeonCoder getGame(){
@@ -141,6 +141,23 @@ public class TaskTwo implements Screen {
         });
         stage.addActor(btnBack);
     }
+
+    private void createCodeQuestion(){
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+        dialog = new Dialog("Warning", skin, "dialog"){
+            public void result(Object obj) {
+                System.out.println("result "+obj);
+            }
+        };
+        dialog.text("Are you sure you want to quit?");
+        dialog.button("Yes", true); //sends "true" as the result
+        dialog.button("No", false);  //sends "false" as the result
+        dialog.key(Input.Keys.ENTER, true); //sends "true" when the ENTER key is pressed
+        dialog.setPosition(V_WIDTH/2,100);
+        dialog.setHeight(500);
+        dialog.setWidth(800);
+    }
+
 
     private void createTextArea() throws FileNotFoundException {
         //to build string into the text file
@@ -246,7 +263,6 @@ public class TaskTwo implements Screen {
                         long end = start;
                         while(end - start < 2000) {
                             end = System.currentTimeMillis();
-                            System.out.println("here");
                             render(Gdx.graphics.getDeltaTime());
                         }
 
@@ -417,6 +433,10 @@ public class TaskTwo implements Screen {
             if(enemy.getX() < player.getX() + 220/DefaultValues.PPM){
                 enemy.b2body.setActive(true);//activate goomba
             }
+        }
+        System.out.println("quest activated: " + DefaultValues.questActivated);
+        if(DefaultValues.questActivated){
+            stage.addActor(dialog);
         }
 
         //update gamecam with correct corrdinates after changes

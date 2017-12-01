@@ -297,7 +297,7 @@ public class MainMenuScreen implements Screen {
                     });*/
 
                     } else if (mode == 2){
-                    finishedAssignment = false;
+                    finishedAssignment = true;
                     if(finishedAssignment){
                         new Dialog("Access Granted.", dialogSkin,"dialog"){
                             protected void result (Object object){

@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.dungeoncoder.screens.TaskThree;
@@ -124,6 +125,19 @@ public class B2WorldCreator {
             shape.setAsBox((rect.getWidth() / 2) / DefaultValues.PPM, (rect.getHeight() / 2) / DefaultValues.PPM);
             fdef.shape = shape;
             fdef.filter.categoryBits = DefaultValues.END_BIT;
+            fdef.isSensor = true;
+            body.createFixture(fdef);
+        }
+
+        //create npc
+        for (MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / DefaultValues.PPM, (rect.getY() + rect.getHeight() / 2) / DefaultValues.PPM);
+            body = world.createBody(bdef);
+            shape.setAsBox((rect.getWidth() / 2) / DefaultValues.PPM, (rect.getHeight() / 2) / DefaultValues.PPM);
+            fdef.filter.categoryBits = DefaultValues.NPC_BIT;
+            fdef.shape = shape;
             fdef.isSensor = true;
             body.createFixture(fdef);
         }

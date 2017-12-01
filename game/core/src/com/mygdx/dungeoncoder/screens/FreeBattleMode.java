@@ -1,6 +1,8 @@
 package com.mygdx.dungeoncoder.screens;
 
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,19 +11,27 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 
+import javax.swing.*;
+import java.awt.*;
+
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
-public class FreeBattleMode implements Screen {
+public class FreeBattleMode extends ApplicationAdapter implements Screen {
 
     private DungeonCoder game;
     private Stage stage;
+    private Skin backButtonSkin;
+    private Skin skin;
+    private TextButton uploadButton;
 
     public FreeBattleMode (DungeonCoder g) {
         game = g;
@@ -31,7 +41,7 @@ public class FreeBattleMode implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         createBack();
-        createInProgress();
+        createUploadButton();
 
     }
 
@@ -75,32 +85,37 @@ public class FreeBattleMode implements Screen {
     }
 
     private void createBack() {
-        Texture back = new Texture(Gdx.files.internal("UIElements/back.png"));
-        TextureRegion backRegion = new TextureRegion(back);
-        TextureRegionDrawable backDrawable = new TextureRegionDrawable(backRegion);
-        Image backImage = new Image(backDrawable);
-        backImage.setPosition(0,680);
-        backImage.addListener(new ClickListener(){
+        backButtonSkin = new Skin(Gdx.files.internal("comic-ui.json"));
+        TextButton btnBack = new TextButton("Back", backButtonSkin);
+        btnBack.setPosition(0, 600);
+        btnBack.setSize(100, 100);
+        btnBack.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                back();
+            public void touchUp(InputEvent e, float x, float y, int point, int button) {
+                game.setScreen(new MainMenuScreen(game));
             }
         });
-
-        stage.addActor(backImage);
+        stage.addActor(btnBack);
     }
 
-    private void back() {
-        game.setScreen(new MainMenuScreen(game));
+    public void create () {
     }
 
-    private void createInProgress() {
-        Texture inProgress = new Texture(Gdx.files.internal("UIElements/inProgress3.png"));
-        TextureRegion inProgressRegion = new TextureRegion(inProgress);
-        TextureRegionDrawable inProgressDrawable = new TextureRegionDrawable(inProgressRegion);
-        Image inProgressImage = new Image(inProgressDrawable);
-        inProgressImage.setPosition(450,300);
 
-        stage.addActor(inProgressImage);
+
+
+    private void createUploadButton() {
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+        uploadButton = new TextButton("Code Here", skin);
+        uploadButton.setPosition(50, 10);
+        uploadButton.setSize(130, 50);
+        uploadButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                create();
+            }
+        });
+        stage.addActor(uploadButton);
+
     }
 }

@@ -1,5 +1,8 @@
 package com.mygdx.dungeoncoder.values;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+
 public class DefaultValues {
     public static final int VIRTUAL_WIDTH = 1280;
     public static final int VIRTUAL_HEIGHT = 720;
@@ -19,14 +22,13 @@ public class DefaultValues {
 
     //for adventurer
     public static final short ADVENTURER_BIT = 2;
-    public static final short END_BIT = 1024;
+    public static final short NPC_BIT = 4;
+    public static final short END_BIT = 8;
     public static final short SKELETON_BIT = 64;
 
     public static boolean WALK_RIGHT = false;
     public static boolean WALK_LEFT = false;
     public static boolean JUMP = false;
     public static boolean gameComplete = false;
-
-
-
+    public static boolean questActivated = false;
 }

@@ -157,6 +157,10 @@ public class Adventurer extends Sprite {
         DefaultValues.gameComplete = true;
     }
 
+    public void questActivated(){
+        DefaultValues.questActivated = true;
+    }
+
     public float getStateTimer(){
         return stateTimer;
     }
@@ -177,7 +181,8 @@ public class Adventurer extends Sprite {
         fdef.filter.maskBits = DefaultValues.GROUND_BIT |
                             DefaultValues.SKELETON_BIT |
                             DefaultValues.OBJECT_BIT|
-                            DefaultValues.END_BIT; // | is or
+                            DefaultValues.END_BIT|
+                            DefaultValues.NPC_BIT; // | is or
 
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);

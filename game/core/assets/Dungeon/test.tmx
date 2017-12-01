@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" nextobjectid="171">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" nextobjectid="188">
  <tileset firstgid="1" name="PlayStation - Castlevania Symphony of the Night - Abandoned Mine Entrance" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="38957" columns="239">
   <image source="test.png" width="4317" height="2949"/>
   <terraintypes>
@@ -80,6 +80,9 @@
   <tile id="22391" terrain=",0,,"/>
   <tile id="22392" terrain="0,0,,"/>
  </tileset>
+ <tileset firstgid="38958" source="npc.tsx"/>
+ <tileset firstgid="39007" source="npc2.tsx"/>
+ <tileset firstgid="39067" source="Adventurer.tsx"/>
  <layer name="Graphic Layer" width="240" height="13" offsetx="443.394" offsety="-107.091">
   <data encoding="base64" compression="zlib">
    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
@@ -139,6 +142,7 @@
   <object id="146" x="1376" y="192" width="576" height="16"/>
   <object id="147" x="1952" y="192" width="112" height="16"/>
   <object id="169" x="-23" y="-5" width="22" height="214"/>
+  <object id="171" x="160" y="192" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="Wall" offsetx="443.39" offsety="-107.09">
   <object id="131" x="3002.61" y="133.09" width="23.3333" height="32"/>
@@ -157,4 +161,12 @@
   <object id="165" x="2131.37" y="192.157"/>
   <object id="166" x="1560.03" y="106.571" width="40.4977" height="85.6393"/>
  </objectgroup>
+ <objectgroup name="npc" offsetx="443.39" offsety="-107.09">
+  <object id="186" x="272" y="80" width="112" height="112"/>
+ </objectgroup>
+ <layer name="npc" width="240" height="13" offsetx="443.39" offsety="-107.09">
+  <data encoding="base64" compression="zlib">
+   eJztzkEJAAAIBLDrn0CwrBl8ibAlWAIAAAAAAAAAAADAVtf1AAB+Gd2UATQ=
+  </data>
+ </layer>
 </map>

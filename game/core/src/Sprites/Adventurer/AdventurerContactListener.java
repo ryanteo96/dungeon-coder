@@ -41,7 +41,18 @@ public class AdventurerContactListener implements ContactListener{
                     Gdx.app.log("ADVENTURER", "GAME COMPLETED");
                 }else{
                     ((Adventurer)fixB.getUserData()).gameCompleted();
-                    Gdx.app.log("ADVENTURER", "GAME FUCKING COMPLETED");
+                    Gdx.app.log("ADVENTURER", "GAME COMPLETED");
+                }
+                break;
+            case DefaultValues.ADVENTURER_BIT | DefaultValues.NPC_BIT:
+                if(fixA.getFilterData().categoryBits == DefaultValues.ADVENTURER_BIT){
+                    ((Adventurer)fixA.getUserData()).questActivated();
+                    DefaultValues.questActivated = true;
+                    Gdx.app.log("NPC", "TRIGGERED A QUEST");
+                }else{
+                    ((Adventurer)fixB.getUserData()).questActivated();
+                    DefaultValues.questActivated = true;
+                    Gdx.app.log("NPC", "TRIGGERED A QUEST");
                 }
                 break;
         }
