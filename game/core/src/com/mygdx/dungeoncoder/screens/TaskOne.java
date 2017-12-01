@@ -28,17 +28,20 @@ import com.mygdx.dungeoncoder.values.DefaultValues;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.mygdx.dungeoncoder.utils.SaveProcessor;
 import javax.swing.Timer;
+import com.badlogic.gdx.graphics.GL20;
 
 import javax.xml.soap.Text;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import com.mygdx.dungeoncoder.utils.GifRecorder;
 
 import static com.badlogic.gdx.utils.Scaling.fit;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
-
 public class TaskOne extends ApplicationAdapter implements Screen {
+    
     private DungeonCoder game;
     private Stage stage;
     private Skin backButtonSkin;
@@ -65,10 +68,12 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     Sprite test;
     public SaveProcessor s;
     public Image popupImage;
+    public GifRecorder gifRecorder;
 
     private TextureAtlas stickman;
 
     public TaskOne(DungeonCoder g){
+        gifRecorder = new GifRecorder(g.batch);
         s = new SaveProcessor();
         Texture popup = new Texture(Gdx.files.internal("UIElements/Accomplished.png"));
         TextureRegion popupRegion = new TextureRegion(popup);
@@ -88,6 +93,7 @@ public class TaskOne extends ApplicationAdapter implements Screen {
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
 
         Gdx.input.setInputProcessor(stage);
+        createBackground();
         createBack();
         popup();
         createAttempts();
@@ -99,6 +105,30 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         createGame();
         createPause();
         createTest();
+    }
+
+    private void createBackground(){
+/*      Gdx.gl.glClearColor(172/255f, 115/255f, 57/255f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        bg = new Texture("gamebackground.png");
+        //player.setPosition(player.getX(),player.getY());
+        float x = Gdx.graphics.getWidth();
+        float y = Gdx.graphics.getHeight();
+        test = new Sprite(bg);
+        test.setPosition(0,0);
+        test.setSize(x ,y);
+        backgroundBatch = new SpriteBatch();
+        backgroundBatch.begin();
+        test.draw(backgroundBatch);
+        //backgroundBatch.draw(player,player.getX(),player.getY());
+        backgroundBatch.end();
+*/
+        Texture main4 = new Texture(Gdx.files.internal("gamebackground.png"));
+        TextureRegion main4Region = new TextureRegion(main4);
+        TextureRegionDrawable main4Drawable = new TextureRegionDrawable(main4Region);
+        Image main4Image = new Image(main4Drawable);
+        main4Image.setPosition(0,0);
+        stage.addActor(main4Image);
     }
 
    private void createDeadline(){
@@ -366,29 +396,14 @@ public class TaskOne extends ApplicationAdapter implements Screen {
     public void render(float delta) {
         //elapsedTime += Gdx.graphics.getDeltaTime(); //if wna make use of pause can stop the time here
         //player.updatePlayer();
-        Gdx.gl.glClearColor(172/255f, 115/255f, 57/255f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        bg = new Texture("gamebackground.png");
-                //player.setPosition(player.getX(),player.getY());
-        float x = Gdx.graphics.getWidth();
-        float y = Gdx.graphics.getHeight();
-        test = new Sprite(bg);
-        test.setPosition(0,0);
-        test.setSize(x ,y);
-        backgroundBatch = new SpriteBatch();
-        backgroundBatch.begin();
-        test.draw(backgroundBatch);
-        //backgroundBatch.draw(player,player.getX(),player.getY());
-        backgroundBatch.end();
-
         //debugRenderer.render(world,box2DCamera.combined);//return proj matrix of the camera, what we see from the camera
         //world.step(Gdx.graphics.getDeltaTime(),6,2); //delta time the time between each frame
         //velocityiterations and positioniterations calculate how the bodies collide with each other
 
         fpslabel.setText("fps: " + Gdx.graphics.getFramesPerSecond());
-
         stage.draw();
         stage.act(delta);
+        gifRecorder.update();
     }
 
     @Override
@@ -422,6 +437,8 @@ public class TaskOne extends ApplicationAdapter implements Screen {
         bg.dispose();
         world.dispose();
         pic1.dispose();
+        gifRecorder.clearFrames();
+        gifRecorder.close();
     }
 
     public void popup(){
