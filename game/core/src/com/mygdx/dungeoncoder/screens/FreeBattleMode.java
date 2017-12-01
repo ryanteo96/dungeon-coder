@@ -61,7 +61,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
     private int result;
     private int sort = 0;
 
-    private ClientConnection clientConnection;
+
     public FreeBattleMode (DungeonCoder g) {
         game = g;
 
@@ -126,14 +126,16 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         list = new List<String>(skin);
 
         // requesting level list.
-        /*ArrayList<String> levels = clientConnection.requestLevelList();
+
+        ArrayList<String> levels = shareVariable.connect.requestLevelList();
+        String[] strings = new String[levels.size()];
         for (int i = 0; i < levels.size(); i++) {
             System.out.println(levels.get(i));
         }
 
         for (int i = 0, k = 0; i < levels.size(); i++) {
             strings[k++] = "Level: " + levels.get(i);
-        }*/
+        }
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         BitmapFont myFont = new BitmapFont(Gdx.files.internal("comic-sans.fnt"));
@@ -144,7 +146,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         lblLevelList.setFontScale(1);
         stage.addActor(lblLevelList);
 
-        String[] strings = new String[30];
+        /*String[] strings = new String[30];
         for (int i = 0, k = 0; i < 30; i++) {
             strings[k++] = "TestFile" + i;
         }
@@ -159,7 +161,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
             for (int i = 29, k = 0; i >= 0; i--) {
                 strings[k++] = "TestFile" + i;
             }
-        }
+        }*/
 
         list.setItems(strings);
         scrollPane = new ScrollPane(list);
