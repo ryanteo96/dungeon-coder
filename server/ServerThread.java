@@ -555,6 +555,7 @@ public class ServerThread extends Thread {
 				outgoing.write(buffer, 0, count);
 			}
 			in.close();
+			System.out.println("finished sending contents");
 			//sendCode((byte)(0x10));
 		}
 		catch (IOException e) {
