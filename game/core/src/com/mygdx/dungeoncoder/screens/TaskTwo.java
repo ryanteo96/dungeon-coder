@@ -243,7 +243,7 @@ public class  TaskTwo implements Screen {
                 TextButton closeButton = new TextButton(String.valueOf(p), skin);
                 TextButton closeButtonToo = new TextButton("Close", cancelButtonSkin, "default");
                 window = new Window("Task 2", skin);
-                window.setDebug(true);
+                window.setDebug(false);
                 window.getTitleTable().add(closeButton).height(window.getPadTop());
                 window.setPosition(555,70);
                 //window.defaults().spaceBottom(10);//not sure what does this do
@@ -545,7 +545,7 @@ public class  TaskTwo implements Screen {
             }
         }
         //System.out.println("quest activated: " + DefaultValues.questActivated);
-        System.out.println("quest activated supposed to be true:" + DefaultValues.questActivated);
+        //System.out.println("quest activated supposed to be true:" + DefaultValues.questActivated);
             if(DefaultValues.questActivated == true){
                 DefaultValues.questActivated = false;
                 DefaultValues.npcDestroyed = true;
@@ -583,7 +583,8 @@ public class  TaskTwo implements Screen {
         renderer.render();
 
         //render our Box2Ddebuglines
-        b2dr.render(world,gamecam.combined);
+        //b2dr.render(world,gamecam.combined);
+
         //set batch to draw what the Hud camera sees.
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
