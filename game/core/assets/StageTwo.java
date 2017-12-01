@@ -14,7 +14,7 @@ public class StageTwo {
             // Shouldn't happen.
         }
         // USER WRITE CODE HERE
-        System.out.println("ARRRRR");
+        System.out.println("THE CODE IS SENT");
 
         // DO NOT WRITE CODE PAST THIS POINT
         out.close();

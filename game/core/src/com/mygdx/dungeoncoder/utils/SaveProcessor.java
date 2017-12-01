@@ -60,16 +60,16 @@ public class SaveProcessor {
         return totalCleared;
     }
 
-    public boolean insClear(){
+    public void insClear(){
         insCleared++;
+        System.out.println("INCREMENT CLEAR" + insCleared);
         totalCleared++;
-        if (checkAchievement()){
+        /*if (checkAchievement()){
             return true;
-        }
+        }*/
         if (autoSave == 1) {
             Save();
         }
-        return false;
     }
 
     public boolean mainClear(){

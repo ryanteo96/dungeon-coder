@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.dungeoncoder.screens.*;
+import com.mygdx.dungeoncoder.utils.SaveProcessor;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mygdx.dungeoncoder.DungeonCoder;
@@ -70,7 +71,7 @@ public class AdventurerHud implements Disposable {
         adventurerLabel = new Label("Points", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         scoreLabel = new Label(String.format("%06d",score),new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
-        levelLabel = new Label("2", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        levelLabel = new Label("1", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         worldLabel = new Label("STAGE", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
         attemptInfo = shareVariable.connect.requestTaskInformation("Task1","Attempts");
@@ -85,8 +86,9 @@ public class AdventurerHud implements Disposable {
 
         progressInfo = shareVariable.connect.requestTaskInformation("Task1","Completion");
 
+        SaveProcessor sp = new SaveProcessor();
         progressLabel = new Label("Progress", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        progress = new Label(progressInfo+"%", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        progress = new Label(sp.getInsCleared() + " stages cleared", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
         countdownLabel.setFontScale(2);
         scoreLabel.setFontScale(2);

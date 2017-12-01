@@ -89,7 +89,7 @@ public class GifRecorder{
 
     /** Updates the recorder and draws the GUI */
     public void update(){
-        System.out.println("Update");
+        //System.out.println("Update");
         doInput();
         float delta = Gdx.graphics.getDeltaTime();
 

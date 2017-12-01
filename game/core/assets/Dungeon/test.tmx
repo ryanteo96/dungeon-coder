@@ -140,7 +140,7 @@
   <object id="143" x="720" y="192" width="656" height="16"/>
   <object id="146" x="1376" y="192" width="576" height="16"/>
   <object id="147" x="1952" y="192" width="112" height="16"/>
-  <object id="169" x="177.5" y="-9" width="22" height="214"/>
+  <object id="169" x="177.5" y="4.58942" width="22" height="200.411"/>
  </objectgroup>
  <objectgroup name="Wall" offsetx="443.39" offsety="-107.09">
   <object id="131" x="3002.61" y="133.09" width="23.3333" height="32"/>
@@ -152,7 +152,6 @@
   <object id="85" x="1361" y="177" width="16" height="16"/>
   <object id="106" x="2496" y="118" width="16" height="16"/>
   <object id="108" x="3103" y="132" width="16" height="16"/>
-  <object id="188" x="99.11" y="378.59" width="34" height="3.5"/>
  </objectgroup>
  <objectgroup name="Endpoint" offsetx="443.39" offsety="-107.09">
   <object id="164" x="1997.73" y="-4.34476" width="61.0147" height="89.787"/>

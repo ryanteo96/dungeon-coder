@@ -33,7 +33,7 @@ public class TimeOver implements Screen {
         table.center();
         table.setFillParent(true);
 
-        Label gameOverLabel = new Label("GAME OVER", font);
+        Label gameOverLabel = new Label("TIME IS OVER", font);
         Label playAgainLabel = new Label("Click to Play Again", font);
 
         table.add(gameOverLabel).expandX();

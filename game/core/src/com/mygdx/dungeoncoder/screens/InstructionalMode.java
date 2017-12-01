@@ -120,7 +120,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
             @Override
             public void clicked(InputEvent event, float x, float y) {
                // if()
-               stage_One(game);
+               stage_Two(game);
 
             }
         });
@@ -135,7 +135,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         stage_TwoImage.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stage_Two(game);
+                stage_One(game);
             }
         });
 
@@ -207,7 +207,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         TextButton closeButton = new TextButton(String.valueOf(x), testSkin);
         TextButton startButton = new TextButton("Start", skin, "default");
         TextButton cancelButton = new TextButton("Cancel", skin, "default");
-        window = new Window("Task 1", testSkin);
+        window = new Window("Task 2", testSkin);
         window.setDebug(false);
         window.getTitleTable().add(closeButton).height(window.getPadTop());
         window.setPosition(300,80);
@@ -226,7 +226,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         repeatButton.addListener(new ChangeListener(){
             public void changed(ChangeEvent event, Actor actor) {
 
-                new Dialog("Task 1", testSkin,"dialog"){
+                new Dialog("Task 2", testSkin,"dialog"){
                     protected void result (Object object){
                         gObject = object;
                         System.out.println("Result: "+ object);
@@ -240,7 +240,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         yesButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                stageOne(game);
+             stageOne(game);
             }
         });
 
@@ -249,7 +249,6 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 stageOne(game);
-
             }
         });
 
@@ -324,7 +323,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         TextButton startButton = new TextButton("Start", skin, "default");
         TextButton cancelButton = new TextButton("Cancel", skin, "default");
 
-        window = new Window("Task 2", testSkin);
+        window = new Window("Task 1", testSkin);
         window.setDebug(false);
         window.getTitleTable().add(closeButton).height(window.getPadTop());
         window.setPosition(300,80);
@@ -343,7 +342,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         repeatButton.addListener(new ChangeListener(){
             public void changed(ChangeEvent event, Actor actor) {
 
-                new Dialog("Task 2", testSkin,"dialog"){
+                new Dialog("Task 1", testSkin,"dialog"){
                     protected void result (Object object){
                         gObject = object;
                         System.out.println("Result: "+ object);
@@ -374,7 +373,6 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-
             }
         });
 

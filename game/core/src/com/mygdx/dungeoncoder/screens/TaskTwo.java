@@ -104,7 +104,7 @@ public class  TaskTwo implements Screen {
 
         codeOn = false;
 
-        gifRecorder = new GifRecorder(g.batch);
+        gifRecorder = new GifRecorder(game.batch);
 
         atlas = new TextureAtlas("Dungeon/Adventurer.pack");
 
@@ -147,11 +147,19 @@ public class  TaskTwo implements Screen {
         gifInstruction.setColor(Color.WHITE);
         stage.addActor(gifInstruction);
 
-        Texture popup = new Texture(Gdx.files.internal("UIElements/Accomplished.png"));
+        /*Texture popup = new Texture(Gdx.files.internal("UIElements/Accomplished.png"));
         TextureRegion popupRegion = new TextureRegion(popup);
         TextureRegionDrawable popupDrawable = new TextureRegionDrawable(popupRegion);
         popupImage = new Image(popupDrawable);
-        popupImage.setPosition(700, VIRTUAL_WIDTH/2);
+        popupImage.setPosition(500, 500);
+        System.out.println("CHECK ACHIEVEMENT: "+saveProcessor.checkAchievement());
+        if (saveProcessor.checkAchievement() == true) {
+            stage.addActor(popupImage);
+            if(player.getStateTimer() > 1){
+                popupImage.remove();
+            }
+        }*/
+
 
         //back button
         createBack();
@@ -235,24 +243,23 @@ public class  TaskTwo implements Screen {
         viewTaskButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                Object[] listEntries = {"Objective",
-                        "Explore the Dungeon World",
-                        "===========================================================================================",
-                        "Task",
-                        "Reach the end of the stage and solve the problems along the way.",
+                Object[] listEntries = {"Mission",
+                        "You have encountered an enemy",
+                        "Here we will be learning about how to print words in Java",
                         "",
-                        "===========================================================================================",
-                        "To move the character",
-                        "Use the Left Right arrow key on your keyboard to move towards left and right",
-                        "Use spacebar to jump",
+                        "In Java you can write this to print a line",
                         "",
-                        "===========================================================================================",
-                        "When you approach a NPC, you will receive your mission",
-                        "Good luck Dungeon Coder!",
-                        "May the odds be in your favor!",
+                        "System.out.println(\"Hello World\")",
                         "",
-                        "===========================================================================================",
-                        "Difficulty: Easy"};
+                        "This line of code will print out 'Hello World' in Java",
+                        "",
+                        "Now it's your turn to try",
+                        "Dr.Robot is in your way, you need to shout at him to make him get out of the way",
+                        "To do that you need to print out the word 'ARGHHHH'",
+                        "",
+                        "================================================================================================",
+                        "Note:",
+                        "Please only write your code under the '// USER WRITE CODE HERE' section"};
                 //create Text using lists and scrollpane
                 List list = new List(skin);
                 list.setItems(listEntries);
@@ -261,6 +268,7 @@ public class  TaskTwo implements Screen {
                 scrollPane.setFlickScroll(false);
                 scrollPane.setScrollingDisabled(true,false);
                 Table table = new Table(skin);
+                table.setWidth(100f);
                 table.add().growX().row();
                 table.add(scrollPane).grow();
                 int i = 88;
@@ -268,16 +276,16 @@ public class  TaskTwo implements Screen {
                 cancelButtonSkin = new Skin(Gdx.files.internal("dialogSkins/plain-james-ui.json"));
                 TextButton closeButton = new TextButton(String.valueOf(p), skin);
                 TextButton closeButtonToo = new TextButton("Close", cancelButtonSkin, "default");
-                window = new Window("Task 2", skin);
-                window.setDebug(false);
+                window = new Window("Task 1", skin);
+                window.setDebug(true);
                 window.getTitleTable().add(closeButton).height(window.getPadTop());
-                window.setPosition(555,70);
+                window.setPosition(600,70);
                 //window.defaults().spaceBottom(10);//not sure what does this do
-                window.setSize(700,600);
+                window.setSize(700,550);
                 window.add(scrollPane).colspan(3).left().expand().fillY();
                 window.row();
                 window.right().bottom();
-                window.add(closeButtonToo).right().padLeft(600);
+                window.add(closeButtonToo).padLeft(500);
                 stage.addActor(window);
                 viewTaskButton.remove();
                 //close button on top 'X' button
@@ -422,7 +430,7 @@ public class  TaskTwo implements Screen {
                     e1.printStackTrace();
                 }
 
-                shareVariable.connect.requestUpdateProgress(file,"Task1",percentage);
+                shareVariable.connect.requestUpdateProgress(file,"Task1",saveProcessor.getInsCleared());
 
             }
         });
@@ -550,7 +558,6 @@ public class  TaskTwo implements Screen {
     }
 
     public void update(float dt){
-        //System.out.println("update");
         handleinput(dt);
         //movedRight(dt);
         //takes 1 step in the physics simulation 60 times per second
@@ -602,7 +609,7 @@ public class  TaskTwo implements Screen {
 
         update(delta);
 
-        Gdx.gl.glClearColor(172/255f, 115/255f, 57/255f, 1);
+        Gdx.gl.glClearColor(172 / 255f, 115 / 255f, 57 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //render game map
@@ -612,13 +619,13 @@ public class  TaskTwo implements Screen {
         gifRecorder.update();
 
         //render our Box2Ddebuglines
-        //b2dr.render(world,gamecam.combined);
+        b2dr.render(world,gamecam.combined);
 
         //set batch to draw what the Hud camera sees.
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
         player.draw(game.batch);
-        for(Enemy enemy : creator.getDungeonMonster()){
+        for (Enemy enemy : creator.getDungeonMonster()) {
             enemy.draw(game.batch);
         }
         game.batch.end();
@@ -626,22 +633,22 @@ public class  TaskTwo implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
 
-        if(gameOver()){
+        if (gameOver()) {
             game.setScreen(new AdventurerGameOver(game));
             dispose();
         }
-            if(gameComplete == true && player.getStateTimer() > 0.7) {
-                DungeonCoder.manager.get("UIElements/Animation/stagecomplete.mp3", Sound.class).play();
-                game.setScreen(new StageTwoComplete(game));
-                hud.stopMusic();
-                gameComplete = false;
-                saveProcessor.insClear();
-                System.out.printf("You have cleared %d instructional stages.", saveProcessor.getInsCleared());
-                if (saveProcessor.checkAchievement()) {
-                    stage.addActor(popupImage);
-                }
 
-            }
+
+        if (gameComplete == true && player.getStateTimer() > 0.7) {
+            DungeonCoder.manager.get("UIElements/Animation/stagecomplete.mp3", Sound.class).play();
+            hud.stopMusic();
+            gameComplete = false;
+            saveProcessor.insClear();
+            System.out.println("Total clear:" + saveProcessor.getTotalCleared());
+            System.out.printf("You have cleared %d instructional stages.\n", saveProcessor.getInsCleared());
+            game.setScreen(new StageTwoComplete(game));
+
+        }
 
         stage.act(delta);
         stage.draw();
