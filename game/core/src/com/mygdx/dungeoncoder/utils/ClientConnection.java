@@ -1,4 +1,4 @@
-package com.mygdx.dungeoncoder.utils;
+//package com.mygdx.dungeoncoder.utils;
 import java.util.ArrayList;
 import java.net.*;
 import java.io.*;
@@ -344,7 +344,7 @@ public class ClientConnection {
 		sendCode((byte)(0x0C));
 		if (recieveCode() == 0x10) {
 			String levelName = "";
-			while(levelName != "\r\n") {
+			while(levelName.equals("\r\n") == false) {
 				try {
 					levelName = incoming.readUTF();
 				}
@@ -354,6 +354,8 @@ public class ClientConnection {
 				levels.add(levelName);
 			}
 		}
+		levels.remove(levels.size() - 1);
+		levels.remove(levels.size() - 1);
 		return levels;
 	}
 

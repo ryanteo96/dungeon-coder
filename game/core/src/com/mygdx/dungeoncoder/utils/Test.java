@@ -1,6 +1,7 @@
-package com.mygdx.dungeoncoder.utils;
+//package com.mygdx.dungeoncoder.utils;
 //import com.mygdx.dungeoncoder.utils.ClientConnection;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.io.*;
@@ -20,6 +21,7 @@ public class Test {
 		codeTransfer();
 		specificCodeTransfer();
 		levelTransfer();
+		levelListTransfer();
 	}
 
 	private static void incorrectUsername() {
@@ -86,12 +88,6 @@ public class Test {
 			else {
 				System.out.println("Update Username, Password, and Email Failed");
 			}
-			try {
-				Thread.sleep(10000);
-			}
-			catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 			accountReset(newInfo[0], newInfo[2]);
 		}
 		else {
@@ -143,5 +139,12 @@ public class Test {
 		}
 		conn.uploadLevel("Devon's Level", temp);
 		conn.requestCustomLevel("Devon's Level");
+	}
+
+	private static void levelListTransfer() {
+		ArrayList<String> levels = conn.requestLevelList();
+		for (int i = 0; i < levels.size(); i++) {
+			System.out.println(levels.get(i));
+		}
 	}
 }
