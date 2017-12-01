@@ -42,6 +42,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
     private TextButton uploadButton;
     private   Object[] listEntries = {};
     private boolean open = false;
+    private int result;
 
     public FreeBattleMode (DungeonCoder g) {
         game = g;
@@ -100,6 +101,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
             listEntries[1] = DefaultValues.username;
             listEntries[2] = DefaultValues.username;
             listEntries[3] = DefaultValues.username;
+            System.out.println("OPEN!");
         }
 
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
@@ -145,8 +147,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
                 fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 if (fc.showOpenDialog(openFileChooser) == JFileChooser.APPROVE_OPTION) {
                     JOptionPane.showMessageDialog(null, fc.getSelectedFile().getAbsolutePath());
-                    System.out.println("APPROVE OPTION " + JFileChooser.APPROVE_OPTION);
-                    open = true;
+                    result = JFileChooser.APPROVE_OPTION;
                 }
             }
         });

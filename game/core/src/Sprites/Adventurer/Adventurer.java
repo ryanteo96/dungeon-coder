@@ -168,7 +168,7 @@ public class Adventurer extends Sprite {
 
     public void defineAdventurer() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(15 / DefaultValues.PPM, 100 / DefaultValues.PPM);
+        bdef.position.set(200 / DefaultValues.PPM, 100 / DefaultValues.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 

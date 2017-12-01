@@ -423,7 +423,7 @@ public class  TaskTwo implements Screen {
 
         //if character dies, freeze the camera right where he died
         if(player.currentState != Adventurer.State.DEAD){
-            gamecam.position.x = player.b2body.getPosition().x + 190/DefaultValues.PPM;
+            gamecam.position.x = player.b2body.getPosition().x;
         }
 
         hud.update(dt);
@@ -468,7 +468,7 @@ public class  TaskTwo implements Screen {
         renderer.render();
 
         //render our Box2Ddebuglines
-        b2dr.render(world,gamecam.combined);
+        //b2dr.render(world,gamecam.combined);
         //set batch to draw what the Hud camera sees.
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();

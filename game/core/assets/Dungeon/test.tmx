@@ -136,13 +136,11 @@
   <object id="79" x="3583" y="149" width="38.5" height="58.5"/>
   <object id="80" x="3638.5" y="118.5" width="200" height="24"/>
   <object id="81" x="3661.5" y="-2.5" width="181.5" height="66"/>
-  <object id="136" x="0" y="192" width="160" height="16"/>
-  <object id="140" x="176" y="192" width="544" height="16"/>
+  <object id="140" x="0.5" y="192" width="719.5" height="16"/>
   <object id="143" x="720" y="192" width="656" height="16"/>
   <object id="146" x="1376" y="192" width="576" height="16"/>
   <object id="147" x="1952" y="192" width="112" height="16"/>
-  <object id="169" x="-23" y="-5" width="22" height="214"/>
-  <object id="171" x="160" y="192" width="16" height="16"/>
+  <object id="169" x="177.5" y="-9" width="22" height="214"/>
  </objectgroup>
  <objectgroup name="Wall" offsetx="443.39" offsety="-107.09">
   <object id="131" x="3002.61" y="133.09" width="23.3333" height="32"/>
