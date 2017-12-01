@@ -355,7 +355,7 @@ public class ClientConnection {
 			}
 		}
 		levels.remove(levels.size() - 1);
-		levels.remove(levels.size() - 1);
+		//levels.remove(levels.size() - 1);
 		return levels;
 	}
 

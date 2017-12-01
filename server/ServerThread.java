@@ -661,7 +661,7 @@ public class ServerThread extends Thread {
 		if (!levelExists(name)) {
 			try {
 				PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("Files/Levels/LevelList.txt", true)));
-				out.print(name + "\n");
+				out.print("\n" + name);
 				out.close();
 			}
 			catch (IOException e) {
