@@ -7,6 +7,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 
@@ -35,12 +38,18 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
 public class FreeBattleMode extends ApplicationAdapter implements Screen {
 
+    private ScrollPane scrollPane;
+    private List<String> list;
+    private SpriteBatch batcher;
+    private float gameWidth, gameHeight;
+    private TextureAtlas atlas;
+
     private DungeonCoder game;
     private Stage stage;
     private Skin backButtonSkin;
     private Skin skin;
     private TextButton uploadButton;
-    private   Object[] listEntries = {};
+    private Object[] listEntries = {};
     private boolean open = false;
     private int result;
 
@@ -52,14 +61,13 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
 
         Gdx.input.setInputProcessor(stage);
 
-        createBack();
         createUploadButton();
         createTable();
+        createBack();
     }
 
     @Override
     public void show() {
-
     }
 
     @Override
@@ -95,28 +103,32 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
     public void dispose() {
         stage.dispose();
     }
-    private void createTable(){
-        if(open){
-            listEntries[0] = DefaultValues.username;
-            listEntries[1] = DefaultValues.username;
-            listEntries[2] = DefaultValues.username;
-            listEntries[3] = DefaultValues.username;
-            System.out.println("OPEN!");
-        }
 
-        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
-        Table table = new Table(skin);
-        com.badlogic.gdx.scenes.scene2d.ui.List list = new List(skin);
-        list.setItems(listEntries);
-        ScrollPane scrollPane = new ScrollPane(list, skin);
-        scrollPane.setSize(0,0);
-        scrollPane.setFlickScroll(false);
-        scrollPane.setScrollingDisabled(true,false);
-        table.add().growX().row();
-        table.add(scrollPane).grow();
-        table.setSize(700,600);
-        table.setPosition(130,50);
-        stage.addActor(table);
+
+    private void createTable() {
+        gameWidth = 400;
+        gameHeight = 225;
+        atlas = new TextureAtlas(Gdx.files.internal("comic-ui.atlas"));
+        skin = new Skin(Gdx.files.internal("comic-ui.json"), atlas);
+
+        batcher = new SpriteBatch();
+        list = new List<String>(skin);
+        String[] strings = new String[30];
+        for (int i = 0, k = 0; i < 30; i++) {
+            strings[k++] = "String: " + i;
+
+        }
+        list.setItems(strings);
+        scrollPane = new ScrollPane(list);
+        scrollPane.setBounds(0, 0, gameWidth, gameHeight);
+        scrollPane.setSmoothScrolling(false);
+        // gameWidth / 2 - scrollPane.getWidth() / 4
+        // gameHeight / 2 - scrollPane.getHeight() / 4
+        scrollPane.setPosition(100, 200);
+        scrollPane.setTransform(true);
+        scrollPane.setScale(1.5f);
+        stage.addActor(scrollPane);
+        Gdx.input.setInputProcessor(stage);
     }
 
     private void createBack() {
@@ -131,6 +143,31 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
             }
         });
         stage.addActor(btnBack);
+    }
+
+    private void createUploadButton() {
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+        uploadButton = new TextButton("UPLOAD", skin);
+        uploadButton.setPosition(1000, 500);
+        uploadButton.setSize(130, 50);
+        uploadButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                try {
+                    createFileChooser();
+                } catch (ClassNotFoundException e1) {
+                    e1.printStackTrace();
+                } catch (InstantiationException e1) {
+                    e1.printStackTrace();
+                } catch (IllegalAccessException e1) {
+                    e1.printStackTrace();
+                } catch (UnsupportedLookAndFeelException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        stage.addActor(uploadButton);
+
     }
 
     public void createFileChooser () throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
@@ -158,28 +195,32 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         window.setLocationRelativeTo(null);
     }
 
-    private void createUploadButton() {
-        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
-        uploadButton = new TextButton("UPLOAD", skin);
-        uploadButton.setPosition(1000, 500);
-        uploadButton.setSize(130, 50);
-        uploadButton.addListener(new ClickListener() {
-           @Override
-            public void clicked(InputEvent e, float x, float y) {
-               try {
-                    createFileChooser();
-                } catch (ClassNotFoundException e1) {
-                    e1.printStackTrace();
-                } catch (InstantiationException e1) {
-                    e1.printStackTrace();
-                } catch (IllegalAccessException e1) {
-                    e1.printStackTrace();
-                } catch (UnsupportedLookAndFeelException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
-        stage.addActor(uploadButton);
+    /*
+    private void createTable(){
+        if(open){
+            listEntries[0] = DefaultValues.username;
+            listEntries[1] = DefaultValues.username;
+            listEntries[2] = DefaultValues.username;
+            listEntries[3] = DefaultValues.username;
+            System.out.println("OPEN!");
+        }
 
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+        Table table = new Table(skin);
+        com.badlogic.gdx.scenes.scene2d.ui.List list = new List(skin);
+        list.setItems(listEntries);
+        ScrollPane scrollPane = new ScrollPane(list, skin);
+        scrollPane.setSize(0,0);
+        scrollPane.setFlickScroll(false);
+        scrollPane.setScrollingDisabled(true,false);
+        table.add().growX().row();
+        table.add(scrollPane).grow();
+        table.setSize(700,600);
+        table.setPosition(130,50);
+        stage.addActor(table);
     }
+
+
+
+*/
 }
