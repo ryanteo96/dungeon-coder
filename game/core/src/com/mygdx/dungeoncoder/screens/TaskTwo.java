@@ -198,7 +198,6 @@ public class  TaskTwo implements Screen {
         okButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                DefaultValues.questActivated = false;
                 stage.addActor(viewTaskButton);
                 stage.addActor(codeButton);
             }
@@ -279,8 +278,7 @@ public class  TaskTwo implements Screen {
         noButton = new TextButton(" No, I need more time! ", skin);
         noButton.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent e, float x, float y) {
-                DefaultValues.questActivated = false;
+            public void clicked(InputEvent e, float x, float y) {                ;
                 new Dialog("Dr.Robot NPC", skin,"dialog"){
                     protected void result (Object object){
                         System.out.println("Result: "+ object);
@@ -547,13 +545,13 @@ public class  TaskTwo implements Screen {
             }
         }
         //System.out.println("quest activated: " + DefaultValues.questActivated);
-
+        System.out.println("quest activated supposed to be true:" + DefaultValues.questActivated);
             if(DefaultValues.questActivated == true){
+                DefaultValues.questActivated = false;
                 DefaultValues.npcDestroyed = true;
                 stage.addActor(dialog);
                 DungeonCoder.manager.get("UIElements/Animation/robottalking.wav", Music.class).play();
-
-        }
+            }
 
 
         //update gamecam with correct corrdinates after changes
