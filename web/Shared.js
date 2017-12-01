@@ -44,6 +44,9 @@ function showModal(type, previousModal) {
     } else if (type === "editStudentList") {
         modal = document.getElementById("editStudentListModal");
         span = document.getElementById("editStudentListClose");
+    } else if (type === "createDiscussion") {
+        modal = document.getElementById("createDiscussionModal");
+        span = document.getElementById("createDiscussionClose");
     }
 
     modal.style.display = "block";
@@ -69,8 +72,10 @@ function showModal(type, previousModal) {
         } else if (previousModal === "editStudentList") {
             modal = document.getElementById("editStudentListModal");
             span = document.getElementById("editStudentListClose");
+        } else if (type === "createDiscussion") {
+            modal = document.getElementById("createDiscussionModal");
+            span = document.getElementById("createDiscussionClose");
         }
-
     }
 
     window.onclick = function(event) {
@@ -93,8 +98,11 @@ function showModal(type, previousModal) {
             } else if (previousModal === "editStudentList") {
                 modal = document.getElementById("editStudentListModal");
                 span = document.getElementById("editStudentListClose");
+            } else if (type === "createDiscussion") {
+                modal = document.getElementById("createDiscussionModal");
+                span = document.getElementById("createDiscussionClose");
             }
-        }
+        } 
     }
 }
 

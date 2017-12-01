@@ -158,9 +158,9 @@
                 position:absolute;
                 top:0px;
                 left:0px;
-                width:180px;
+                width:280px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -176,10 +176,10 @@
             #task2 {
                 position:absolute;
                 top:0px;
-                left:200px;
-                width:180px;
+                left:360px;
+                width:280px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -195,10 +195,10 @@
             #task3 {
                 position:absolute;
                 top:0px;
-                left:400px;
-                width:180px;
+                left:720px;
+                width:280px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -217,7 +217,7 @@
                 left:600px;
                 width:180px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -236,7 +236,7 @@
                 left:800px;
                 width:180px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -255,7 +255,7 @@
                 left:0px;
                 width:180px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -274,7 +274,7 @@
                 left:200px;
                 width:180px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -293,7 +293,7 @@
                 left:400px;
                 width:180px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -312,7 +312,7 @@
                 left:600px;
                 width:180px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -331,7 +331,7 @@
                 left:800px;
                 width:180px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -587,6 +587,21 @@
                 overflow-x:hidden;
            }
 
+           #discussionPageBtn {
+                position:absolute;
+                top:150px;
+                left:0px;
+                width:1000px;
+                height:50px;
+                background-color: transparent;
+                border-style:solid;
+                border-width:1px;
+                border-radius:4px;
+                cursor:pointer;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
+
         </style>
     </head>
 
@@ -638,16 +653,17 @@
 
             <!-- Div for Class Task. -->
             <div id="classTasks">
-                <input id="task1" type="button" value="TASK 1"></input>
-                <input id="task2" type="button" value="TASK 2"></input>
-                <input id="task3" type="button" value="TASK 3"></input>
-                <input id="task4" type="button" value="TASK 4"></input>
-                <input id="task5" type="button" value="TASK 5"></input>
-                <input id="task6" type="button" value="TASK 6"></input>
-                <input id="task7" type="button" value="TASK 7"></input>
-                <input id="task8" type="button" value="TASK 8"></input>
-                <input id="task9" type="button" value="TASK 9"></input>
-                <input id="task10" type="button" value="TASK 10"></input>
+                <button id="task1">TASK 1</button>
+                <button id="task2">TASK 2</button>
+                <button id="task3">TASK 3</button>
+                <button id="discussionPageBtn">Discussion Page</button>
+                <!--<button id="task4">TASK 4</button>
+                <button id="task5">TASK 5</button>
+                <button id="task6">TASK 6</button>
+                <button id="task7">TASK 7</button>
+                <button id="task8">TASK 8</button>
+                <button id="task9">TASK 9</button>
+                <button id="task10">TASK 10</button>-->
             </div>
 
             <!-- Div for Student List Entries. -->   
@@ -702,6 +718,8 @@
                             <label id="changeDeadline">Change Deadline:</label>
                             <input id="changeDeadlineInput" type="date"></input>
                             <input id="changeDeadlineBtn" type="button" value="Change"></input>
+
+                            <div id="downloadAllCodeDiv"></div>
                         </div>
 
                         <div id="studentTaskListDiv">

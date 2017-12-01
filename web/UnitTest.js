@@ -291,7 +291,7 @@ function testSettingEmail(callback) {
                 testSettingEmailRes.innerHTML = "FAIL";
             }
 
-            callback();
+            callback(testAddDiscussion);
         }
     };
 
@@ -299,7 +299,7 @@ function testSettingEmail(callback) {
     xmlhttp.send();
 }
 
-function testChangingPassword() {
+function testChangingPassword(callback) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -312,9 +312,53 @@ function testChangingPassword() {
             } else {
                 testChangingPasswordRes.innerHTML = "FAIL";
             }
+
+            callback(testAddResponse);
         }
     };
 
     xmlhttp.open("GET", "UnitTest.php?test=set_values&mode=password", true);
+    xmlhttp.send();
+}
+
+function testAddDiscussion(callback) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("TEST 15");
+            console.log(this.responseText);
+            response = this.responseText;
+
+            if (response === "PASS") {
+                testAddDiscussionRes.innerHTML = "PASS";
+            } else {
+                testAddDiscussionRes.innerHTML = "FAIL";
+            }
+
+            callback();
+        }
+    };
+
+    xmlhttp.open("GET", "UnitTest.php?test=add_discussion", true);
+    xmlhttp.send();
+}
+
+function testAddResponse() {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("TEST 16");
+            console.log(this.responseText);
+            response = this.responseText;
+
+            if (response === "PASS") {
+                testAddResponseRes.innerHTML = "PASS";
+            } else {
+                testAddResponseRes.innerHTML = "FAIL";
+            }
+        }
+    };
+
+    xmlhttp.open("GET", "UnitTest.php?test=add_response", true);
     xmlhttp.send();
 }

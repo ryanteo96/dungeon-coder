@@ -40,6 +40,7 @@ function signInBtn_onclick() {
         }
     
         sessionStorageSet("CurrentUser", usernameInput.value);
+        sessionStorageSet("Password", passwordInput.value);
         attemptLogin();
     }
 }

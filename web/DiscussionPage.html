@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <title>Discussion Page - Dungeon Coder</title>
+        <script language="javascript" type="text/javascript" src="DiscussionPage.js"></script>
+        <script language="javascript" type="text/javascript" src="Shared.js"></script>
+        <link rel="stylesheet" type="text/css" href="DiscussionPage.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700" rel="stylesheet">
+    </head>
+    
+    <body onload="body_onload()">
+        <!-- Div for Discussion Page Header Div. -->
+        <div id="discussionPageHdrDiv">
+            <label id="discussionPageHdr">DISCUSSION PAGE</label>
+            <input id="backBtn" type="button" value="Back"></input>
+            <input id="createDiscussionBtn" type="button" value="Create Discussion"></input>
+        </div>
+        
+        <div id="discussionList">
+            <div id="discussionQuestions"></div>
+            <div id="discussionQuestionsData"></div>
+            <div id="discussionThreadData">
+                <label id="discussionThreadTitle"></label>
+                <label id="discussionThreadAuthor"></label>
+                <label id="discussionThreadDesc"></label>
+
+                <div id="discussionResponsesData"></div>
+            </div>
+
+
+        </div>
+
+        <!-- Create Discussion Modal-->
+        <div id="createDiscussionModal">
+            <div id="createDiscussionContent">
+                <span id="createDiscussionClose">&times;</span>
+                <div id="createDiscussionDiv">
+                    <label id="createDiscussionHdr">CREATE DISCUSSION</label>
+                    <label id="createDiscussionDesc">Fill in the text area below with your discussion.</label>
+                    <label id="createDiscussionTitleLbl">Title:</label>
+                    <input id="createDiscussionTitle" type="text" />
+                    <label id="createDiscussionInputLbl">Discussion:</label>
+                    <textarea id="createDiscussionInput"></textarea>
+                    <input id="createDiscussionCreateBtn" type="button" value="Create" />
+                </div>
+            </div>
+        </div>
+        
+        
+
+    </body>
+</html>

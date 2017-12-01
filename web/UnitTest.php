@@ -450,6 +450,66 @@ if ($test === "set_values") {
     $conn->query($sql);
 }
 
+if ($test === "add_discussion") {
+    $author = "test author";
+    $title = "test title";
+    $description = "test description";
+    $type = "post";
+    $id = "9999";
+
+    $sql = "INSERT INTO Discussions (ID, Author, Title, " . "Description" . ", Type) VALUES ('" . $id . "','" . $author . "','" . $title . "','" . $description . "','" . $type . "')";
+    $conn->query($sql);
+
+    $sql = "SELECT ID FROM Discussions WHERE ID=9999";
+    $result = $conn->query($sql);
+
+    $return = "FAIL";
+
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+            if ($id === $row["ID"])
+                $return = "PASS";
+            else 
+                $return = "FAIL";
+        }
+
+        echo $return;
+    }
+
+    $sql = "DELETE FROM Discussions WHERE ID=9999";
+    $conn->query($sql);
+}
+
+if ($test === "add_response") {
+    $author = "test author";
+    $description = "test description";
+    $type = "response";
+    $id = "9999";
+
+    $sql = "INSERT INTO Discussions (ID, Title, " . "Description" . ", Type) VALUES ('" . $id . "','" . $title . "','" . $description . "','" . $type . "')";
+    $conn->query($sql);
+
+    $sql = "SELECT ID FROM Discussions WHERE ID=9999";
+    $result = $conn->query($sql);
+
+    $return = "FAIL";
+
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+            if ($id === $row["ID"])
+                $return = "PASS";
+            else 
+                $return = "FAIL";
+        }
+
+        echo $return;
+    }
+
+    $sql = "DELETE FROM Discussions WHERE ID=9999";
+    $conn->query($sql);
+}
 
 $conn->close();
 

@@ -25,6 +25,7 @@ function body_onload() {
     signOutBtn.onclick = signOutBtn_onclick;
     createAnnouncementBtn.onclick = createAnnouncementBtn_onclick;
     studentPriorityHeading.onclick = studentPriorityHeading_onclick;
+    discussionPageBtn.onclick = discussionPageBtn_onclick;
 }
 
 function displayStudents() {
@@ -120,6 +121,16 @@ function task1_onclick() {
     showModal("Task1", null);
     currentTask = "Task1";
     restoreState(currentTask);
+
+    downloadAllCodeDiv.innerHTML = "";
+    var text = document.createElement("button");
+    text.id = "downloadAllCodeSelect";
+    text.innerHTML = "Download all codes submitted by students";
+    downloadAllCodeDiv.appendChild(text);
+
+    downloadAllCodeSelect.onclick = function () {
+        window.open("/files/test3.zip");
+    }
 }
 
 function restoreState(task) {
@@ -508,4 +519,8 @@ function studentPriorityHeading_onclick() {
         retrieveStudentList("asc");
         studentPriorityHeading.innerHTML = "Priority &darr;";
     }
+}
+
+function discussionPageBtn_onclick() {
+    location.href = "DiscussionPage.html";
 }

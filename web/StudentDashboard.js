@@ -1,4 +1,5 @@
 var currentUser;
+var currentTask;
 var userInformation;
 var taskInformation;
 
@@ -15,10 +16,12 @@ function body_onload() {
 
     manageAccountBtn.onclick = manageAccountBtn_onclick;
     task1.onclick = function() {
+        currentTask = "Task1";
         task_onclick("Task1");
     }
     saveBtn.onclick = saveBtn_onclick;
     signOutBtn.onclick = signOutBtn_onclick;
+    discussionPageBtn.onclick = discussionPageBtn_onclick;
 }
 
 function task_onclick(task) {
@@ -34,7 +37,7 @@ function getUserTaskInformation(task) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            var taskInformation = new Object();
+            taskInformation = new Object();
             var response = this.responseText;
             var array = response.split("&");
             taskInformation = JSON.parse(array);
@@ -131,8 +134,24 @@ function createCodeLink(file) {
     text.innerHTML = "View Code<br><br>Right click -> Save As to download file." ;    
     codeVal.appendChild(text);  
 
+    var fileName = currentUser + currentTask + "\\|" + (taskInformation.attempts - 1);
+    var password = sessionStorageGet("Password", null);
+
     codeDownload.onclick = function() {
-        window.open('/files/test.java', '_blank');
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var responses = this.responseText;
+                console.log(responses);
+                if (responses === "true") {
+                    window.open('/files/' + currentUser + currentTask + "|" + (taskInformation.attempts - 1), '_blank');
+                }
+            }
+        };
+        xmlhttp.open("GET", "CodeDownload.php?user=" + currentUser + "&password=" + password + "&filename=" + fileName, true);
+        xmlhttp.send();
+        
+        //window.open('/files/test.java', '_blank');
     }
 }
 
@@ -147,4 +166,8 @@ function createExampleCodeLink(file) {
     exampleCodeDownload.onclick = function () {
         window.open('/files/test2.java', '_blank');
     }
+}
+
+function discussionPageBtn_onclick() {
+    location.href = "DiscussionPage.html";
 }

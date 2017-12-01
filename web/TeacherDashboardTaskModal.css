@@ -422,3 +422,27 @@
     text-align:center;
     font-family:'Open Sans', san-serif;
 }
+
+#downloadAllCodeDiv {
+    position:absolute;
+    width:400px;
+    height:50px;
+    top:230px;
+    left:500px;
+    margin:auto;
+    font-size:50;
+    text-align:center;
+    border-style:dotted;
+    border-width:1px;
+    font-family:'Open Sans', san-serif;
+}
+
+#downloadAllCodeSelect {
+    position:absolute;
+    width:400px;
+    height:50px;
+    background:none;
+    border:none;
+    left:0px;
+    cursor:pointer;
+}

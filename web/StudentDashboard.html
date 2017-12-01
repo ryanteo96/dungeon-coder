@@ -4,7 +4,6 @@
         <script language="javascript" type="text/javascript" src="StudentDashboard.js"></script>
         <script language="javascript" type="text/javascript" src="Shared.js"></script>
         <script language="javascript" type="text/javascript" src="ManageAccount.js"></script>
-
         <link rel="stylesheet" type="text/css" href="ManageAccountModal.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700" rel="stylesheet">
         <style type="text/css">
@@ -43,6 +42,7 @@
                 margin:auto;
                 font-size:20;
                 font-family:'Open Sans', san-serif;
+                cursor:pointer;
             }
 
             #signOutBtn {
@@ -53,6 +53,7 @@
                 margin:auto;
                 font-size:20;
                 font-family:'Open Sans', san-serif;
+                cursor:pointer;
             }
 
             #welcomeHdr {
@@ -187,17 +188,17 @@
                 left:0px;
                 right:0px;
                 width:1000px;
-                height:40%;
+                height:300px;
                 margin:auto;
             }
 
             #task1 {
                 position:absolute;
                 top:0px;
-                left:20px;
-                width:180px;
+                left:50px;
+                width:280px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color: transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -213,10 +214,10 @@
             #task2 {
                 position:absolute;
                 top:0px;
-                left:220px;
-                width:180px;
+                left:380px;
+                width:280px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -228,14 +229,14 @@
             #task2:hover {
                 background-color:rgb(226, 226, 226);
             }
-
+            
             #task3 {
                 position:absolute;
                 top:0px;
-                left:420px;
-                width:180px;
+                left:720px;
+                width:280px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -243,18 +244,16 @@
                 font-family:'Open Sans', san-serif;
                 font-size:15;
             }
-
             #task3:hover {
                 background-color:rgb(226, 226, 226);
             }
-
             #task4 {
                 position:absolute;
                 top:0px;
                 left:620px;
                 width:180px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -262,18 +261,16 @@
                 font-family:'Open Sans', san-serif;
                 font-size:15;
             }
-
             #task4:hover {
                 background-color:rgb(226, 226, 226);
             }
-
             #task5 {
                 position:absolute;
                 top:0px;
                 left:820px;
                 width:180px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -281,18 +278,16 @@
                 font-family:'Open Sans', san-serif;
                 font-size:15;
             }
-
             #task5:hover {
                 background-color:rgb(226, 226, 226);
             }
-
             #task6 {
                 position:absolute;
                 top:120px;
                 left:20px;
                 width:180px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -300,18 +295,16 @@
                 font-family:'Open Sans', san-serif;
                 font-size:15;
             }
-
             #task6:hover {
                 background-color:rgb(226, 226, 226);
             }
-
             #task7 {
                 position:absolute;
                 top:120px;
                 left:220px;
                 width:180px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -319,18 +312,16 @@
                 font-family:'Open Sans', san-serif;
                 font-size:15;
             }
-
             #task7:hover {
                 background-color:rgb(226, 226, 226);
             }
-
             #task8 {
                 position:absolute;
                 top:120px;
                 left:420px;
                 width:180px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -338,18 +329,16 @@
                 font-family:'Open Sans', san-serif;
                 font-size:15;
             }
-
             #task8:hover {
                 background-color:rgb(226, 226, 226);
             }
-
             #task9 {
                 position:absolute;
                 top:120px;
                 left:620px;
                 width:180px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -357,18 +346,16 @@
                 font-family:'Open Sans', san-serif;
                 font-size:15;
             }
-
             #task9:hover {
                 background-color:rgb(226, 226, 226);
             }
-
             #task10 {
                 position:absolute;
                 top:120px;
                 left:820px;
                 width:180px;
                 height:100px;
-                background-color:#FFFFFF;
+                background-color:transparent;
                 border-style:solid;
                 border-width:1px;
                 border-radius:4px;
@@ -376,11 +363,9 @@
                 font-family:'Open Sans', san-serif;
                 font-size:15;
             }
-
             #task10:hover {
                 background-color:rgb(226, 226, 226);
             }
-
             #taskModal {
                display:none;
                position:fixed;
@@ -393,7 +378,6 @@
                background-color:rgb(0,0,0);
                background-color: rgba(0,0,0,0.4);
            }
-
             #taskContent {
                 position:absolute;
                 background-color:#fefefe;
@@ -406,21 +390,18 @@
                 width:800px;
                 height:620px;
             }
-
             #taskClose {
                color:#aaa;
                float:right;
                font-size:28px;
                font-weight:bold;
            }
-
             #taskClose:hover,
             #taskClose:focus {
                 color:black;
                 text-decoration:none;
                 cursor:pointer;
             }
-
             #taskDiv {
                 top:50px;
                 right: 0px;
@@ -430,7 +411,6 @@
                 height:620px;
                 margin:auto;
             }
-
             #taskHdr {
                 position:absolute;
                 width:100px;
@@ -441,7 +421,6 @@
                 text-align:center;
                 font-family:'Open Sans', san-serif;
             }
-
             #completionVal {
                 position:absolute;
                 width:170px;
@@ -464,7 +443,6 @@
                 text-align:center;
                 font-family:'Open Sans', san-serif;
             }
-
             #deadlineVal {
                 position:absolute;
                 width:200px;
@@ -487,7 +465,6 @@
                 text-align:center;
                 font-family:'Open Sans', san-serif;
             }
-
             #attemptsVal {
                 position:absolute;
                 width:80px;
@@ -510,7 +487,6 @@
                 text-align:center;
                 font-family:'Open Sans', san-serif;
             }
-
             #pointsVal {
                 position:absolute;
                 width:80px;
@@ -533,7 +509,6 @@
                 text-align:center;
                 font-family:'Open Sans', san-serif;
             }
-
             #codeLbl {
                 position:absolute;
                 width:50px;
@@ -544,7 +519,6 @@
                 text-align:center;
                 font-family:'Open Sans', san-serif;
             }
-
             #codeVal {
                 position:absolute;
                 width:700px;
@@ -569,7 +543,6 @@
                 text-align:center;
                 font-family:'Open Sans', san-serif;
             }
-
             #commentsVal {
                 position:absolute;
                 width:700px;
@@ -580,7 +553,6 @@
                 font-size:15;
                 font-family:'Open Sans', san-serif;
             }
-
             #exampleCodeLbl {
                 position:absolute;
                 width:150px;
@@ -590,7 +562,6 @@
                 font-size:20;
                 font-family:'Open Sans', san-serif;
             }
-
             #exampleCodeVal {
                 position:absolute;
                 width:700px;
@@ -604,7 +575,6 @@
                 border-width:1px;
                 font-family:'Open Sans', san-serif;
             }
-
             #codeDownload {
                 position:absolute;
                 width:700px;
@@ -625,6 +595,20 @@
                 cursor:pointer;
             }
 
+            #discussionPageBtn {
+                position:absolute;
+                top:150px;
+                left:50px;
+                width:950px;
+                height:50px;
+                background-color: transparent;
+                border-style:solid;
+                border-width:1px;
+                border-radius:4px;
+                cursor:pointer;
+                font-family:'Open Sans', san-serif;
+                font-size:15;
+            }
         </style>
     </head>
 
@@ -653,19 +637,20 @@
                     </div>
                 </div>
 
-
                 <!-- Div for Class Task. -->
                 <div id="classTasks">
-                    <input id="task1" type=button value="TASK 1"></input>
-                    <input id="task2" type=button value="TASK 2"></input>
-                    <input id="task3" type=button value="TASK 3"></input>
-                    <input id="task4" type=button value="TASK 4"></input>
-                    <input id="task5" type=button value="TASK 5"></input>
-                    <input id="task6" type=button value="TASK 6"></input>
-                    <input id="task7" type=button value="TASK 7"></input>
-                    <input id="task8" type=button value="TASK 8"></input>
-                    <input id="task9" type=button value="TASK 9"></input>
-                    <input id="task10" type=button value="TASK 10"></input>
+                    <button id="task1">TASK 1</button>
+                    <button id="task2">TASK 2</button>
+                    <button id="task3">TASK 3</button>
+                    <button id="discussionPageBtn">Discussion Page</button>
+                    <!--
+                    <button id="task4">TASK 4</button>
+                    <button id="task5">TASK 5</button>
+                    <button id="task6">TASK 6</button>
+                    <button id="task7">TASK 7</button>
+                    <button id="task8">TASK 8</button>
+                    <button id="task9">TASK 9</button>
+                    <button id="task10">TASK 10</button> -->
                 </div>
             </div>
 
