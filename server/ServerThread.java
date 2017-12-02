@@ -445,11 +445,28 @@ public class ServerThread extends Thread {
 	private void sendUserEmailAddress() {
 		try {
 			System.out.println("getting email for " + connectedUser);
-			rs = stmt.executeQuery("SELECT Email From Users WHERE Username='" + connectedUser + "'");
+			rs = stmt.executeQuery("SELECT Email FROM Users WHERE Username='" + connectedUser + "'");
 			rs.next();
 			String emailAddress = rs.getString("Email");
 			System.out.println("Sending email address: " + emailAddress);
 			sendString(emailAddress);
+		}
+		catch (SQLException e) {
+			// Do nothing
+		}
+	}
+
+	private void sendLockStatus() {
+		try {
+			rs = stmt.executeQuery("SELECT LockStatus FROM Users WHERE Username='" + connectedUser + "'");
+			rs.next();
+			int status = rs.getInt("LockStatus");
+			if (status == 0) {
+				sendString("false");
+			}
+			else {
+				sendString("true");
+			}
 		}
 		catch (SQLException e) {
 			// Do nothing
@@ -806,10 +823,16 @@ public class ServerThread extends Thread {
 					updateAccount();
 					break;
 				
-				// SENDUSERAMILADDRESS
+				// FETCHUSERAMILADDRESS
 				case 0x13 :
 					sendCode((byte)(0x10));
 					sendUserEmailAddress();
+					break;
+
+				// FETCHLOCKSTATUS
+				case 0x23 :
+					sendCode((byte)(0x10));
+					sendLockStatus();
 					break;
 
 				// UPDATEMODULECOMPLETION
