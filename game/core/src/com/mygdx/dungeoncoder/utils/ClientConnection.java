@@ -174,6 +174,25 @@ public class ClientConnection {
 		return "";
 	}
 
+	public synchronized boolean requestLockStatus() {
+		try {
+			sendCode((byte)(0x23));
+			if (recieveCode() == 0x10) {
+				String result = incoming.readUTF();
+				if (result.equals("false")) {
+					return false;
+				}
+				else if (result.equals("true")) {
+					return true;
+				} 
+			}
+		}
+		catch (IOException e) {
+			// Do nothing
+		}
+		return true;
+	}
+
 	public synchronized boolean requestUpdateProgress(File file, String task, int percentage) {
 		try {
 			sendCode((byte)(0x04));
@@ -344,7 +363,7 @@ public class ClientConnection {
 		sendCode((byte)(0x0C));
 		if (recieveCode() == 0x10) {
 			String levelName = "";
-			while(levelName.equals("\r\n") == false) {
+			while(levelName != "\r\n") {
 				try {
 					levelName = incoming.readUTF();
 				}
@@ -354,8 +373,6 @@ public class ClientConnection {
 				levels.add(levelName);
 			}
 		}
-		levels.remove(levels.size() - 1);
-		//levels.remove(levels.size() - 1);
 		return levels;
 	}
 
