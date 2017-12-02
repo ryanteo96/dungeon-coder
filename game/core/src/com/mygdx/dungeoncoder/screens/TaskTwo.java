@@ -1,6 +1,12 @@
 package com.mygdx.dungeoncoder.screens;
 
 import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 import Scenes.AdventurerHud;
 import Sprites.Adventurer.Adventurer;
 import Sprites.Adventurer.AdventurerContactListener;
@@ -11,9 +17,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -25,7 +29,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
@@ -33,7 +36,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.*;
 import com.mygdx.dungeoncoder.values.DefaultValues;
-import com.sun.org.apache.xpath.internal.SourceTree;
+
 
 import static com.mygdx.dungeoncoder.DungeonCoder.V_HEIGHT;
 import static com.mygdx.dungeoncoder.DungeonCoder.V_WIDTH;
@@ -82,6 +85,7 @@ public class  TaskTwo implements Screen {
     private TextButton noButton;
     private TextButton comeBackNextTimeButton;
     private TextButton viewTaskButton;
+    private TextButton hintButton;
 
     public Image popupImage;
 
@@ -147,23 +151,13 @@ public class  TaskTwo implements Screen {
         gifInstruction.setColor(Color.WHITE);
         stage.addActor(gifInstruction);
 
-        /*Texture popup = new Texture(Gdx.files.internal("UIElements/Accomplished.png"));
-        TextureRegion popupRegion = new TextureRegion(popup);
-        TextureRegionDrawable popupDrawable = new TextureRegionDrawable(popupRegion);
-        popupImage = new Image(popupDrawable);
-        popupImage.setPosition(500, 500);
-        System.out.println("CHECK ACHIEVEMENT: "+saveProcessor.checkAchievement());
-        if (saveProcessor.checkAchievement() == true) {
-            stage.addActor(popupImage);
-            if(player.getStateTimer() > 1){
-                popupImage.remove();
-            }
-        }*/
-
-
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        System.out.println(dateFormat.format(date)); //current date
         //back button
         createBack();
         createTextArea();
+        createHint();
     }
 
     public DungeonCoder getGame(){
@@ -234,6 +228,7 @@ public class  TaskTwo implements Screen {
             public void clicked(InputEvent e, float x, float y) {
                 stage.addActor(viewTaskButton);
                 stage.addActor(codeButton);
+                stage.addActor(hintButton);
             }
         });
 
@@ -249,7 +244,7 @@ public class  TaskTwo implements Screen {
                         "",
                         "In Java you can write this to print a line",
                         "",
-                        "System.out.println(\"Hello World\")",
+                        "System.out.println(); OR System.out.print();",
                         "",
                         "This line of code will print out 'Hello World' in Java",
                         "",
@@ -277,11 +272,11 @@ public class  TaskTwo implements Screen {
                 TextButton closeButton = new TextButton(String.valueOf(p), skin);
                 TextButton closeButtonToo = new TextButton("Close", cancelButtonSkin, "default");
                 window = new Window("Task 1", skin);
-                window.setDebug(true);
+                window.setDebug(false);
                 window.getTitleTable().add(closeButton).height(window.getPadTop());
                 window.setPosition(600,70);
                 //window.defaults().spaceBottom(10);//not sure what does this do
-                window.setSize(700,550);
+                window.setSize(600,550);
                 window.add(scrollPane).colspan(3).left().expand().fillY();
                 window.row();
                 window.right().bottom();
@@ -458,6 +453,27 @@ public class  TaskTwo implements Screen {
 
     }
 
+    private void createHint() {
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+        hintButton = new TextButton("Hint", skin);
+        hintButton.setPosition(350, 10);
+        hintButton.setSize(100, 30);
+        hintButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                new Dialog("Hint", skin,"dialog"){
+                    protected void result (Object object){
+                        System.out.println("Result: "+ object);
+                        System.out.println("CLICKED");
+                    }
+                }.text("This will print the lines and moves the cursor to a new line\n System.out.println(\"SOMETHING\");\n\n" +
+                        "This will just print the string without going to the next line\n System.out.print(\"SOMETHING\");\n\n" +
+                        "TIP: you can include a '\\n' at the back of the string to create a next line").button("     Ok     ", true).
+                        key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+            }
+        });
+    }
+
     public void movedRight(){
         DefaultValues.WALK_RIGHT = true;
         if (DefaultValues.WALK_RIGHT && player.b2body.getLinearVelocity().x <= 2 ) { //isKeyPressed for holding down keys
@@ -519,6 +535,7 @@ public class  TaskTwo implements Screen {
         //control player using immediate impulses, use world center so the torque wont make the character fly around
         if(player.currentState != Adventurer.State.DEAD){
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { // for quick tap
+                DungeonCoder.manager.get("UIElements/Animation/jump.wav", Sound.class).setVolume(5,10);
                 DungeonCoder.manager.get("UIElements/Animation/jump.wav", Sound.class).play();
                 player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
                 player.currentState = Adventurer.State.JUMPING;
@@ -583,6 +600,7 @@ public class  TaskTwo implements Screen {
                 DefaultValues.questActivated = false;
                 DefaultValues.npcDestroyed = true;
                 stage.addActor(dialog);
+                DungeonCoder.manager.get("UIElements/Animation/robottalking.wav", Music.class).setVolume(2f);
                 DungeonCoder.manager.get("UIElements/Animation/robottalking.wav", Music.class).play();
             }
 
@@ -640,7 +658,9 @@ public class  TaskTwo implements Screen {
 
 
         if (gameComplete == true && player.getStateTimer() > 0.7) {
-            DungeonCoder.manager.get("UIElements/Animation/stagecomplete.mp3", Sound.class).play();
+            if (saveProcessor.checkAchievement() == true) {
+                DungeonCoder.manager.get("UIElements/Animation/stagecomplete.mp3", Sound.class).play();
+            }
             hud.stopMusic();
             gameComplete = false;
             saveProcessor.insClear();
@@ -653,8 +673,6 @@ public class  TaskTwo implements Screen {
         stage.act(delta);
         stage.draw();
     }
-
-
 
     @Override
     public void resize(int width, int height) {

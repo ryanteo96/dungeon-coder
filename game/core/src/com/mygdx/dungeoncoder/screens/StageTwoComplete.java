@@ -3,6 +3,8 @@ package com.mygdx.dungeoncoder.screens;
 import Sprites.Adventurer.Adventurer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -50,10 +52,12 @@ public class StageTwoComplete implements Screen {
         TextureRegionDrawable popupDrawable = new TextureRegionDrawable(popupRegion);
         popupImage = new Image(popupDrawable);
         popupImage.setPosition(500, 500);
+
         System.out.println("CHECK ACHIEVEMENT: "+ saveProcessor.checkAchievement());
-        System.out.println(saveProcessor.getInsCleared());
+        System.out.println("Instructional Stages Clear in StageTwoComplete.java: " + saveProcessor.getInsCleared());
         if (saveProcessor.checkAchievement() == true) {
             stage.addActor(popupImage);
+            DungeonCoder.manager.get("UIElements/Animation/achievement.mp3", Sound.class).play();
         }else{
             popupImage.remove();
         }

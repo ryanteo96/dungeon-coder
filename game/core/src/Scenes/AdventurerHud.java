@@ -44,15 +44,14 @@ public class AdventurerHud implements Disposable {
     private String attemptInfo;
     private String deadlineInfo;
     private String progressInfo;
-
     private Music music;
-
     private DungeonCoder game;
 
     public AdventurerHud(SpriteBatch sb, TaskTwo screen){
         game = screen.getGame();
         music = DungeonCoder.manager.get("UIElements/Animation/backgroundmusic.mp3", Music.class);
         music.setLooping(true);
+        music.setVolume(0.40f);
         music.play();
 
         worldTimer = 300;
