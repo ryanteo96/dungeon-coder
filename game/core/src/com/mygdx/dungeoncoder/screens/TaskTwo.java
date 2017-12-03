@@ -86,6 +86,8 @@ public class  TaskTwo implements Screen {
     private TextButton viewTaskButton;
     private TextButton hintButton;
     private TextButton quest2YesButton;
+    private TextButton quest2NoButton;
+
 
     //boolean
     private boolean codeOn;
@@ -93,6 +95,8 @@ public class  TaskTwo implements Screen {
     private boolean quest2 = false;
     private boolean quest1Passed = false;
     private boolean quest2Passed = false;
+    private boolean playQuest1Again = true;
+    private boolean playQuest2Again = true;
 
     private Window window;
 
@@ -152,9 +156,9 @@ public class  TaskTwo implements Screen {
         world.setContactListener(new AdventurerContactListener());
 
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
-        Label gifInstruction = new Label("To use the GIF recording function, press O to open and\n press P to start recording and end recording",skin); //display deadline from the database
+        Label gifInstruction = new Label("To use the GIF recording function, press F1 to activate it and\n press F1 first time to start recording and second time to end recording",skin); //display deadline from the database
         gifInstruction.setFontScale(1f,1f);
-        gifInstruction.setPosition(850, 7);
+        gifInstruction.setPosition(800, 7);
         gifInstruction.setColor(Color.WHITE);
         stage.addActor(gifInstruction);
 
@@ -380,28 +384,41 @@ public class  TaskTwo implements Screen {
         dialog.button(noButton, false);
         dialog.setPosition(500,300);
         dialog.setHeight(150);
-        dialog.setWidth(380);
+        dialog.setWidth(330);
 
 
-        quest2YesButton = new TextButton(" I am ready! ", skin);
+        quest2YesButton = new TextButton("  Yes  ", skin);
         quest2YesButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                //shareVariable.connect.requestUpdateProgress(file,"Task1",progressInsideTaskTwo);
+                //yes is do nothing
             }
         });
 
-        dialog2 = new Dialog("Mr. Katana", skin, "dialog"){
+        quest2NoButton = new TextButton("  No  ", skin);
+        quest2NoButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                new Dialog("Mr.Katana NPC", skin,"dialog"){
+                    protected void result (Object object){
+                    }
+                }.text("You shall not pass until you earn enough points from both of us!").button("Ok", true).show(stage);
+            }
+        });
+
+
+
+        dialog2 = new Dialog("Mr.Katana NPC", skin, "dialog"){
             public void result(Object obj) {
             }
         };
 
-        dialog2.text("Looks like you pass your first test, but what about my test?\nAre you ready?");
+        dialog2.text("Looks like you have passed your first test, \nbut what about my test?\nAre you prepared?");
         dialog2.button(quest2YesButton, true); //sends "true" as the result
-        dialog2.button("No", false);
+        dialog2.button(quest2NoButton, false);
         dialog2.setPosition(500,300);
-        dialog2.setHeight(150);
-        dialog2.setWidth(380);
+        dialog2.setHeight(130);
+        dialog2.setWidth(350);
 
         runButton = new TextButton("Run", skin);
         runButton.setPosition(460, 10);
@@ -443,31 +460,46 @@ public class  TaskTwo implements Screen {
                         System.out.println("it gets in the if statement");
                         codeevaluator.run(classPath, runName);
                     }
-                    System.out.println("Code Evaluator: "+codeevaluator.evaluate(filepath));
+                    System.out.println("Code Evaluator: " + codeevaluator.evaluate(filepath));
                     FileReader fileReader = new FileReader("code.txt");
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
 
                     while((line = bufferedReader.readLine()) != null) {
-                        if(quest1 == true){
-                            if(line.equals("ARGHHHH")){
-                                quest1Passed = true;
-                                progress = 40;
-                                progressInsideTaskTwo += 40;
-                                score = 150;
-                                hud.addProgress(progress);
-                                hud.addScore(score);
+                        System.out.println("THE LINE PRINTED IS: "+line);
+                        System.out.println("playQuest1Again: "  + playQuest1Again);
+                        if(quest1 == true && quest2 == false){
+                            if(playQuest1Again == true){
+                                if(line.equals("ARGHHHH")){
+                                    quest1Passed = true;
+                                    playQuest1Again = false;
+                                }else{
+                                    quest1Passed = false;
+                                    playQuest1Again = true;
+                                }
+                                questOne();
+                            }else{
+                                new Dialog("Dr.Robot NPC", skin, "dialog") {
+                                    protected void result(Object object) {
+                                    }
+                                }.text("You have already completed my quest, you may continue your journey.").button("     Ok     ", true).show(stage);
                             }
-                        }else if(quest2 == true){
-                            if(line.equals("No one can stop a Dungeon Coder!")){
-                                quest2Passed = true;
-                                score = 300;
-                                progress = 60;
-                                progressInsideTaskTwo += 60;
-                                hud.addProgress(progress);
-                                hud.addScore(score);
+                        }else if(quest2 == true && quest1 == false){
+                            if(playQuest2Again == true) {
+                                if (line.equals("No one can stop a Dungeon Coder!")) {
+                                    quest2Passed = true;
+                                    playQuest2Again = false;
+                                } else {
+                                    quest2Passed = false;
+                                    playQuest2Again = true;
+                                }
+                                questTwo();
+                            }else{
+                                new Dialog("Mr.Katana NPC", skin, "dialog") {
+                                    protected void result(Object object) {
+                                    }
+                                }.text("You have already completed my quest, you may continue your journey.").button("     Ok     ", true).show(stage);
                             }
                         }
-
                     }
                     bufferedReader.close();
                 }
@@ -479,8 +511,6 @@ public class  TaskTwo implements Screen {
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
-
-
             }
         });
 
@@ -500,13 +530,56 @@ public class  TaskTwo implements Screen {
                     runButton.remove();
                     codeOn = false;
                 }
-
             }
         });
         //to find the path of the file
         //System.out.println("File path: " + new File("test.txt").getAbsolutePath());
 
     }
+
+    private void questOne(){
+        if(quest1Passed == true) {
+            progress = 40;
+            progressInsideTaskTwo += 40;
+            score = 150;
+            hud.addProgress(progress);
+            hud.addScore(score);
+            DungeonCoder.manager.get("UIElements/Animation/questcompleted.wav", Music.class).play();
+            new Dialog("Dr.Robot NPC", skin, "dialog") {
+                protected void result(Object object) {
+                }
+            }.text("Congratualtion! You have passed my test! \nBut beware, a greater task is yet to come.").button("     Ok     ", true).show(stage);
+
+        } else if (quest1Passed == false) {
+            DungeonCoder.manager.get("UIElements/Animation/fail.mp3", Music.class).play();
+            new Dialog("Dr.Robot NPC", skin, "dialog") {
+                protected void result(Object object) {
+                }
+            }.text("Too bad... But don't be disappointed, you can still do it!").button("Try again", true).show(stage);
+        }
+    }
+
+    private void questTwo(){
+        if(quest2Passed == true){
+            score = 300;
+            progress = 60;
+            progressInsideTaskTwo += 60;
+            hud.addProgress(progress);
+            hud.addScore(score);
+            DungeonCoder.manager.get("UIElements/Animation/questcompleted.wav", Music.class).play();
+            new Dialog("Mr.Katana NPC", skin,"dialog"){
+                protected void result (Object object){
+                }
+            }.text("Congratulation! You have earned my respect and you shall pass.").button("     Ok     ", true).show(stage);
+        }else if(quest2Passed == false){
+            DungeonCoder.manager.get("UIElements/Animation/fail.mp3", Music.class).play();
+            new Dialog("Mr.Katana NPC", skin,"dialog"){
+                protected void result (Object object){
+                }
+            }.text("Don't be disappointed, you can still do it!").button("Try again", true).show(stage);
+        }
+    }
+
 
     private void createHint() {
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
@@ -528,41 +601,6 @@ public class  TaskTwo implements Screen {
         });
     }
 
-    public void movedRight(){
-        DefaultValues.WALK_RIGHT = true;
-        if (DefaultValues.WALK_RIGHT && player.b2body.getLinearVelocity().x <= 2 ) { //isKeyPressed for holding down keys
-            player.b2body.applyLinearImpulse(new Vector2(1f, 0), player.b2body.getWorldCenter(), true);
-            DefaultValues.WALK_RIGHT = false;
-            System.out.println("RIGHT METHOD CALLED");
-            System.out.println("Your character moved right!");
-        }
-    }
-
-    public void movedLeft(){
-        DefaultValues.WALK_LEFT = true;
-        if (DefaultValues.WALK_LEFT && player.b2body.getLinearVelocity().x >= -2)  {
-            player.b2body.applyLinearImpulse(new Vector2(-1f, 0), player.b2body.getWorldCenter(), true);
-            DefaultValues.WALK_LEFT = false;
-            System.out.println("LEFT METHOD CALLED");
-            System.out.println("Your character moved left!");
-        }
-
-    }
-
-    public void jump(){
-        DefaultValues.JUMP = true;
-        if (DefaultValues.JUMP) { // for quick tap
-            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
-            player.currentState = Adventurer.State.JUMPING;
-            if(DefaultValues.JUMP && player.previousState == Adventurer.State.JUMPING){
-                player.b2body.applyLinearImpulse(new Vector2(0, -4f), player.b2body.getWorldCenter(), true);
-            }
-            DefaultValues.JUMP = false;
-            System.out.println("Your character jumped!");
-
-        }
-
-    }
 
     public boolean gameOver(){
         if(player.currentState == Adventurer.State.DEAD && player.getStateTimer() > 3){
@@ -606,27 +644,6 @@ public class  TaskTwo implements Screen {
             }
         }
 
-        /*if (DefaultValues.JUMP) { // for quick tap
-            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
-            player.currentState = Adventurer.State.JUMPING;
-            if(DefaultValues.JUMP && player.previousState == Adventurer.State.JUMPING){
-                player.b2body.applyLinearImpulse(new Vector2(0, -4f), player.b2body.getWorldCenter(), true);
-            }
-            DefaultValues.JUMP = false;
-            System.out.println("Your character jumped!");
-        }
-
-        if (DefaultValues.WALK_RIGHT && player.b2body.getLinearVelocity().x <= 2 ) { //isKeyPressed for holding down keys
-            player.b2body.applyLinearImpulse(new Vector2(1f, 0), player.b2body.getWorldCenter(), true);
-            DefaultValues.WALK_RIGHT = false;
-            System.out.println("Your character moved right!");
-        }
-
-        if (DefaultValues.WALK_LEFT && player.b2body.getLinearVelocity().x >= -2)  {
-            player.b2body.applyLinearImpulse(new Vector2(-1f, 0), player.b2body.getWorldCenter(), true);
-            DefaultValues.WALK_LEFT = false;
-            System.out.println("Your character moved left!");
-        }*/
     }
 
     public void update(float dt){
@@ -668,8 +685,8 @@ public class  TaskTwo implements Screen {
                 quest2 = true;
                 DefaultValues.quest2Activated = false;
                 stage.addActor(dialog2);
-                DungeonCoder.manager.get("UIElements/Animation/robottalking.wav", Music.class).setVolume(2f);
-                DungeonCoder.manager.get("UIElements/Animation/robottalking.wav", Music.class).play();
+                DungeonCoder.manager.get("UIElements/Animation/npc2.mp3", Music.class).setVolume(4f);
+                DungeonCoder.manager.get("UIElements/Animation/npc2.mp3", Music.class).play();
             }
 
 
@@ -691,8 +708,6 @@ public class  TaskTwo implements Screen {
 
     @Override
     public void render(float delta) {
-        //System.out.println("render");
-
         update(delta);
 
         Gdx.gl.glClearColor(172 / 255f, 115 / 255f, 57 / 255f, 1);
@@ -736,7 +751,7 @@ public class  TaskTwo implements Screen {
             System.out.println("Total clear:" + saveProcessor.getTotalCleared());
             System.out.printf("You have cleared %d instructional stages.\n", saveProcessor.getInsCleared());
             game.setScreen(new StageTwoComplete(game));
-
+            dispose();
         }
 
         stage.act(delta);

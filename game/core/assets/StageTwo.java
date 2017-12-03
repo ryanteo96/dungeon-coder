@@ -13,7 +13,8 @@ public class StageTwo {
             // Shouldn't happen.
         }
         // USER WRITE CODE HERE
-        System.out.println("No one can stop a Dungeon Coder!");
+        String a = "No one can stop a Dungeon Coder!";
+        System.out.println(a);
 
         // DO NOT WRITE CODE PAST THIS POINT
         out.close();

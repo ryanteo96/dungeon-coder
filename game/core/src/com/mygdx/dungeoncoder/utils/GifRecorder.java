@@ -22,7 +22,7 @@ import com.badlogic.gdx.utils.*;
 public class GifRecorder{
     private static final float defaultSize = 600;
 
-    private int resizeKey = Keys.CONTROL_LEFT, openKey = Keys.O, recordKey = Keys.P;
+    private int resizeKey = Keys.CONTROL_LEFT, openKey = Keys.F1, recordKey = Keys.F2;
     private RecorderController controller = new DefaultController();
 
     private Batch batch;
