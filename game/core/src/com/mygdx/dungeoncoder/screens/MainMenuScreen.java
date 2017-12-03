@@ -73,8 +73,8 @@ public class MainMenuScreen implements Screen {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = new SimpleDateFormat("yyyy-MM-dd").format(new Date()); //current date
         Date deadline_Date = sdf.parse(deadline);//deadline date
-        System.out.println("This is the current date: "+dateString);
-        System.out.println("This is the deadline: "+deadline);
+        System.out.println("This is the current date: " + dateString);
+        System.out.println("This is the deadline: " + deadline);
         Date currentDate = sdf.parse(dateString);
         if (deadline_Date.compareTo(currentDate) > 0) {
             System.out.println("The student cannot play other modes");
@@ -294,20 +294,40 @@ public class MainMenuScreen implements Screen {
                     instructionalMode(game);
                 } else if (DefaultValues.mode == 1) {
                     System.out.println("deadlinePassed: " + deadlinePassed);
-                    if (finishedAssignment && deadlinePassed == false) {
-                        new Dialog("Access Granted.", dialogSkin, "dialog") {
-                            protected void result(Object object) {
-                            }
-                        }.text("    You have finished your assignment.    ").button(continueButton, true).button("Cancel", false).
-                                key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                    if (finishedAssignment) {
+                            //not lock and deadline has not passed,
+                        if (!shareVariable.connect.requestLockStatus() && !deadlinePassed) {
+                            new Dialog("Access Granted.", dialogSkin, "dialog") {
+                                protected void result(Object object) {
+                                }
+                            }.text("    You have finished your assignment.    ").button(continueButton, true).button("Cancel", false).
+                                    key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                            //not lock and deadline has passed
+                        } else if (!shareVariable.connect.requestLockStatus() && deadlinePassed) {
+                            new Dialog("Access Granted.", dialogSkin, "dialog") {
+                                protected void result(Object object) {
+                                }
+                            }.text("    You have finished your assignment.    ").button(continueButton, true).button("Cancel", false).
+                                    key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                            //lock and deadline has passed
+                        } else if (shareVariable.connect.requestLockStatus() && deadlinePassed) {
+                            new Dialog("Access Denied!", dialogSkin, "dialog") {
+                                protected void result(Object object) {
+                                }
+                            }.text("     The deadline has already passed.     ").button(cannotContinue, false).button("Cancel", false).
+                                    key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                            //lock and deadline has not passed
+                        } else if (shareVariable.connect.requestLockStatus() && !deadlinePassed) {
+                            new Dialog("Access Denied!", dialogSkin, "dialog") {
+                                protected void result(Object object) {
+                                }
+                            }.text("     Other modes are currently locked, please request permission from the instructor in order to access them    ").button(cannotContinue, false).button("Cancel", false).
+                                    key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                        }
 
-                    } else if (finishedAssignment && deadlinePassed == true) {
-                        new Dialog("Access Denied!", dialogSkin, "dialog") {
-                            protected void result(Object object) {
-                            }
-                        }.text("     The deadline has already passed.     ").button(cannotContinue, false).button("Cancel", false).
-                                key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
-                    } else if (!finishedAssignment && deadlinePassed == true) {
+                    }
+
+                    if (!finishedAssignment && deadlinePassed == true) {
                         new Dialog("Access Denied!", dialogSkin, "dialog") {
                             protected void result(Object object) {
                             }
@@ -333,6 +353,7 @@ public class MainMenuScreen implements Screen {
 
                 {
                     finishedAssignment = true;
+                    deadlinePassed = false;
                     if (finishedAssignment && deadlinePassed == false) {
                         new Dialog("Access Granted.", dialogSkin, "dialog") {
                             protected void result(Object object) {

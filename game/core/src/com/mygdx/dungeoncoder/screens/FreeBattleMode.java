@@ -71,11 +71,11 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
 
         Gdx.input.setInputProcessor(stage);
-
+        System.out.println("It has gone in free battle mode");
         createUploadButton();
         createDownloadButton();
         createSortButton();
-        createTable(sort);
+        //createTable(sort);
         createBack();
     }
 
@@ -130,7 +130,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
 
         // requesting level list.
 
-        /*ArrayList<String> levels = shareVariable.connect.requestLevelList();
+        ArrayList<String> levels = shareVariable.connect.requestLevelList();
 
         if (order == 0) {
             sort = 0;
@@ -169,7 +169,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         Label lblLevelList = new Label("LEVELS", labelStyle);
         lblLevelList.setPosition(100, 550);
         lblLevelList.setFontScale(1);
-        stage.addActor(lblLevelList);*/
+        stage.addActor(lblLevelList);
 
         /*String[] strings = new String[30];
         for (int i = 0, k = 0; i < 30; i++) {
@@ -188,7 +188,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
             }
         }*/
 
-       // list.setItems(strings);
+        list.setItems(strings);
         scrollPane = new ScrollPane(list);
         scrollPane.setBounds(0, 0, gameWidth, gameHeight);
         scrollPane.setSmoothScrolling(false);
@@ -260,7 +260,6 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
                     JOptionPane.showMessageDialog(null, fc.getSelectedFile().getAbsolutePath());
 
                     //File f = new File(fc.getSelectedFile().getAbsolutePath());
-
                     //clientConnection.uploadLevel("testLevel", f);
 
                     result = JFileChooser.APPROVE_OPTION;

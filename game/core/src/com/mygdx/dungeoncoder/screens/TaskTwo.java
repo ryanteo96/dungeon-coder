@@ -237,7 +237,6 @@ public class TaskTwo implements Screen {
                 stage.addActor(viewTaskButton);
                 stage.addActor(codeButton);
                 stage.addActor(hintButton);
-                //shareVariable.connect.requestUpdateProgress(file,"Task1",progressInsideTaskTwo);
             }
         });
 
@@ -486,6 +485,7 @@ public class TaskTwo implements Screen {
                                     quest2Passed = false;
                                     playQuest2Again = true;
                                 }
+                                System.out.println("quest2Passed: " + quest2Passed);
                                 questTwo();
                             } else {
                                 new Dialog("Mr.Katana NPC", skin, "dialog") {
@@ -495,6 +495,7 @@ public class TaskTwo implements Screen {
                             }
                         }
                     }
+                    shareVariable.connect.requestUpdateProgress(file,"Task1",progressInsideTaskTwo);
                     bufferedReader.close();
                 } catch (FileNotFoundException ex) {
                     System.out.println("Unable to open file when run is being clicked'" + fileName + "'");
@@ -503,7 +504,9 @@ public class TaskTwo implements Screen {
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
+                System.out.println("the progress: "+progressInsideTaskTwo);
             }
+
         });
 
 
@@ -541,7 +544,6 @@ public class TaskTwo implements Screen {
                 protected void result(Object object) {
                 }
             }.text("Congratualtion! You have passed my test! \nBut beware, a greater task is yet to come.").button("     Ok     ", true).show(stage);
-
         } else if (quest1Passed == false) {
             DungeonCoder.manager.get("UIElements/Animation/fail.mp3", Music.class).play();
             new Dialog("Dr.Robot NPC", skin, "dialog") {
