@@ -14,6 +14,7 @@ public class StageTwo {
         }
         // USER WRITE CODE HERE
         String a = "No one can stop a Dungeon Coder!";
+        //String a = "ARGHHHH";
         System.out.println(a);
 
         // DO NOT WRITE CODE PAST THIS POINT

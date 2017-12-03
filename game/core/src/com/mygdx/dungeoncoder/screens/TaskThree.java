@@ -174,6 +174,7 @@ public class TaskThree implements Screen {
     }
 
     private void backToInstructionalMode(DungeonCoder g) {
+        dispose();
         g.setScreen(new InstructionalMode(g));
         music.stop();
     }
@@ -265,8 +266,8 @@ public class TaskThree implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
     if(gameOver()){
-        game.setScreen(new GameOverScreen(game));
         dispose();
+        game.setScreen(new GameOverScreen(game));
     }
         stage.draw();
         stage.act(delta);

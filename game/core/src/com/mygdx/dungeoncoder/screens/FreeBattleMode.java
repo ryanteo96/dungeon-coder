@@ -22,23 +22,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
+
 import com.mygdx.dungeoncoder.DungeonCoder;
-import com.mygdx.dungeoncoder.utils.ClientConnection;
-import com.mygdx.dungeoncoder.values.DefaultValues;
+
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Scanner;
+
 
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
@@ -115,6 +114,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        skin.dispose();
     }
 
 
@@ -129,7 +129,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
 
         // requesting level list.
 
-        ArrayList<String> levels = shareVariable.connect.requestLevelList();
+        /*ArrayList<String> levels = shareVariable.connect.requestLevelList();
 
         if (order == 0) {
             sort = 0;
@@ -168,7 +168,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         Label lblLevelList = new Label("LEVELS", labelStyle);
         lblLevelList.setPosition(100, 550);
         lblLevelList.setFontScale(1);
-        stage.addActor(lblLevelList);
+        stage.addActor(lblLevelList);*/
 
         /*String[] strings = new String[30];
         for (int i = 0, k = 0; i < 30; i++) {
@@ -187,7 +187,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
             }
         }*/
 
-        list.setItems(strings);
+       // list.setItems(strings);
         scrollPane = new ScrollPane(list);
         scrollPane.setBounds(0, 0, gameWidth, gameHeight);
         scrollPane.setSmoothScrolling(false);
@@ -208,6 +208,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         btnBack.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
+                dispose();
                 game.setScreen(new MainMenuScreen(game));
             }
         });

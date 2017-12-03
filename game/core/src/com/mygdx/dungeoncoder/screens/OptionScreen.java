@@ -94,6 +94,7 @@ public class OptionScreen implements Screen{
     }
 
     private void back() {
+        dispose();
         game.setScreen(new MainMenuScreen(game));
     }
 

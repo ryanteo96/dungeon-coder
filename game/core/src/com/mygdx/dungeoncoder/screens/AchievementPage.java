@@ -115,6 +115,7 @@ public class AchievementPage implements Screen {
 
 
     private void back() {
+        dispose();
         game.setScreen(new SplashScreen(game));
     }
 
@@ -173,7 +174,8 @@ public class AchievementPage implements Screen {
 
     private void Save(DungeonCoder g) throws IOException {
         s.Save();
-            g.setScreen(new AchievementPage(game));
+        dispose();
+        g.setScreen(new AchievementPage(game));
     }
 
     private void createTest() {
@@ -216,6 +218,7 @@ public class AchievementPage implements Screen {
         });
         stage.addActor(backImage);
     }
+
     private void createOff() {
         Texture back = new Texture(Gdx.files.internal("UIElements/Off.png"));
         TextureRegion backRegion = new TextureRegion(back);

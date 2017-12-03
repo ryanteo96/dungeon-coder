@@ -107,7 +107,6 @@
   <object id="50" x="1810" y="0" width="16" height="45.5"/>
   <object id="51" x="1981" y="28" width="47" height="25.5"/>
   <object id="52" x="1939.5" y="25" width="44.5" height="17"/>
-  <object id="53" x="2070" y="188.5" width="480.5" height="18"/>
   <object id="54" x="2086" y="79" width="64.5" height="17.5"/>
   <object id="55" x="2098.5" y="67" width="58.5" height="20"/>
   <object id="56" x="2126" y="42" width="62" height="26"/>
@@ -136,10 +135,7 @@
   <object id="79" x="3583" y="149" width="38.5" height="58.5"/>
   <object id="80" x="3638.5" y="118.5" width="200" height="24"/>
   <object id="81" x="3661.5" y="-2.5" width="181.5" height="66"/>
-  <object id="140" x="0.5" y="192" width="719.5" height="16"/>
-  <object id="143" x="720" y="192" width="656" height="16"/>
-  <object id="146" x="1376" y="192" width="576" height="16"/>
-  <object id="147" x="1952" y="192" width="112" height="16"/>
+  <object id="140" x="0.5" y="192" width="3477.5" height="16"/>
   <object id="169" x="177.5" y="4.58942" width="22" height="200.411"/>
  </objectgroup>
  <objectgroup name="Wall" offsetx="443.39" offsety="-107.09">

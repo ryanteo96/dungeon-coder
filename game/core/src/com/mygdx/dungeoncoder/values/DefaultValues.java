@@ -27,12 +27,11 @@ public class DefaultValues {
     public static final short END_BIT = 8;
     public static final short SKELETON_BIT = 64;
 
-    public static boolean WALK_RIGHT = false;
-    public static boolean WALK_LEFT = false;
-    public static boolean JUMP = false;
-    public static boolean gameComplete = false;
+    public static boolean touchedFinishline = false;
     public static boolean quest2Activated = false;
     public static boolean questActivated = false;
+
+    public static int mode = 0;
 
     public static String username = "";
 }

@@ -103,6 +103,7 @@ public class SplashScreen implements Screen {
         stage.addActor(main4Image);
     }
     private void AchievementPage(DungeonCoder g) throws FileNotFoundException {
+        dispose();
         g.setScreen(new AchievementPage(g));
     }
 
@@ -121,6 +122,7 @@ public class SplashScreen implements Screen {
         stage.addActor(main4Image);
     }
     private void LoginScreen(DungeonCoder g) {
+        dispose();
         g.setScreen(new LoginScreen(g));
     }
 
@@ -152,6 +154,7 @@ public class SplashScreen implements Screen {
 
         okButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+                dispose();
                 game.setScreen(new LoginScreen(game));
             }
         });
@@ -159,6 +162,7 @@ public class SplashScreen implements Screen {
         stage.addActor(main4Image);
     }
     private void Mainmenu(DungeonCoder g) {
+        dispose();
         g.setScreen(new MainMenuScreen(g));
     }
 }

@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
+import com.mygdx.dungeoncoder.values.DefaultValues;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -31,11 +32,9 @@ public class MainMenuScreen implements Screen {
 
     private DungeonCoder game;
     private Stage stage;
-    private int mode = 0;
     private Skin backButtonSkin;
     private Skin dialogSkin;
     private Skin skin;
-    TextButton logoutButton;
     private boolean finishedAssignment = true;
     TextButton oKButton;
     TextButton cannotContinue;
@@ -73,6 +72,9 @@ public class MainMenuScreen implements Screen {
         createMenu4();
         createCharacter();
         createLogout();
+        stage.addActor(mainStoryModeImage_Text);
+        stage.addActor(instructionalModeImage_Text);
+        stage.addActor(freeBattleModeImage_Text);
     }
     public void btnBackClicked(DungeonCoder g) {
         g.setScreen(new SplashScreen(g));
@@ -87,9 +89,23 @@ public class MainMenuScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(240/255f, 240/255f, 240/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if(DefaultValues.mode == 0){
+            freeBattleModeImage_Text.setVisible(false);
+            instructionalModeImage_Text.setVisible(true);
+            mainStoryModeImage_Text.setVisible(false);
+        }else if(DefaultValues.mode == 1){
+            freeBattleModeImage_Text.setVisible(false);
+            instructionalModeImage_Text.setVisible(false);
+            mainStoryModeImage_Text.setVisible(true);
+        }else if(DefaultValues.mode == 2){
+            freeBattleModeImage_Text.setVisible(true);
+            instructionalModeImage_Text.setVisible(false);
+            mainStoryModeImage_Text.setVisible(false);
+        }
         stage.draw();
         stage.act(delta);
     }
+
 
     @Override
     public void resize(int width, int height) {
@@ -141,12 +157,12 @@ public class MainMenuScreen implements Screen {
 
 
     private void createLogout(){
-        skin = new Skin(Gdx.files.internal("comic-ui.json"));
+        /*skin = new Skin(Gdx.files.internal("comic-ui.json"));
         dialogSkin = new Skin(Gdx.files.internal("UIElements/test.json"));
         yesButton = new TextButton("   Yes   ",dialogSkin);
         logoutButton = new TextButton("Log Out",skin);
         logoutButton.setSize(200,55);
-        logoutButton.setPosition(1000,650);
+        logoutButton.setPosition(1000,30);
         logoutButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -165,10 +181,41 @@ public class MainMenuScreen implements Screen {
         yesButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 game.setScreen(new SplashScreen(game));
             }
         });
-        stage.addActor(logoutButton);
+        stage.addActor(logoutButton);*/
+        dialogSkin = new Skin(Gdx.files.internal("UIElements/test.json"));
+        yesButton = new TextButton("   Yes   ",dialogSkin);
+        Texture logout = new Texture(Gdx.files.internal("UIElements/logout.png"));
+        TextureRegion logoutRegion = new TextureRegion(logout);
+        TextureRegionDrawable logoutDrawable = new TextureRegionDrawable(logoutRegion);
+        Image logoutImage = new Image(logoutDrawable);
+        logoutImage.setPosition(840,147);
+        logoutImage.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                shareVariable.connected = false;
+                new Dialog("Logging out", dialogSkin,"dialog"){
+                    protected void result (Object object){
+                        System.out.println("Result: "+ object);
+                        System.out.println("Log out");
+                    }
+                }.text("    Are you sure you want to log out?    ").button(yesButton, true).button("Cancel",false).
+                        key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+            }
+        });
+
+        yesButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new SplashScreen(game));
+            }
+        });
+
+        stage.addActor(logoutImage);
+
     }
 
 
@@ -182,13 +229,9 @@ public class MainMenuScreen implements Screen {
         instructionalModeImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                mode = 0;
+                DefaultValues.mode = 0;
                 instructionalModeImage_Text.setPosition(200, 550);
                 System.out.println("You are now in instructional mode");
-                stage.addActor(instructionalModeImage_Text);
-                instructionalModeImage_Text.setVisible(true);
-                mainStoryModeImage_Text.setVisible(false);
-                freeBattleModeImage_Text.setVisible(false);
             }
         });
 
@@ -205,13 +248,9 @@ public class MainMenuScreen implements Screen {
         mainStoryModeImage.setPosition(960,585);
         mainStoryModeImage.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                mode = 1;
+                DefaultValues.mode = 1;
                 mainStoryModeImage_Text.setPosition(200, 550);
                 System.out.println("You are now in main story mode");
-                stage.addActor(mainStoryModeImage_Text);
-                instructionalModeImage_Text.setVisible(false);
-                mainStoryModeImage_Text.setVisible(true);
-                freeBattleModeImage_Text.setVisible(false);
             }
         });
 
@@ -231,13 +270,9 @@ public class MainMenuScreen implements Screen {
         freeBattleModeImage.addListener(new ClickListener(){
             @Override
              public void clicked(InputEvent event, float x, float y) {
-                mode = 2;
+                DefaultValues.mode = 2;
                 freeBattleModeImage_Text.setPosition(200, 550);
                 System.out.println("You are now in free battle mode");
-                stage.addActor(freeBattleModeImage_Text);
-                freeBattleModeImage_Text.setVisible(true);
-                instructionalModeImage_Text.setVisible(false);
-                mainStoryModeImage_Text.setVisible(false);
             }
         });
         stage.addActor(freeBattleModeImage);
@@ -259,9 +294,9 @@ public class MainMenuScreen implements Screen {
         main1Image.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (mode == 0){
+                if (DefaultValues.mode == 0){
                     instructionalMode(game);
-                } else if (mode == 1){
+                } else if (DefaultValues.mode == 1){
                     if(finishedAssignment){
                         new Dialog("Access Granted.", dialogSkin,"dialog"){
                             protected void result (Object object){
@@ -293,11 +328,12 @@ public class MainMenuScreen implements Screen {
                     cannotContinue.addListener(new ClickListener(){
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
+                            dispose();
                             game.setScreen(new MainMenuScreen(game));
                         }
                     });*/
 
-                    } else if (mode == 2){
+                    } else if (DefaultValues.mode == 2){
                     finishedAssignment = true;
                     if(finishedAssignment){
                         new Dialog("Access Granted.", dialogSkin,"dialog"){
@@ -340,6 +376,7 @@ public class MainMenuScreen implements Screen {
                     cannotContinue.addListener(new ClickListener(){
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
+                            dispose();
                             game.setScreen(new MainMenuScreen(game));
                         }
                     });*/
@@ -361,7 +398,7 @@ public class MainMenuScreen implements Screen {
                 CostumeScreen(game);
             }
         });
-        stage.addActor(main2Image);
+        //stage.addActor(main2Image);
     }
     private void CostumeScreen(DungeonCoder g) {
         g.setScreen(new CostumeScreen(g));
@@ -376,10 +413,11 @@ public class MainMenuScreen implements Screen {
         main3Image.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
                 DesignScreen(game);
             }
         });
-        stage.addActor(main3Image);
+        //stage.addActor(main3Image);
     }
     private void DesignScreen(DungeonCoder g) {
         g.setScreen(new DesignScreen(g));
@@ -390,7 +428,7 @@ public class MainMenuScreen implements Screen {
         TextureRegion main4Region = new TextureRegion(main4);
         TextureRegionDrawable main4Drawable = new TextureRegionDrawable(main4Region);
         Image main4Image = new Image(main4Drawable);
-        main4Image.setPosition(840,69);
+        main4Image.setPosition(840,300);
         main4Image.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -406,12 +444,13 @@ public class MainMenuScreen implements Screen {
     private void createCharacter(){
         Texture chara = new Texture(Gdx.files.internal("UIElements/chara.png"));
         instructionalModeImage_Text.setPosition(200, 550);
+        mainStoryModeImage_Text.setPosition(200,550);
+        freeBattleModeImage_Text.setPosition(200,550);
         TextureRegion charaRegion = new TextureRegion(chara);
         TextureRegionDrawable charaDrawable = new TextureRegionDrawable(charaRegion);
         Image charaImage = new Image(charaDrawable);
         charaImage.setPosition(200,200);
         stage.addActor(charaImage);
-        stage.addActor(instructionalModeImage_Text);
     }
 
 

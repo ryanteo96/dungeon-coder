@@ -38,6 +38,7 @@ public class MainStory1 implements Screen {
         btnBack.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
+                dispose();
                 game.setScreen(new MainStoryMode(game));;
             }
         });

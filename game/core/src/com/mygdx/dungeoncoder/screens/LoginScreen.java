@@ -163,6 +163,7 @@ public class LoginScreen implements Screen {
             ping.start();
             System.out.println(ping);
             DefaultValues.username = txfUsername.getText();
+            dispose();
             g.setScreen(new MainMenuScreen(g));
             //System.out.println(shareVariable.connect);
         } else {
@@ -173,6 +174,7 @@ public class LoginScreen implements Screen {
     }
 
     public void btnBackClicked(DungeonCoder g){
+        dispose();
          g.setScreen(new SplashScreen(g));
     }
 

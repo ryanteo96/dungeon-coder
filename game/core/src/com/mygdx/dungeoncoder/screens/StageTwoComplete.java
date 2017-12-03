@@ -74,8 +74,8 @@ public class StageTwoComplete implements Screen {
     @Override
     public void render(float delta) {
         if(Gdx.input.justTouched()){
-            game.setScreen(new InstructionalMode((DungeonCoder)game));
             dispose();
+            game.setScreen(new InstructionalMode((DungeonCoder)game));
         }
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

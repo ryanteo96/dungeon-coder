@@ -53,11 +53,11 @@ public class TimeOver implements Screen {
     public void render(float delta) {
         if(Gdx.input.justTouched()){
             try {
+                dispose();
                 game.setScreen(new TaskTwo((DungeonCoder)game));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            dispose();
         }
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
