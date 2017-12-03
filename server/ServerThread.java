@@ -483,8 +483,7 @@ public class ServerThread extends Thread {
 		try {
 			System.out.println("updating user progress");
 			stmt.executeUpdate("UPDATE " + task + " SET Completion='" + percentage + "' WHERE Student='" + connectedUser + "'");
-			sendCode(updateUserCode(task));
-			return;
+			updateUserCode(task);
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -497,7 +496,7 @@ public class ServerThread extends Thread {
 	}
 
 	// Update the user's saved code and attempts.
-	private byte updateUserCode(String task) {
+	private void updateUserCode(String task) {
 		try {
 			if (conn == null) {
 				connectDB();
@@ -513,11 +512,11 @@ public class ServerThread extends Thread {
 			currentAttempts++;
 			stmt.executeUpdate("UPDATE " + task + " SET Attempts='" + currentAttempts + "' WHERE Student='" + connectedUser + "'");
 			stmt.executeUpdate("UPDATE " + task + " Set Code='" + fileName + "' WHERE Student='" + connectedUser + "'");
-			return((byte)(0x10));
+			sendCode((byte)(0x10));
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
-			return((byte)(0x60));
+			//return((byte)(0x60));
 		}
 	}
 
@@ -885,7 +884,7 @@ public class ServerThread extends Thread {
 				
 				// PING
 				case (byte)(0xFF) :
-					sendCode((byte)(0x10));
+					sendCode((byte)(0xFF));
 					break;
 				
 				// INVALIDREQUEST
