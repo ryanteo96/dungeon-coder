@@ -494,8 +494,8 @@ public class TaskTwo implements Screen {
                                 }.text("You have already completed my quest, you may continue your journey.").button("     Ok     ", true).show(stage);
                             }
                         }
+                        shareVariable.connect.requestUpdateProgress(file,"Task1",progressInsideTaskTwo);
                     }
-                    shareVariable.connect.requestUpdateProgress(file,"Task1",progressInsideTaskTwo);
                     bufferedReader.close();
                 } catch (FileNotFoundException ex) {
                     System.out.println("Unable to open file when run is being clicked'" + fileName + "'");

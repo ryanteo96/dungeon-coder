@@ -295,28 +295,28 @@ public class MainMenuScreen implements Screen {
                 } else if (DefaultValues.mode == 1) {
                     System.out.println("deadlinePassed: " + deadlinePassed);
                     if (finishedAssignment) {
-                            //not lock and deadline has not passed,
+                            //not lock and deadline has not passed, student can play
                         if (!shareVariable.connect.requestLockStatus() && !deadlinePassed) {
                             new Dialog("Access Granted.", dialogSkin, "dialog") {
                                 protected void result(Object object) {
                                 }
                             }.text("    You have finished your assignment.    ").button(continueButton, true).button("Cancel", false).
                                     key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
-                            //not lock and deadline has passed
+                            //not lock and deadline has passed,  student cannot play
                         } else if (!shareVariable.connect.requestLockStatus() && deadlinePassed) {
-                            new Dialog("Access Granted.", dialogSkin, "dialog") {
+                            new Dialog("Access Denied!.", dialogSkin, "dialog") {
                                 protected void result(Object object) {
                                 }
-                            }.text("    You have finished your assignment.    ").button(continueButton, true).button("Cancel", false).
+                            }.text("    The deadline has already passed.    ").button(cannotContinue, true).button("Cancel", false).
                                     key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
-                            //lock and deadline has passed
+                            //lock and deadline has passed, student cannot play
                         } else if (shareVariable.connect.requestLockStatus() && deadlinePassed) {
                             new Dialog("Access Denied!", dialogSkin, "dialog") {
                                 protected void result(Object object) {
                                 }
                             }.text("     The deadline has already passed.     ").button(cannotContinue, false).button("Cancel", false).
                                     key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
-                            //lock and deadline has not passed
+                            //lock and deadline has not passed, student cannot play
                         } else if (shareVariable.connect.requestLockStatus() && !deadlinePassed) {
                             new Dialog("Access Denied!", dialogSkin, "dialog") {
                                 protected void result(Object object) {
