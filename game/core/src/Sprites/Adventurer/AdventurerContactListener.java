@@ -48,11 +48,22 @@ public class AdventurerContactListener implements ContactListener{
                 if(fixA.getFilterData().categoryBits == DefaultValues.ADVENTURER_BIT){
                     ((Adventurer)fixA.getUserData()).questActivated();
                     DefaultValues.questActivated = true;
-                    Gdx.app.log("NPC", "TRIGGERED A QUEST");
+                    Gdx.app.log("NPC", "TRIGGERED QUEST 1");
                 }else{
                     ((Adventurer)fixB.getUserData()).questActivated();
                     DefaultValues.questActivated = true;
-                    Gdx.app.log("NPC", "TRIGGERED A QUEST");
+                    Gdx.app.log("NPC", "TRIGGERED QUEST 1");
+                }
+                break;
+            case DefaultValues.ADVENTURER_BIT | DefaultValues.NPC2_BIT:
+                if(fixA.getFilterData().categoryBits == DefaultValues.ADVENTURER_BIT){
+                    ((Adventurer)fixA.getUserData()).quest2Activated();
+                    DefaultValues.quest2Activated = true;
+                    Gdx.app.log("NPC", "TRIGGERED QUEST 2");
+                }else{
+                    ((Adventurer)fixB.getUserData()).quest2Activated();
+                    DefaultValues.quest2Activated = true;
+                    Gdx.app.log("NPC", "TRIGGERED QUEST 2");
                 }
                 break;
         }

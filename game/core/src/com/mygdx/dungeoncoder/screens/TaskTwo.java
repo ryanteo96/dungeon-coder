@@ -3,8 +3,6 @@ package com.mygdx.dungeoncoder.screens;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import Scenes.AdventurerHud;
@@ -41,6 +39,7 @@ import com.mygdx.dungeoncoder.values.DefaultValues;
 import static com.mygdx.dungeoncoder.DungeonCoder.V_HEIGHT;
 import static com.mygdx.dungeoncoder.DungeonCoder.V_WIDTH;
 import static com.mygdx.dungeoncoder.values.DefaultValues.*;
+
 
 
 public class  TaskTwo implements Screen {
@@ -87,14 +86,15 @@ public class  TaskTwo implements Screen {
     private TextButton viewTaskButton;
     private TextButton hintButton;
 
-    public Image popupImage;
-
     //boolean
     private boolean codeOn;
+    private boolean quest1 = false;
+    private boolean quest2 = false;
 
     private Window window;
 
     private Dialog dialog;
+    private Dialog dialog2;
 
     public GifRecorder gifRecorder;
 
@@ -232,13 +232,28 @@ public class  TaskTwo implements Screen {
             }
         });
 
+        //No and then show another dialog and then go back to instructional mode
+        noButton = new TextButton(" No, I need more time! ", skin);
+        noButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                new Dialog("Dr.Robot NPC", skin,"dialog"){
+                    protected void result (Object object){
+                        System.out.println("Result: "+ object);
+                    }
+                }.text("    I guess you are not ready yet, come back next time  ").button( comeBackNextTimeButton, true).
+                        key(Input.Keys.ENTER, true).show(stage);
+
+            }
+        });
+
         viewTaskButton = new TextButton("View your mission", skin);
         viewTaskButton.setHeight(50);
         viewTaskButton.setPosition(200,10);
         viewTaskButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                Object[] listEntries = {"Mission",
+                Object[] listEntries = {"Mission 1",
                         "You have encountered an enemy",
                         "Here we will be learning about how to print words in Java",
                         "",
@@ -254,10 +269,38 @@ public class  TaskTwo implements Screen {
                         "",
                         "================================================================================================",
                         "Note:",
+                        "Please only write your code in the section '// USER WRITE CODE HERE' and",
+                        "// DO NOT WRITE CODE PAST THIS POINT"};
+
+
+                Object[] listEntries2 = {"Mission 2",
+                        "You have encountered a new enemy",
+                        "",
+                        "In this mission, you will need to use Strings.",
+                        "Strings are a sequence of characters. In Java programming language, strings are created as objects.",
+                        "The Java platform provides the String class to create and manipulate strings.",
+                        "To create Strings: ",
+                        "",
+                        "String greeting = \"Hello world!\"",
+                        "",
+                        "Whenever it encounters a string literal in your code, the compiler creates a String object",
+                        "with its value in this case, \"Hello world!\"",
+                        "To print it, you can just this",
+                        "",
+                        "System.out.println(greeting)",
+                        "================================================================================================",
+                        "Note:",
                         "Please only write your code under the '// USER WRITE CODE HERE' section"};
+
                 //create Text using lists and scrollpane
                 List list = new List(skin);
-                list.setItems(listEntries);
+                System.out.println("first quest is: "+ DefaultValues.questActivated);
+                System.out.println("Second quest is: "+ DefaultValues.quest2Activated);
+                if(quest1 == true){
+                    list.setItems(listEntries);
+                }else if(quest2 == true){
+                    list.setItems(listEntries2);
+                }
                 ScrollPane scrollPane = new ScrollPane(list, skin);
                 scrollPane.setSize(0,0);
                 scrollPane.setFlickScroll(false);
@@ -303,20 +346,7 @@ public class  TaskTwo implements Screen {
             }
         });
 
-        //No and then show another dialog and then go back to instructional mode
-        noButton = new TextButton(" No, I need more time! ", skin);
-        noButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent e, float x, float y) {                ;
-                new Dialog("Dr.Robot NPC", skin,"dialog"){
-                    protected void result (Object object){
-                        System.out.println("Result: "+ object);
-                    }
-                }.text("    I guess you are not ready yet, come back next time  ").button( comeBackNextTimeButton, true).
-                        key(Input.Keys.ENTER, true).show(stage);
 
-            }
-        });
         //return to instructional
         comeBackNextTimeButton = new TextButton("Ok", skin);
         comeBackNextTimeButton.addListener(new ClickListener() {
@@ -335,13 +365,26 @@ public class  TaskTwo implements Screen {
                 System.out.println("result "+ obj);
             }
         };
-        //when ok is clicked  DefaultValues.questActivated = false;
+
         dialog.text("Hi, "+ DefaultValues.username + ", Welcome to the Dungeon!\nTo gain points and complete the stage,you\n will need to solve these problems by using\n Java programming, Are you ready?");
         dialog.button(okButton, true); //sends "true" as the result
         dialog.button(noButton, false);
         dialog.setPosition(500,300);
         dialog.setHeight(150);
         dialog.setWidth(380);
+
+        dialog2 = new Dialog("Mr. Katana", skin, "dialog"){
+            public void result(Object obj) {
+                System.out.println("result "+ obj);
+            }
+        };
+
+        dialog2.text("Looks like you pass your first test, but what about my test?\nAre you ready?");
+        dialog2.button("Yes", true); //sends "true" as the result
+        dialog2.button("No", false);
+        dialog2.setPosition(500,300);
+        dialog2.setHeight(150);
+        dialog2.setWidth(380);
 
         final int percentage = Integer.parseInt(hud.getProgressInfo()); // to update the database
 
@@ -594,12 +637,20 @@ public class  TaskTwo implements Screen {
                 enemy.b2body.setActive(true);//activate goomba
             }
         }
-        //System.out.println("quest activated: " + DefaultValues.questActivated);
-        //System.out.println("quest activated supposed to be true:" + DefaultValues.questActivated);
             if(DefaultValues.questActivated == true){
+                quest1 = true;
+                quest2 = false;
                 DefaultValues.questActivated = false;
-                DefaultValues.npcDestroyed = true;
                 stage.addActor(dialog);
+                DungeonCoder.manager.get("UIElements/Animation/robottalking.wav", Music.class).setVolume(2f);
+                DungeonCoder.manager.get("UIElements/Animation/robottalking.wav", Music.class).play();
+            }
+
+            if(DefaultValues.quest2Activated == true){
+                quest1 = false;
+                quest2 = true;
+                DefaultValues.quest2Activated = false;
+                stage.addActor(dialog2);
                 DungeonCoder.manager.get("UIElements/Animation/robottalking.wav", Music.class).setVolume(2f);
                 DungeonCoder.manager.get("UIElements/Animation/robottalking.wav", Music.class).play();
             }

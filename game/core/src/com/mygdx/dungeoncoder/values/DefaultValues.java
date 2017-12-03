@@ -23,6 +23,7 @@ public class DefaultValues {
     //for adventurer
     public static final short ADVENTURER_BIT = 2;
     public static final short NPC_BIT = 4;
+    public static final short NPC2_BIT = 16;
     public static final short END_BIT = 8;
     public static final short SKELETON_BIT = 64;
 
@@ -30,8 +31,8 @@ public class DefaultValues {
     public static boolean WALK_LEFT = false;
     public static boolean JUMP = false;
     public static boolean gameComplete = false;
+    public static boolean quest2Activated = false;
     public static boolean questActivated = false;
-    public static boolean npcDestroyed = false;
 
     public static String username = "";
 }
