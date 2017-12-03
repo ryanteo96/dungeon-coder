@@ -27,6 +27,7 @@ public class AdventurerHud implements Disposable {
     private Integer worldTimer;
     private float timeCount;
     private static Integer score;
+    private int progressPercent;
 
     private Label countdownLabel;
     private static Label scoreLabel;
@@ -40,7 +41,7 @@ public class AdventurerHud implements Disposable {
     private Label deadlineLabel;
     private Label deadline;
     private Label progressLabel;
-    private Label progress;
+    private static Label progress;
     private String attemptInfo;
     private String deadlineInfo;
     private String progressInfo;
@@ -57,6 +58,7 @@ public class AdventurerHud implements Disposable {
         worldTimer = 300;
         timeCount = 0;
         score = 0;
+        progressPercent = 0;
         viewport = new FitViewport(DefaultValues.VIRTUAL_WIDTH,DefaultValues.VIRTUAL_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport,sb);
 
@@ -68,7 +70,7 @@ public class AdventurerHud implements Disposable {
         timeLabel = new Label("TIME", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
         adventurerLabel = new Label("Points", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        scoreLabel = new Label(String.format("%06d",score),new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        scoreLabel = new Label(String.format("%06d",score) ,new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
         levelLabel = new Label("1", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         worldLabel = new Label("STAGE", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
@@ -87,7 +89,7 @@ public class AdventurerHud implements Disposable {
 
         SaveProcessor sp = new SaveProcessor();
         progressLabel = new Label("Progress", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        progress = new Label(sp.getInsCleared() + " stages cleared", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        progress = new Label( progressPercent +"%", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
         countdownLabel.setFontScale(2);
         scoreLabel.setFontScale(2);
@@ -140,8 +142,8 @@ public class AdventurerHud implements Disposable {
         music.stop();
     }
 
-    public String getProgressInfo(){
-        return progressInfo;
+    public int getCurrentProgress(){
+        return progressPercent;
     }
 
     private void gameOver(DungeonCoder g) {
@@ -151,8 +153,16 @@ public class AdventurerHud implements Disposable {
 
     public static void addScore(int value){
         score += value;
+        System.out.println("Score in adventurer hud: " + score);
         scoreLabel.setText(String.format("%06d",score));
     }
+
+    public void addProgress(int value){
+        progressPercent += value;
+        System.out.println("progressPercent in adventurer hud: " + progressPercent);
+        progress.setText(progressPercent + "%");
+    }
+
 
     @Override
     public void dispose() {

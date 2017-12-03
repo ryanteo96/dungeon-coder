@@ -85,6 +85,7 @@ public class  TaskTwo implements Screen {
     private TextButton comeBackNextTimeButton;
     private TextButton viewTaskButton;
     private TextButton hintButton;
+    private TextButton quest2YesButton;
 
     //boolean
     private boolean codeOn;
@@ -96,8 +97,12 @@ public class  TaskTwo implements Screen {
     private Dialog dialog;
     private Dialog dialog2;
 
+    private int progress = 0;
+    private int progressInsideTaskTwo = 0;
+    private int score = 0;
     public GifRecorder gifRecorder;
 
+    private File file;
 
     public TaskTwo(DungeonCoder g) throws FileNotFoundException {
         game = g;
@@ -226,9 +231,18 @@ public class  TaskTwo implements Screen {
         okButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
+                System.out.println("Before yes i am ready is clicked: " + progress);
+                progress = 40;
+                progressInsideTaskTwo += 40;
+                score = 150;
+                System.out.println("After yes i am ready is clicked: " + progress);
+                hud.addProgress(progress);
+                hud.addScore(score);
                 stage.addActor(viewTaskButton);
                 stage.addActor(codeButton);
                 stage.addActor(hintButton);
+                System.out.println("INSIDE FUCKING TASK TWO" +progressInsideTaskTwo);
+                shareVariable.connect.requestUpdateProgress(file,"Task1",progressInsideTaskTwo);
             }
         });
 
@@ -373,6 +387,23 @@ public class  TaskTwo implements Screen {
         dialog.setHeight(150);
         dialog.setWidth(380);
 
+
+        quest2YesButton = new TextButton(" I am ready! ", skin);
+        quest2YesButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                System.out.println("Before quest 2 i am ready is clicked: " + progress);
+                score = 300;
+                progress = 60;
+                progressInsideTaskTwo += 60;
+                System.out.println("INSIDE FUCKING TASK TWO" +progressInsideTaskTwo);
+                shareVariable.connect.requestUpdateProgress(file,"Task1",progressInsideTaskTwo);
+                System.out.println("After quest 2 i am ready is clicked: " + progress);
+                hud.addProgress(progress);
+                hud.addScore(score);
+            }
+        });
+
         dialog2 = new Dialog("Mr. Katana", skin, "dialog"){
             public void result(Object obj) {
                 System.out.println("result "+ obj);
@@ -380,26 +411,24 @@ public class  TaskTwo implements Screen {
         };
 
         dialog2.text("Looks like you pass your first test, but what about my test?\nAre you ready?");
-        dialog2.button("Yes", true); //sends "true" as the result
+        dialog2.button(quest2YesButton, true); //sends "true" as the result
         dialog2.button("No", false);
         dialog2.setPosition(500,300);
         dialog2.setHeight(150);
         dialog2.setWidth(380);
 
-        final int percentage = Integer.parseInt(hud.getProgressInfo()); // to update the database
-
         runButton = new TextButton("Run", skin);
         runButton.setPosition(460, 10);
         runButton.setSize(100, 50);
+        file = new File("StageTwo.java");
         runButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 String code = textArea.getText();
                 //System.out.println("textarea:" + code);
-                File file = new File("StageTwo.java");
+
                 String path = file.getAbsolutePath();
                 System.out.println("The file path of test file is "+path);
-
                 try {
                     FileWriter fileWriter = new FileWriter(file);
                     fileWriter.write(code);
@@ -424,7 +453,6 @@ public class  TaskTwo implements Screen {
                 try {
                     String filepath = file.getAbsolutePath();
                     System.out.println(filepath);
-                    shareVariable.connect.requestUpdateProgress(file,"Task1",10);
                     if(codeevaluator.evaluate(filepath) == true){
                         System.out.println("it gets in the if statement");
                         codeevaluator.run(classPath, runName);
@@ -468,10 +496,11 @@ public class  TaskTwo implements Screen {
                     e1.printStackTrace();
                 }
 
-                shareVariable.connect.requestUpdateProgress(file,"Task1",saveProcessor.getInsCleared());
 
             }
         });
+
+
         codeButton = new TextButton("Code Here", skin);
         codeButton.setPosition(50, 10);
         codeButton.setSize(130, 50);
@@ -490,7 +519,6 @@ public class  TaskTwo implements Screen {
 
             }
         });
-
         //to find the path of the file
         //System.out.println("File path: " + new File("test.txt").getAbsolutePath());
 
@@ -569,6 +597,7 @@ public class  TaskTwo implements Screen {
         g.setScreen(new InstructionalMode(g));
         hud.stopMusic();
     }
+
     @Override
     public void show() {
         System.out.println("you are in stage two");
@@ -618,6 +647,7 @@ public class  TaskTwo implements Screen {
     }
 
     public void update(float dt){
+       // System.out.println("progress is now: "+progress);
         handleinput(dt);
         //movedRight(dt);
         //takes 1 step in the physics simulation 60 times per second
