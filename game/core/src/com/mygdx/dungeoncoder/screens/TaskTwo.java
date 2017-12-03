@@ -231,17 +231,14 @@ public class  TaskTwo implements Screen {
         okButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                System.out.println("Before yes i am ready is clicked: " + progress);
                 progress = 40;
                 progressInsideTaskTwo += 40;
                 score = 150;
-                System.out.println("After yes i am ready is clicked: " + progress);
                 hud.addProgress(progress);
                 hud.addScore(score);
                 stage.addActor(viewTaskButton);
                 stage.addActor(codeButton);
                 stage.addActor(hintButton);
-                System.out.println("INSIDE FUCKING TASK TWO" +progressInsideTaskTwo);
                 shareVariable.connect.requestUpdateProgress(file,"Task1",progressInsideTaskTwo);
             }
         });
@@ -253,7 +250,6 @@ public class  TaskTwo implements Screen {
             public void clicked(InputEvent e, float x, float y) {
                 new Dialog("Dr.Robot NPC", skin,"dialog"){
                     protected void result (Object object){
-                        System.out.println("Result: "+ object);
                     }
                 }.text("    I guess you are not ready yet, come back next time  ").button( comeBackNextTimeButton, true).
                         key(Input.Keys.ENTER, true).show(stage);
@@ -376,7 +372,6 @@ public class  TaskTwo implements Screen {
 
         dialog = new Dialog("Dr.Robot NPC", skin, "dialog"){
             public void result(Object obj) {
-                System.out.println("result "+ obj);
             }
         };
 
@@ -392,13 +387,10 @@ public class  TaskTwo implements Screen {
         quest2YesButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                System.out.println("Before quest 2 i am ready is clicked: " + progress);
                 score = 300;
                 progress = 60;
                 progressInsideTaskTwo += 60;
-                System.out.println("INSIDE FUCKING TASK TWO" +progressInsideTaskTwo);
                 shareVariable.connect.requestUpdateProgress(file,"Task1",progressInsideTaskTwo);
-                System.out.println("After quest 2 i am ready is clicked: " + progress);
                 hud.addProgress(progress);
                 hud.addScore(score);
             }
@@ -406,7 +398,6 @@ public class  TaskTwo implements Screen {
 
         dialog2 = new Dialog("Mr. Katana", skin, "dialog"){
             public void result(Object obj) {
-                System.out.println("result "+ obj);
             }
         };
 
@@ -534,7 +525,6 @@ public class  TaskTwo implements Screen {
             public void clicked(InputEvent e, float x, float y) {
                 new Dialog("Hint", skin,"dialog"){
                     protected void result (Object object){
-                        System.out.println("Result: "+ object);
                         System.out.println("CLICKED");
                     }
                 }.text("This will print the lines and moves the cursor to a new line\n System.out.println(\"SOMETHING\");\n\n" +

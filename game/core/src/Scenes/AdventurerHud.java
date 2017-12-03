@@ -153,13 +153,11 @@ public class AdventurerHud implements Disposable {
 
     public static void addScore(int value){
         score += value;
-        System.out.println("Score in adventurer hud: " + score);
         scoreLabel.setText(String.format("%06d",score));
     }
 
     public void addProgress(int value){
         progressPercent += value;
-        System.out.println("progressPercent in adventurer hud: " + progressPercent);
         progress.setText(progressPercent + "%");
     }
 
