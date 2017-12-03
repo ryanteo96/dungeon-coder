@@ -363,7 +363,7 @@ public class ClientConnection {
 		sendCode((byte)(0x0C));
 		if (recieveCode() == 0x10) {
 			String levelName = "";
-			while(levelName != "\r\n") {
+			while(levelName.equals("\r\n") == false) {
 				try {
 					levelName = incoming.readUTF();
 				}
@@ -373,6 +373,10 @@ public class ClientConnection {
 				levels.add(levelName);
 			}
 		}
+		else {
+		}
+		levels.remove(levels.size() - 1);
+		levels.remove(levels.size() - 1);
 		return levels;
 	}
 

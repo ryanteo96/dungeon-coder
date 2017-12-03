@@ -1,6 +1,6 @@
 #!/bin/bash
 rm original.txt returned.txt original2.txt Devon\'s\ Level SpecificB.txt
-javac Test.java
+javac Test.java ClientConnection.java
 java Test
 DIFF=$(diff original.txt returned.txt)
 if [ "$DIFF" == "" ]

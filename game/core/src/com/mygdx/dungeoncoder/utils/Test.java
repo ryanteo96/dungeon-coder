@@ -1,5 +1,5 @@
-package com.mygdx.dungeoncoder.utils;
-import com.mygdx.dungeoncoder.utils.ClientConnection;
+//package com.mygdx.dungeoncoder.utils;
+//import com.mygdx.dungeoncoder.utils.ClientConnection;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -11,7 +11,6 @@ public class Test {
 	
 	public static void main(String[] args) {
 		conn = new ClientConnection();
-		conn.requestAccountCreation("Devon1", "Password");
 		conn.requestLogin("Devon1", "Password");
 		incorrectUsername();
 		incorrectPassword();
