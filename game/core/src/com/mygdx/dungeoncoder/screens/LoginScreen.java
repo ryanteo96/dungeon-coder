@@ -17,6 +17,8 @@ import com.mygdx.dungeoncoder.utils.ClientConnection;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 import com.sun.deploy.util.SessionState;
 
+import java.text.ParseException;
+
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
@@ -91,7 +93,11 @@ public class LoginScreen implements Screen {
         btnLogin.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                btnLoginClicked(game);
+                try {
+                    btnLoginClicked(game);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -156,7 +162,7 @@ public class LoginScreen implements Screen {
 
     }
 
-    public void btnLoginClicked(DungeonCoder g) {
+    public void btnLoginClicked(DungeonCoder g) throws ParseException {
         shareVariable.connect = new ClientConnection();
         if (shareVariable.connect.requestLogin(txfUsername.getText(), txfPassword.getText())) {
             shareVariable.connected = true;

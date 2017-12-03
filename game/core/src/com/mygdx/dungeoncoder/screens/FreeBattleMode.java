@@ -34,6 +34,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -208,8 +209,11 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         btnBack.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
-                dispose();
-                game.setScreen(new MainMenuScreen(game));
+                try {
+                    game.setScreen(new MainMenuScreen(game));
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
         stage.addActor(btnBack);

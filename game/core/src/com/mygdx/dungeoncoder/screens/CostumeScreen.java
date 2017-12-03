@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 
+import java.text.ParseException;
+
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
@@ -80,14 +82,18 @@ public class CostumeScreen implements Screen{
         backImage.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                back();
+                try {
+                    back();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         stage.addActor(backImage);
     }
 
-    private void back() {
+    private void back() throws ParseException {
         dispose();
         game.setScreen(new MainMenuScreen(game));
     }

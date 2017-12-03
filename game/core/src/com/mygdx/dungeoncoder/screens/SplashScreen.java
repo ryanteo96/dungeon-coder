@@ -23,6 +23,7 @@ import com.mygdx.dungeoncoder.utils.ClientConnection;
 
 
 import java.io.FileNotFoundException;
+import java.text.ParseException;
 
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
@@ -103,7 +104,6 @@ public class SplashScreen implements Screen {
         stage.addActor(main4Image);
     }
     private void AchievementPage(DungeonCoder g) throws FileNotFoundException {
-        dispose();
         g.setScreen(new AchievementPage(g));
     }
 
@@ -122,7 +122,6 @@ public class SplashScreen implements Screen {
         stage.addActor(main4Image);
     }
     private void LoginScreen(DungeonCoder g) {
-        dispose();
         g.setScreen(new LoginScreen(g));
     }
 
@@ -138,7 +137,11 @@ public class SplashScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(shareVariable.connected == true){
-                    Mainmenu(game);
+                    try {
+                        Mainmenu(game);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }else{
                     skin = new Skin(Gdx.files.internal("UIElements/test.json"));
                     new Dialog("Dungeon Coder", skin,"dialog"){
@@ -154,15 +157,13 @@ public class SplashScreen implements Screen {
 
         okButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                dispose();
                 game.setScreen(new LoginScreen(game));
             }
         });
 
         stage.addActor(main4Image);
     }
-    private void Mainmenu(DungeonCoder g) {
-        dispose();
+    private void Mainmenu(DungeonCoder g) throws ParseException {
         g.setScreen(new MainMenuScreen(g));
     }
 }

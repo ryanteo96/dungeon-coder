@@ -27,6 +27,7 @@ import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.ClientConnection;
 
 import java.io.FileNotFoundException;
+import java.text.ParseException;
 
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
@@ -99,13 +100,17 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         btnBack.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
-                btnBackClicked(game);
+                try {
+                    btnBackClicked(game);
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
         stage.addActor(btnBack);
     }
 
-    private void btnBackClicked(DungeonCoder g) {
+    private void btnBackClicked(DungeonCoder g) throws ParseException {
         g.setScreen(new MainMenuScreen(g));
     }
 

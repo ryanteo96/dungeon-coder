@@ -23,6 +23,8 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 
+import java.text.ParseException;
+
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
@@ -93,7 +95,11 @@ public class MainStoryMode implements Screen {
         quitImage.addListener(new ClickListener(){
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
-                back();
+                try {
+                    back();
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
 
@@ -110,7 +116,7 @@ public class MainStoryMode implements Screen {
         stage.addActor(aboutImage);
     }
 
-    private void back() {
+    private void back() throws ParseException {
         game.setScreen(new MainMenuScreen(game));
     }
     @Override

@@ -17,6 +17,8 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.utils.SaveProcessor;
 
+import java.text.ParseException;
+
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
@@ -85,7 +87,11 @@ public class OptionScreen implements Screen{
         backImage.addListener( new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                back();
+                try {
+                    back();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
         );
@@ -93,8 +99,7 @@ public class OptionScreen implements Screen{
         stage.addActor(backImage);
     }
 
-    private void back() {
-        dispose();
+    private void back() throws ParseException {
         game.setScreen(new MainMenuScreen(game));
     }
 

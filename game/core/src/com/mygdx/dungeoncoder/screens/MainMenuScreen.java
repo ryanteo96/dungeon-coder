@@ -25,6 +25,12 @@ import com.mygdx.dungeoncoder.values.DefaultValues;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
@@ -34,12 +40,12 @@ public class MainMenuScreen implements Screen {
     private Stage stage;
     private Skin backButtonSkin;
     private Skin dialogSkin;
-    private Skin skin;
     private boolean finishedAssignment = true;
-    TextButton oKButton;
-    TextButton cannotContinue;
-    TextButton continueButton;
-    TextButton yesButton;
+    private TextButton cannotContinue;
+    private TextButton continueButton;
+    private TextButton yesButton;
+    private String deadline = "";
+    private boolean deadlinePassed = false;
 
     Texture instructionalMode_Text = new Texture(Gdx.files.internal("UIElements/instructionalmode.png"));
     TextureRegion instructionalModeRegion_Text = new TextureRegion(instructionalMode_Text);
@@ -57,11 +63,31 @@ public class MainMenuScreen implements Screen {
     Image freeBattleModeImage_Text = new Image(freeBattleModeDrawable_Text);
 
 
-    public MainMenuScreen(DungeonCoder g) {
+    public MainMenuScreen(DungeonCoder g) throws ParseException {
         game = g;
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
                 new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)));
         Gdx.input.setInputProcessor(stage);
+
+        deadline = shareVariable.connect.requestTaskInformation("Task1", "Deadline");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = new SimpleDateFormat("yyyy-MM-dd").format(new Date()); //current date
+        Date deadline_Date = sdf.parse(deadline);//deadline date
+        System.out.println("This is the current date: "+dateString);
+        System.out.println("This is the deadline: "+deadline);
+        Date currentDate = sdf.parse(dateString);
+        if (deadline_Date.compareTo(currentDate) > 0) {
+            System.out.println("The student cannot play other modes");
+            deadlinePassed = false;
+        } else if (deadline_Date.compareTo(currentDate) < 0) {
+            System.out.println("The student can play other modes");
+            deadlinePassed = true;
+        } else if (deadline_Date.compareTo(currentDate) == 0) {
+            System.out.println("The student can play other modes");
+            deadlinePassed = true;
+        } else {
+            System.out.println("I have no idea");
+        }
         createInstructional();
         createMainStory();
         createFreeBattle();
@@ -76,6 +102,7 @@ public class MainMenuScreen implements Screen {
         stage.addActor(instructionalModeImage_Text);
         stage.addActor(freeBattleModeImage_Text);
     }
+
     public void btnBackClicked(DungeonCoder g) {
         g.setScreen(new SplashScreen(g));
     }
@@ -87,17 +114,17 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(240/255f, 240/255f, 240/255f, 1);
+        Gdx.gl.glClearColor(240 / 255f, 240 / 255f, 240 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        if(DefaultValues.mode == 0){
+        if (DefaultValues.mode == 0) {
             freeBattleModeImage_Text.setVisible(false);
             instructionalModeImage_Text.setVisible(true);
             mainStoryModeImage_Text.setVisible(false);
-        }else if(DefaultValues.mode == 1){
+        } else if (DefaultValues.mode == 1) {
             freeBattleModeImage_Text.setVisible(false);
             instructionalModeImage_Text.setVisible(false);
             mainStoryModeImage_Text.setVisible(true);
-        }else if(DefaultValues.mode == 2){
+        } else if (DefaultValues.mode == 2) {
             freeBattleModeImage_Text.setVisible(true);
             instructionalModeImage_Text.setVisible(false);
             mainStoryModeImage_Text.setVisible(false);
@@ -130,7 +157,6 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
         backButtonSkin.dispose();
-        skin.dispose();
         dialogSkin.dispose();
         stage.dispose();
 
@@ -156,53 +182,24 @@ public class MainMenuScreen implements Screen {
     }
 
 
-    private void createLogout(){
-        /*skin = new Skin(Gdx.files.internal("comic-ui.json"));
+    private void createLogout() {
         dialogSkin = new Skin(Gdx.files.internal("UIElements/test.json"));
-        yesButton = new TextButton("   Yes   ",dialogSkin);
-        logoutButton = new TextButton("Log Out",skin);
-        logoutButton.setSize(200,55);
-        logoutButton.setPosition(1000,30);
-        logoutButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-               shareVariable.connected = false;
-                new Dialog("Logging out", dialogSkin,"dialog"){
-                    protected void result (Object object){
-                        System.out.println("Result: "+ object);
-                        System.out.println("Log out");
-                    }
-                }.text("    Are you sure you want to log out?    ").button(yesButton, true).button("Cancel",false).
-                        key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
-
-            }
-        });
-
-        yesButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                dispose();
-                game.setScreen(new SplashScreen(game));
-            }
-        });
-        stage.addActor(logoutButton);*/
-        dialogSkin = new Skin(Gdx.files.internal("UIElements/test.json"));
-        yesButton = new TextButton("   Yes   ",dialogSkin);
+        yesButton = new TextButton("   Yes   ", dialogSkin);
         Texture logout = new Texture(Gdx.files.internal("UIElements/logout.png"));
         TextureRegion logoutRegion = new TextureRegion(logout);
         TextureRegionDrawable logoutDrawable = new TextureRegionDrawable(logoutRegion);
         Image logoutImage = new Image(logoutDrawable);
-        logoutImage.setPosition(840,147);
+        logoutImage.setPosition(840, 147);
         logoutImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 shareVariable.connected = false;
-                new Dialog("Logging out", dialogSkin,"dialog"){
-                    protected void result (Object object){
-                        System.out.println("Result: "+ object);
+                new Dialog("Logging out", dialogSkin, "dialog") {
+                    protected void result(Object object) {
+                        System.out.println("Result: " + object);
                         System.out.println("Log out");
                     }
-                }.text("    Are you sure you want to log out?    ").button(yesButton, true).button("Cancel",false).
+                }.text("    Are you sure you want to log out?    ").button(yesButton, true).button("Cancel", false).
                         key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
             }
         });
@@ -219,13 +216,12 @@ public class MainMenuScreen implements Screen {
     }
 
 
-
     private void createInstructional() {
         Texture instructionalMode = new Texture(Gdx.files.internal("UIElements/instructional.png"));
         TextureRegion instructionalModeRegion = new TextureRegion(instructionalMode);
         TextureRegionDrawable instructionalModeDrawable = new TextureRegionDrawable(instructionalModeRegion);
         Image instructionalModeImage = new Image(instructionalModeDrawable);
-        instructionalModeImage.setPosition(840,585);
+        instructionalModeImage.setPosition(840, 585);
         instructionalModeImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -245,7 +241,7 @@ public class MainMenuScreen implements Screen {
         TextureRegion mainStoryModeRegion = new TextureRegion(mainStoryMode);
         TextureRegionDrawable mainStoryModeDrawable = new TextureRegionDrawable(mainStoryModeRegion);
         Image mainStoryModeImage = new Image(mainStoryModeDrawable);
-        mainStoryModeImage.setPosition(960,585);
+        mainStoryModeImage.setPosition(960, 585);
         mainStoryModeImage.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 DefaultValues.mode = 1;
@@ -266,10 +262,10 @@ public class MainMenuScreen implements Screen {
         TextureRegion freeBattleModeRegion = new TextureRegion(freeBattleMode);
         TextureRegionDrawable freeBattleModeDrawable = new TextureRegionDrawable(freeBattleModeRegion);
         Image freeBattleModeImage = new Image(freeBattleModeDrawable);
-        freeBattleModeImage.setPosition(1080,585);
-        freeBattleModeImage.addListener(new ClickListener(){
+        freeBattleModeImage.setPosition(1080, 585);
+        freeBattleModeImage.addListener(new ClickListener() {
             @Override
-             public void clicked(InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) {
                 DefaultValues.mode = 2;
                 freeBattleModeImage_Text.setPosition(200, 550);
                 System.out.println("You are now in free battle mode");
@@ -282,80 +278,90 @@ public class MainMenuScreen implements Screen {
         g.setScreen(new FreeBattleMode(g));
     }
 
-    private void createMenu1(){
+    private void createMenu1() {
         dialogSkin = new Skin(Gdx.files.internal("UIElements/test.json"));
         Texture main1 = new Texture(Gdx.files.internal("UIElements/Main1.png"));
         TextureRegion main1Region = new TextureRegion(main1);
         TextureRegionDrawable main1Drawable = new TextureRegionDrawable(main1Region);
         Image main1Image = new Image(main1Drawable);
-        main1Image.setPosition(840,453);
-        cannotContinue = new TextButton("  OK  " ,dialogSkin);
-        continueButton = new TextButton(" Continue " ,dialogSkin);
-        main1Image.addListener(new ClickListener(){
+        main1Image.setPosition(840, 453);
+        cannotContinue = new TextButton("  OK  ", dialogSkin);
+        continueButton = new TextButton(" Continue ", dialogSkin);
+        main1Image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (DefaultValues.mode == 0){
+                if (DefaultValues.mode == 0) {
                     instructionalMode(game);
-                } else if (DefaultValues.mode == 1){
-                    if(finishedAssignment){
-                        new Dialog("Access Granted.", dialogSkin,"dialog"){
-                            protected void result (Object object){
-                                System.out.println("Result: "+ object);
-                                System.out.println("CLICKED");
+                } else if (DefaultValues.mode == 1) {
+                    System.out.println("deadlinePassed: " + deadlinePassed);
+                    if (finishedAssignment && deadlinePassed == false) {
+                        new Dialog("Access Granted.", dialogSkin, "dialog") {
+                            protected void result(Object object) {
                             }
-                        }.text("    You have finished your assignment.    ").button(continueButton, true).button("Cancel",false).
+                        }.text("    You have finished your assignment.    ").button(continueButton, true).button("Cancel", false).
                                 key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
 
-                    }else{
-                        new Dialog("Access Denied!", dialogSkin,"dialog"){
-                            protected void result (Object object){
-                                System.out.println("Result: "+ object);
-                                System.out.println("CLICKED");
+                    } else if (finishedAssignment && deadlinePassed == true) {
+                        new Dialog("Access Denied!", dialogSkin, "dialog") {
+                            protected void result(Object object) {
                             }
-                        }.text("     You have not finished your assignment!     ").button(cannotContinue, false).button("Cancel",false).
+                        }.text("     The deadline has already passed.     ").button(cannotContinue, false).button("Cancel", false).
+                                key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                    } else if (!finishedAssignment && deadlinePassed == true) {
+                        new Dialog("Access Denied!", dialogSkin, "dialog") {
+                            protected void result(Object object) {
+                            }
+                        }.text("     You have not completed your assignment and the deadline has already passed.     ").button(cannotContinue, false).button("Cancel", false).
+                                key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                    } else {
+                        new Dialog("Access Denied!", dialogSkin, "dialog") {
+                            protected void result(Object object) {
+                            }
+                        }.text("     You have not finished your assignment!     ").button(cannotContinue, false).button("Cancel", false).
                                 key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
                     }
 
                     //continue to go to main story mode if assignment is finished.
-                    continueButton.addListener(new ClickListener(){
+                    continueButton.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             mainStoryMode(game);
                         }
                     });
 
-                    /*//stay at main menu if assignment is not finished
-                    cannotContinue.addListener(new ClickListener(){
-                        @Override
-                        public void clicked(InputEvent event, float x, float y) {
-                            dispose();
-                            game.setScreen(new MainMenuScreen(game));
-                        }
-                    });*/
+                } else if (DefaultValues.mode == 2)
 
-                    } else if (DefaultValues.mode == 2){
+                {
                     finishedAssignment = true;
-                    if(finishedAssignment){
-                        new Dialog("Access Granted.", dialogSkin,"dialog"){
-                            protected void result (Object object){
-                                System.out.println("Result: "+ object);
-                                System.out.println("CLICKED");
+                    if (finishedAssignment && deadlinePassed == false) {
+                        new Dialog("Access Granted.", dialogSkin, "dialog") {
+                            protected void result(Object object) {
                             }
-                        }.text("    You have finished your assignment.    ").button(continueButton, true).button("Cancel",false).
+                        }.text("    You have finished your assignment.    ").button(continueButton, true).button("Cancel", false).
                                 key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
 
-                    }else{
-                        new Dialog("Access Denied!", dialogSkin,"dialog"){
-                            protected void result (Object object){
-                                System.out.println("Result: "+ object);
-                                System.out.println("CLICKED");
+                    } else if (finishedAssignment && deadlinePassed == true) {
+                        new Dialog("Access Denied!", dialogSkin, "dialog") {
+                            protected void result(Object object) {
                             }
-                        }.text("     You have not finished your assignment!     ").button(cannotContinue, false).
+                        }.text("     The deadline has already passed.     ").button(cannotContinue, false).button("Cancel", false).
+                                key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                    } else if (!finishedAssignment && deadlinePassed == true) {
+                        new Dialog("Access Denied!", dialogSkin, "dialog") {
+                            protected void result(Object object) {
+                            }
+                        }.text("     You have not completed your assignment and the deadline has already passed.     ").button(cannotContinue, false).button("Cancel", false).
+                                key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                    } else {
+                        new Dialog("Access Denied!", dialogSkin, "dialog") {
+                            protected void result(Object object) {
+                            }
+                        }.text("     You have not finished your assignment!     ").button(cannotContinue, false).button("Cancel", false).
                                 key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
                     }
 
                     //continue to go to main story mode if assignment is finished.
-                    continueButton.addListener(new ClickListener(){
+                    continueButton.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             try {
@@ -372,27 +378,20 @@ public class MainMenuScreen implements Screen {
                         }
                     });
 
-                    /*//stay at main menu if assignment is not finished
-                    cannotContinue.addListener(new ClickListener(){
-                        @Override
-                        public void clicked(InputEvent event, float x, float y) {
-                            dispose();
-                            game.setScreen(new MainMenuScreen(game));
-                        }
-                    });*/
                 }
             }
         });
         finishedAssignment = true;
         stage.addActor(main1Image);
     }
-    private void createMenu2(){
+
+    private void createMenu2() {
         Texture main2 = new Texture(Gdx.files.internal("UIElements/Main2.png"));
         TextureRegion main2Region = new TextureRegion(main2);
         TextureRegionDrawable main2Drawable = new TextureRegionDrawable(main2Region);
         Image main2Image = new Image(main2Drawable);
-        main2Image.setPosition(840,325);
-        main2Image.addListener(new ClickListener(){
+        main2Image.setPosition(840, 325);
+        main2Image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 CostumeScreen(game);
@@ -400,17 +399,18 @@ public class MainMenuScreen implements Screen {
         });
         //stage.addActor(main2Image);
     }
+
     private void CostumeScreen(DungeonCoder g) {
         g.setScreen(new CostumeScreen(g));
     }
 
-    private void createMenu3(){
+    private void createMenu3() {
         Texture main3 = new Texture(Gdx.files.internal("UIElements/Main3.png"));
         TextureRegion main3Region = new TextureRegion(main3);
         TextureRegionDrawable main3Drawable = new TextureRegionDrawable(main3Region);
         Image main3Image = new Image(main3Drawable);
-        main3Image.setPosition(840,197);
-        main3Image.addListener(new ClickListener(){
+        main3Image.setPosition(840, 197);
+        main3Image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
@@ -419,17 +419,18 @@ public class MainMenuScreen implements Screen {
         });
         //stage.addActor(main3Image);
     }
+
     private void DesignScreen(DungeonCoder g) {
         g.setScreen(new DesignScreen(g));
     }
 
-    private void createMenu4(){
+    private void createMenu4() {
         Texture main4 = new Texture(Gdx.files.internal("UIElements/Main4.png"));
         TextureRegion main4Region = new TextureRegion(main4);
         TextureRegionDrawable main4Drawable = new TextureRegionDrawable(main4Region);
         Image main4Image = new Image(main4Drawable);
-        main4Image.setPosition(840,300);
-        main4Image.addListener(new ClickListener(){
+        main4Image.setPosition(840, 300);
+        main4Image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 OptionScreen(game);
@@ -437,19 +438,20 @@ public class MainMenuScreen implements Screen {
         });
         stage.addActor(main4Image);
     }
+
     private void OptionScreen(DungeonCoder g) {
         g.setScreen(new OptionScreen(g));
     }
 
-    private void createCharacter(){
+    private void createCharacter() {
         Texture chara = new Texture(Gdx.files.internal("UIElements/chara.png"));
         instructionalModeImage_Text.setPosition(200, 550);
-        mainStoryModeImage_Text.setPosition(200,550);
-        freeBattleModeImage_Text.setPosition(200,550);
+        mainStoryModeImage_Text.setPosition(200, 550);
+        freeBattleModeImage_Text.setPosition(200, 550);
         TextureRegion charaRegion = new TextureRegion(chara);
         TextureRegionDrawable charaDrawable = new TextureRegionDrawable(charaRegion);
         Image charaImage = new Image(charaDrawable);
-        charaImage.setPosition(200,200);
+        charaImage.setPosition(200, 200);
         stage.addActor(charaImage);
     }
 
