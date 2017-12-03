@@ -91,6 +91,8 @@ public class  TaskTwo implements Screen {
     private boolean codeOn;
     private boolean quest1 = false;
     private boolean quest2 = false;
+    private boolean quest1Passed = false;
+    private boolean quest2Passed = false;
 
     private Window window;
 
@@ -231,15 +233,10 @@ public class  TaskTwo implements Screen {
         okButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                progress = 40;
-                progressInsideTaskTwo += 40;
-                score = 150;
-                hud.addProgress(progress);
-                hud.addScore(score);
                 stage.addActor(viewTaskButton);
                 stage.addActor(codeButton);
                 stage.addActor(hintButton);
-                shareVariable.connect.requestUpdateProgress(file,"Task1",progressInsideTaskTwo);
+                //shareVariable.connect.requestUpdateProgress(file,"Task1",progressInsideTaskTwo);
             }
         });
 
@@ -287,7 +284,8 @@ public class  TaskTwo implements Screen {
                         "You have encountered a new enemy",
                         "",
                         "In this mission, you will need to use Strings.",
-                        "Strings are a sequence of characters. In Java programming language, strings are created as objects.",
+                        "Strings are a sequence of characters. In Java programming language, strings",
+                        "are created as objects.",
                         "The Java platform provides the String class to create and manipulate strings.",
                         "To create Strings: ",
                         "",
@@ -298,6 +296,8 @@ public class  TaskTwo implements Screen {
                         "To print it, you can just this",
                         "",
                         "System.out.println(greeting)",
+                        "Instead of printing 'ARGHHHH' this time, you will need to print,",
+                        "\"No one can stop a Dungeon Coder!\"",
                         "================================================================================================",
                         "Note:",
                         "Please only write your code under the '// USER WRITE CODE HERE' section"};
@@ -387,12 +387,7 @@ public class  TaskTwo implements Screen {
         quest2YesButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                score = 300;
-                progress = 60;
-                progressInsideTaskTwo += 60;
-                shareVariable.connect.requestUpdateProgress(file,"Task1",progressInsideTaskTwo);
-                hud.addProgress(progress);
-                hud.addScore(score);
+                //shareVariable.connect.requestUpdateProgress(file,"Task1",progressInsideTaskTwo);
             }
         });
 
@@ -453,28 +448,26 @@ public class  TaskTwo implements Screen {
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
 
                     while((line = bufferedReader.readLine()) != null) {
-                        System.out.println("line is: " + line);
-
-                        long start = System.currentTimeMillis();
-                        long end = start;
-                        while(end - start < 2000) {
-                            end = System.currentTimeMillis();
-                            render(Gdx.graphics.getDeltaTime());
+                        if(quest1 == true){
+                            if(line.equals("ARGHHHH")){
+                                quest1Passed = true;
+                                progress = 40;
+                                progressInsideTaskTwo += 40;
+                                score = 150;
+                                hud.addProgress(progress);
+                                hud.addScore(score);
+                            }
+                        }else if(quest2 == true){
+                            if(line.equals("No one can stop a Dungeon Coder!")){
+                                quest2Passed = true;
+                                score = 300;
+                                progress = 60;
+                                progressInsideTaskTwo += 60;
+                                hud.addProgress(progress);
+                                hud.addScore(score);
+                            }
                         }
 
-                        if(line.equals("right")){
-                            movedRight();
-                            //render(Gdx.graphics.getDeltaTime());
-                            //update(Gdx.graphics.getDeltaTime());
-                        }
-                        if(line.equals("left")){
-                            movedLeft();
-                            //render(Gdx.graphics.getDeltaTime());
-                        }
-                        if(line.equals("up")){
-                            DefaultValues.JUMP = true;
-                        }
-                        //testing code function
                     }
                     bufferedReader.close();
                 }
@@ -638,7 +631,11 @@ public class  TaskTwo implements Screen {
 
     public void update(float dt){
        // System.out.println("progress is now: "+progress);
-        handleinput(dt);
+        if(codeOn == true){
+            //do nothing
+        }else{
+            handleinput(dt);
+        }
         //movedRight(dt);
         //takes 1 step in the physics simulation 60 times per second
         world.step(1/60f, 6,2);
@@ -730,8 +727,9 @@ public class  TaskTwo implements Screen {
 
         if (gameComplete == true && player.getStateTimer() > 0.7) {
             if (saveProcessor.checkAchievement() == true) {
-                DungeonCoder.manager.get("UIElements/Animation/stagecomplete.mp3", Sound.class).play();
+                DungeonCoder.manager.get("UIElements/Animation/achievement.mp3", Sound.class).play();
             }
+            DungeonCoder.manager.get("UIElements/Animation/stagecomplete.mp3", Sound.class).play();
             hud.stopMusic();
             gameComplete = false;
             saveProcessor.insClear();
