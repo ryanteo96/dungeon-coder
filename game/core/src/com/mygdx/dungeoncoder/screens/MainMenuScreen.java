@@ -310,14 +310,14 @@ public class MainMenuScreen implements Screen {
                             new Dialog("Access Denied!", dialogSkin, "dialog") {
                                 protected void result(Object object) {
                                 }
-                            }.text("     You may not proceed.     ").button(cannotContinue, false).button("Cancel", false).
+                            }.text("                    You may not proceed.                    ").button(cannotContinue, false).button("Cancel", false).
                                     key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
                             //lock and deadline has not passed, student cannot play
                         } else if (!shareVariable.connect.requestLockStatus()){
                             new Dialog("Access Granted.", dialogSkin, "dialog") {
                                 protected void result(Object object) {
                                 }
-                            }.text("    You may proceed.    ").button(continueButton, true).button("Cancel", false).
+                            }.text("                    You may proceed.                    ").button(continueButton, true).button("Cancel", false).
                                     key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
                         }
 
@@ -327,21 +327,21 @@ public class MainMenuScreen implements Screen {
                             new Dialog("Access Denied!", dialogSkin, "dialog") {
                                 protected void result(Object object) {
                                 }
-                            }.text("     You may not proceed.     ").button(cannotContinue, false).button("Cancel", false).
+                            }.text("                    You may not proceed.                    ").button(cannotContinue, false).button("Cancel", false).
                                     key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
                             //if lock is false and deadline has not pass
                         }else if(!shareVariable.connect.requestLockStatus() && !deadlinePassed){
                             new Dialog("Access Granted.", dialogSkin, "dialog") {
                                 protected void result(Object object) {
                                 }
-                            }.text("    You may proceed.    ").button(continueButton, true).button("Cancel", false).
+                            }.text("                    You may proceed.                    ").button(continueButton, true).button("Cancel", false).
                                     key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
                             //if deadline is passed no matter its lock or not cant play
                         }else if(deadlinePassed){
                             new Dialog("Access Denied!", dialogSkin, "dialog") {
                                 protected void result(Object object) {
                                 }
-                            }.text("     You may not proceed.     ").button(cannotContinue, false).button("Cancel", false).
+                            }.text("                    You may not proceed.                    ").button(cannotContinue, false).button("Cancel", false).
                                     key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
                         }
 
@@ -363,14 +363,14 @@ public class MainMenuScreen implements Screen {
                             new Dialog("Access Denied!", dialogSkin, "dialog") {
                                 protected void result(Object object) {
                                 }
-                            }.text("     You may not proceed.     ").button(cannotContinue, false).button("Cancel", false).
+                            }.text("                    You may not proceed.                    ").button(cannotContinue, false).button("Cancel", false).
                                     key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
                             //lock and deadline has not passed, student cannot play
                         } else if (!shareVariable.connect.requestLockStatus()){
                             new Dialog("Access Granted.", dialogSkin, "dialog") {
                                 protected void result(Object object) {
                                 }
-                            }.text("    You may proceed.    ").button(continueButton, true).button("Cancel", false).
+                            }.text("                    You may proceed.                    ").button(continueButton, true).button("Cancel", false).
                                     key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
                         }
 
@@ -380,21 +380,21 @@ public class MainMenuScreen implements Screen {
                             new Dialog("Access Denied!", dialogSkin, "dialog") {
                                 protected void result(Object object) {
                                 }
-                            }.text("     You may not proceed.     ").button(cannotContinue, false).button("Cancel", false).
+                            }.text("                    You may not proceed.                    ").button(cannotContinue, false).button("Cancel", false).
                                     key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
                             //if lock is false and deadline has not pass
                         }else if(!shareVariable.connect.requestLockStatus() && !deadlinePassed){
                             new Dialog("Access Granted.", dialogSkin, "dialog") {
                                 protected void result(Object object) {
                                 }
-                            }.text("    You may proceed.    ").button(continueButton, true).button("Cancel", false).
+                            }.text("                    You may proceed.                    ").button(continueButton, true).button("Cancel", false).
                                     key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
                             //if deadline is passed no matter its lock or not cant play
                         }else if(deadlinePassed){
                             new Dialog("Access Denied!", dialogSkin, "dialog") {
                                 protected void result(Object object) {
                                 }
-                            }.text("     You may not proceed.     ").button(cannotContinue, false).button("Cancel", false).
+                            }.text("                    You may not proceed.                    ").button(cannotContinue, false).button("Cancel", false).
                                     key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
                         }
 

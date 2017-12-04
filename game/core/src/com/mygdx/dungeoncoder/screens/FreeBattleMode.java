@@ -1,9 +1,6 @@
 package com.mygdx.dungeoncoder.screens;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -14,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
@@ -54,7 +52,6 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
 
     private ScrollPane scrollPane;
     private List<String> list;
-    private SpriteBatch batcher;
     private TextureAtlas atlas;
 
     private DungeonCoder game;
@@ -64,14 +61,15 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
     private TextButton uploadButton;
     private TextButton downloadButton;
     private TextButton sortButton;
-    private Object[] listEntries = {};
+    private TextButton launchButton;
     private int result;
     private int sort = 0;
 
     private TextField textArea;
+    private TextField chooseStage;
 
 
-    public FreeBattleMode (DungeonCoder g) {
+    public FreeBattleMode(DungeonCoder g) {
         game = g;
 
         stage = new Stage(new ScalingViewport(Scaling.fit, VIRTUAL_WIDTH, VIRTUAL_HEIGHT,
@@ -84,6 +82,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         createDownloadButton();
         createSortButton();
         createBack();
+        createLaunch();
     }
 
     @Override
@@ -92,7 +91,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(172/255f, 115/255f, 57/255f, 1);
+        Gdx.gl.glClearColor(172 / 255f, 115 / 255f, 57 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.draw();
@@ -125,11 +124,56 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         skin.dispose();
     }
 
+    private void createLaunch() {
+        chooseStage = new TextField("", skin);
+        chooseStage.setPosition(830, 200);
+        chooseStage.setSize(150, 50);
+        chooseStage.setAlignment(Align.center);
+        chooseStage.setMessageText("Type in here!");
+        stage.addActor(chooseStage);
+
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
+        final TextButton yesButton = new TextButton("Yes", skin);
+        launchButton = new TextButton("LAUNCH GAME", skin);
+        launchButton.setPosition(1000, 200);
+        launchButton.setSize(130, 50);
+        launchButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                System.out.println("choosestage: " + chooseStage.getText());
+                if (chooseStage.getText().trim().equals("")) {
+                    new Dialog(" Error ", skin, "dialog") {
+                        protected void result(Object object) {
+                        }
+                    }.text("     Please enter the name of the the map.     ").button("    Ok    ", true).key(Input.Keys.ENTER, true).show(stage);
+                } else {
+                    new Dialog("Launching", skin, "dialog") {
+                        protected void result(Object object) {
+                        }
+                    }.text("    Do you want to proceed?  ").button(yesButton, true).button("No", false).
+                            key(Input.Keys.ENTER, true).show(stage);
+
+                    //shareVariable.connect.requestCustomLevel(textArea.getText());
+                }
+
+
+            }
+        });
+
+        yesButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                game.setScreen(new FreeBattleModeGameScreen(game));
+            }
+        });
+        stage.addActor(launchButton);
+
+    }
+
 
     private void createTable(int order) {
         atlas = new TextureAtlas(Gdx.files.internal("dialogSkins/plain-james-ui.atlas"));
         skin = new Skin(Gdx.files.internal(("dialogSkins/plain-james-ui.json")));
-        batcher = new SpriteBatch();
         list = new List<String>(skin);
 
         // requesting level list.
@@ -138,7 +182,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
 
         if (order == 0) {
             sort = 0;
-            Collections.sort(levels,new Comparator<String>() {
+            Collections.sort(levels, new Comparator<String>() {
                 @Override
                 public int compare(String s1, String s2) {
                     return s1.compareToIgnoreCase(s2);
@@ -161,36 +205,20 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         for (int i = 0; i < levels.size(); i++) {
             System.out.println(levels.get(i));
         }
-
+        int count = 1;
         for (int i = 0, k = 0; i < levels.size(); i++) {
-            strings[k++] = "Level: " + levels.get(i);
+            strings[k++] = "Level "+ count + " : " + levels.get(i);
+            count++;
         }
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         BitmapFont myFont = new BitmapFont(Gdx.files.internal("comic-sans.fnt"));
         labelStyle.font = myFont;
 
-        Label lblLevelList = new Label("LEVELS", labelStyle);
+        Label lblLevelList = new Label("CUSTOM LEVELS", labelStyle);
         lblLevelList.setPosition(120, 600);
         lblLevelList.setFontScale(1);
         stage.addActor(lblLevelList);
-
-        /*String[] strings = new String[30];
-        for (int i = 0, k = 0; i < 30; i++) {
-            strings[k++] = "TestFile" + i;
-        }
-
-        if (order == 0) {
-            sort = 0;
-            for (int i = 0, k = 0; i < 30; i++) {
-                strings[k++] = "TestFile" + i;
-            }
-        } else {
-            sort = 1;
-            for (int i = 29, k = 0; i >= 0; i--) {
-                strings[k++] = "TestFile" + i;
-            }
-        }*/
 
         list.setItems(strings);
         Texture background = new Texture(Gdx.files.internal("UIElements/greybackground.png"));
@@ -199,8 +227,8 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         Image backgroundImage = new Image(backgroundDrawable);
 
         //backgroundImage.setSize(500,500);
-        backgroundImage.setBounds(0,0,710,530);
-        backgroundImage.setPosition(107,50);
+        backgroundImage.setBounds(0, 0, 710, 530);
+        backgroundImage.setPosition(107, 50);
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
         scrollPane = new ScrollPane(list);
         scrollPane.setBounds(0, 0, 470, 350);
@@ -259,7 +287,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
 
     }
 
-    public void createFileChooser () throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    public void createFileChooser() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         JFrame window = new JFrame("Upload TMX file");
         JPanel topPanel = new JPanel();
@@ -278,14 +306,14 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
                     int indexOfDot = filePath.lastIndexOf('.');
                     String fileName = "";
                     int filenameStart = 0;
-                    for(int i = indexOfDot - 1; i >= 0; i--){
-                        if(!Character.isLetterOrDigit(filePath.charAt(i))){
+                    for (int i = indexOfDot - 1; i >= 0; i--) {
+                        if (!Character.isLetterOrDigit(filePath.charAt(i))) {
                             filenameStart = i;
                             break;
                         }
                     }
                     fileName = filePath.substring(filenameStart + 1);
-                    System.out.println("fileName is: "+ fileName);
+                    System.out.println("fileName is: " + fileName);
                     File f = new File(fc.getSelectedFile().getAbsolutePath());
                     shareVariable.connect.uploadLevel(fileName, f);
                     result = JFileChooser.APPROVE_OPTION;
@@ -304,11 +332,12 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
 
     private void createDownloadButton() {
         textArea = new TextField("", skin);
-        textArea.setPosition(830,400);
-        textArea.setSize(150,50);
+        textArea.setPosition(830, 400);
+        textArea.setSize(150, 50);
         textArea.setAlignment(Align.center);
         textArea.setMessageText("Type in here!");
         stage.addActor(textArea);
+
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
         downloadButton = new TextButton("DOWNLOAD", skin);
         downloadButton.setPosition(1000, 400);
@@ -316,7 +345,20 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         downloadButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                shareVariable.connect.requestCustomLevel(textArea.getText());
+                if (textArea.getText().trim().equals("")) {
+                    new Dialog(" Error ", skin, "dialog") {
+                        protected void result(Object object) {
+                        }
+                    }.text("     Please enter name of the map.     ").button("    Ok    ", true).key(Input.Keys.ENTER, true).show(stage);
+                } else {
+                    System.out.println("DOWNLOADED");
+                    new Dialog("Download", skin, "dialog") {
+                        protected void result(Object object) {
+                        }
+                    }.text("    Your file has been downloaded.  ").button("Ok", true).
+                            key(Input.Keys.ENTER, true).show(stage);
+                    shareVariable.connect.requestCustomLevel(textArea.getText());
+                }
             }
         });
         stage.addActor(downloadButton);
@@ -330,7 +372,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         sortButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-               scrollPane.remove();
+                scrollPane.remove();
                 if (sort == 0) {
                     createTable(1);
                 } else {
@@ -342,33 +384,4 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         stage.addActor(sortButton);
 
     }
-
-    /*
-    private void createTable(){
-        if(open){
-            listEntries[0] = DefaultValues.username;
-            listEntries[1] = DefaultValues.username;
-            listEntries[2] = DefaultValues.username;
-            listEntries[3] = DefaultValues.username;
-            System.out.println("OPEN!");
-        }
-
-        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
-        Table table = new Table(skin);
-        com.badlogic.gdx.scenes.scene2d.ui.List list = new List(skin);
-        list.setItems(listEntries);
-        ScrollPane scrollPane = new ScrollPane(list, skin);
-        scrollPane.setSize(0,0);
-        scrollPane.setFlickScroll(false);
-        scrollPane.setScrollingDisabled(true,false);
-        table.add().growX().row();
-        table.add(scrollPane).grow();
-        table.setSize(700,600);
-        table.setPosition(130,50);
-        stage.addActor(table);
-    }
-
-
-
-*/
 }
