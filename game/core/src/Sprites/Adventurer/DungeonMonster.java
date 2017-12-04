@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.dungeoncoder.screens.FreeBattleModeGameScreen;
 import com.mygdx.dungeoncoder.screens.TaskThree;
 import com.mygdx.dungeoncoder.screens.TaskTwo;
 import com.mygdx.dungeoncoder.values.DefaultValues;
@@ -40,6 +41,26 @@ public class DungeonMonster extends Enemy {
         setToDestroy = false;
         destroyed = false;
     }
+
+
+    public DungeonMonster(FreeBattleModeGameScreen freeBattleScreen, float x, float y) {
+        super(freeBattleScreen, x, y);
+        frames = new Array<TextureRegion>();
+        Texture texture1 = new Texture(Gdx.files.internal("Dungeon/Enemies/1.png"));
+        Texture texture2 = new Texture(Gdx.files.internal("Dungeon/Enemies/2.png"));
+        Texture texture3 = new Texture(Gdx.files.internal("Dungeon/Enemies/3.png"));
+        Texture texture4 = new Texture(Gdx.files.internal("Dungeon/Enemies/4.png"));
+        frames.add(new TextureRegion(texture1,0,0,63,40));
+        frames.add(new TextureRegion(texture2,0,0,63,40));
+        frames.add(new TextureRegion(texture3,0,0,63,40));
+        frames.add(new TextureRegion(texture4,0,0,63,40));
+        walkAnimation = new Animation(0.4f, frames);
+        stateTime = 0;
+        setBounds(getX(),getY(),20/DefaultValues.PPM,20/DefaultValues.PPM);//how big is it
+        setToDestroy = false;
+        destroyed = false;
+    }
+
 
 
     @Override

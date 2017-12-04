@@ -124,6 +124,82 @@ public class AdventurerHud implements Disposable {
         stage.addActor(table);
     }
 
+    public AdventurerHud(SpriteBatch sb, FreeBattleModeGameScreen screen){
+        game = screen.getGame();
+        music = DungeonCoder.manager.get("UIElements/Animation/backgroundmusic.mp3", Music.class);
+        music.setLooping(true);
+        music.setVolume(0.40f);
+        music.play();
+
+        worldTimer = 300;
+        timeCount = 0;
+        score = 0;
+        progressPercent = 0;
+        viewport = new FitViewport(DefaultValues.VIRTUAL_WIDTH,DefaultValues.VIRTUAL_HEIGHT, new OrthographicCamera());
+        stage = new Stage(viewport,sb);
+
+        Table table = new Table();
+        table.top();
+        table.setFillParent(true);
+
+        countdownLabel = new Label(String.format("%03d",worldTimer),new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        timeLabel = new Label("TIME", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+
+        adventurerLabel = new Label("Points", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        scoreLabel = new Label(String.format("%06d",score) ,new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+
+        levelLabel = new Label("1", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        worldLabel = new Label("STAGE", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+
+        attemptInfo = shareVariable.connect.requestTaskInformation("Task1","Attempts");
+
+        attemptLabel = new Label("Attempt", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        attempt = new Label(attemptInfo, new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+
+        deadlineInfo = shareVariable.connect.requestTaskInformation("Task1","Deadline");
+
+        deadlineLabel = new Label("Deadline", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        deadline = new Label(deadlineInfo, new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+
+        progressInfo = shareVariable.connect.requestTaskInformation("Task1","Completion");
+
+        SaveProcessor sp = new SaveProcessor();
+        progressLabel = new Label("Progress", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        progress = new Label( progressPercent +"%", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+
+        countdownLabel.setFontScale(2);
+        scoreLabel.setFontScale(2);
+        timeLabel.setFontScale(2);
+        levelLabel.setFontScale(2);
+        worldLabel.setFontScale(2);
+        adventurerLabel.setFontScale(2);
+        attemptLabel.setFontScale(2);
+        attempt.setFontScale(2);
+        deadlineLabel.setFontScale(2);
+        deadline.setFontScale(2);
+        progressLabel.setFontScale(2);
+        progress.setFontScale(2);
+
+
+        table.add(worldLabel).expandX().padTop(10).padLeft(50);
+        table.add(adventurerLabel).expandX().padTop(10);
+        table.add(timeLabel).expandX().padTop(10);
+        table.add(attemptLabel).expandX().padTop(10);
+        table.add(deadlineLabel).expandX().padTop(10);
+        table.add(progressLabel).expandX().padTop(10);
+
+        table.row();
+
+        table.add(levelLabel).expandX().padLeft(50);
+        table.add(scoreLabel).expandX();
+        table.add(countdownLabel).expandX();
+        table.add(attempt).expandX();
+        table.add(deadline).expandX();
+        table.add(progress).expandX();
+
+        stage.addActor(table);
+    }
+
     public void update(float dt){
         timeCount += dt;
         if(timeCount >= 1){

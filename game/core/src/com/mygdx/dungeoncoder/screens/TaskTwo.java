@@ -752,7 +752,6 @@ public class TaskTwo implements Screen {
         hud.stage.draw();
 
         if (gameOver()) {
-            dispose();
             game.setScreen(new AdventurerGameOver(game));
         }
 
