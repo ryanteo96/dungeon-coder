@@ -155,7 +155,7 @@ public class TaskTwo implements Screen {
         world.setContactListener(new AdventurerContactListener());
 
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
-        Label gifInstruction = new Label("To use the GIF recording function, press F1 to activate it and\n press F1 first time to start recording and second time to end recording", skin); //display deadline from the database
+        Label gifInstruction = new Label("To use the GIF recording function, press F1 to activate it and\n press F2 first time to start recording and second time to end recording", skin); //display deadline from the database
         gifInstruction.setFontScale(1f, 1f);
         gifInstruction.setPosition(800, 7);
         gifInstruction.setColor(Color.WHITE);
@@ -733,9 +733,6 @@ public class TaskTwo implements Screen {
         //render game map
         renderer.render();
 
-        //update gif
-        gifRecorder.update();
-
         //render our Box2Ddebuglines
         b2dr.render(world, gamecam.combined);
 
@@ -757,6 +754,7 @@ public class TaskTwo implements Screen {
 
         stage.act(delta);
         stage.draw();
+        gifRecorder.update();
     }
 
 
