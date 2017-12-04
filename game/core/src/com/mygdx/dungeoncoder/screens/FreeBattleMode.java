@@ -357,13 +357,14 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
                         }
                     }.text("     Please enter name of the map.     ").button("    Ok    ", true).key(Input.Keys.ENTER, true).show(stage);
                 } else {
-                    System.out.println("DOWNLOADED");
+
                     new Dialog("Download", skin, "dialog") {
                         protected void result(Object object) {
                         }
                     }.text("    Your file has been downloaded.  ").button("Ok", true).
                             key(Input.Keys.ENTER, true).show(stage);
                     shareVariable.connect.requestCustomLevel(textArea.getText());
+                    System.out.println("DOWNLOADED");
                 }
             }
         });

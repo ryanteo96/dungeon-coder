@@ -158,7 +158,7 @@ public class FreeBattleModeGameScreen implements Screen {
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
         Label gifInstruction = new Label("To use the GIF recording function, press F1 to activate it and\n press F1 first time to start recording and second time to end recording", skin); //display deadline from the database
         gifInstruction.setFontScale(1f, 1f);
-        gifInstruction.setPosition(800, 7);
+        gifInstruction.setPosition(790, 7);
         gifInstruction.setColor(Color.WHITE);
         stage.addActor(gifInstruction);
 
@@ -183,7 +183,6 @@ public class FreeBattleModeGameScreen implements Screen {
         btnBack.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
-                disposeNotStage();
                 game.setScreen(new FreeBattleMode(game));
                 hud.stopMusic();
             }
@@ -367,7 +366,6 @@ public class FreeBattleModeGameScreen implements Screen {
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 hud.stopMusic();
-                disposeNotStage();
                 game.setScreen(new FreeBattleMode(game));
             }
         });
@@ -694,7 +692,6 @@ public class FreeBattleModeGameScreen implements Screen {
                 saveProcessor.insClear();
                 System.out.println("Total clear:" + saveProcessor.getTotalCleared());
                 System.out.printf("You have cleared %d instructional stages.\n", saveProcessor.getInsCleared());
-                disposeNotStage();
                 game.setScreen(new StageTwoComplete(game));
             } else {
                 touchedFinishline = false;
@@ -782,10 +779,6 @@ public class FreeBattleModeGameScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
-    }
-
-    public void disposeNotStage(){
         world.dispose();
         map.dispose();
         hud.dispose();
@@ -793,6 +786,8 @@ public class FreeBattleModeGameScreen implements Screen {
         renderer.dispose();
         gifRecorder.clearFrames();
         gifRecorder.close();
+        stage.dispose();
     }
+
 
 }

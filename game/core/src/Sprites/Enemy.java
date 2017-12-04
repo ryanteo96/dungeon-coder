@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.dungeoncoder.screens.FreeBattleModeGameScreen;
+import com.mygdx.dungeoncoder.screens.MainStory1;
 import com.mygdx.dungeoncoder.screens.TaskThree;
 import com.mygdx.dungeoncoder.screens.TaskTwo;
 
@@ -13,6 +14,7 @@ public abstract class Enemy extends Sprite {
     protected TaskThree screen;
     protected TaskTwo screen2;
     protected FreeBattleModeGameScreen freeBattleScreen;
+    protected MainStory1 mainStory;
     public Body b2body;
     public Vector2 velocity;
 
@@ -37,6 +39,15 @@ public abstract class Enemy extends Sprite {
     public Enemy(FreeBattleModeGameScreen freeBattleScreen, float x, float y){
         this.world = freeBattleScreen.getWorld();
         this.freeBattleScreen = freeBattleScreen;
+        setPosition(x,y);
+        defineEnemy();
+        velocity = new Vector2(-1,-2);
+        b2body.setActive(false);//stay sleep until someone wakes them up
+    }
+
+    public Enemy(MainStory1 mainStory, float x, float y){
+        this.world = mainStory.getWorld();
+        this.mainStory = mainStory;
         setPosition(x,y);
         defineEnemy();
         velocity = new Vector2(-1,-2);

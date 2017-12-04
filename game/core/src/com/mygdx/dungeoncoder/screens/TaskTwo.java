@@ -157,7 +157,7 @@ public class TaskTwo implements Screen {
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
         Label gifInstruction = new Label("To use the GIF recording function, press F1 to activate it and\n press F2 first time to start recording and second time to end recording", skin); //display deadline from the database
         gifInstruction.setFontScale(1f, 1f);
-        gifInstruction.setPosition(800, 7);
+        gifInstruction.setPosition(790, 7);
         gifInstruction.setColor(Color.WHITE);
         stage.addActor(gifInstruction);
 

@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 
+import java.io.FileNotFoundException;
 import java.text.ParseException;
 
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
@@ -71,7 +72,11 @@ public class MainStoryMode implements Screen {
         startImage.addListener(new ClickListener(){
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
-                game.setScreen(new MainStory1(game));
+                try {
+                    game.setScreen(new MainStory1(game));
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
 
