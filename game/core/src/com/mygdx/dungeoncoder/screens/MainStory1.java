@@ -134,7 +134,7 @@ public class MainStory1 implements Screen {
         //Load our map and setup our map renderer
         mapLoader = new TmxMapLoader();
 
-        map = mapLoader.load("mainstory.tmx");
+        map = mapLoader.load("StagesMaps/mainstory.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / DefaultValues.PPM);
 
         //set camera at center at the start of the map
@@ -183,7 +183,7 @@ public class MainStory1 implements Screen {
         btnBack.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
-                game.setScreen(new FreeBattleMode(game));
+                game.setScreen(new MainStoryMode(game));
                 hud.stopMusic();
             }
         });
@@ -366,7 +366,7 @@ public class MainStory1 implements Screen {
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 hud.stopMusic();
-                game.setScreen(new FreeBattleMode(game));
+                game.setScreen(new MainStoryMode(game));
             }
         });
 
@@ -496,7 +496,6 @@ public class MainStory1 implements Screen {
                                 }.text("You have already completed my quest, you may continue your journey.").button("     Ok     ", true).show(stage);
                             }
                         }
-                        shareVariable.connect.requestUpdateProgress(file,"Task1",progressInsideTaskTwo);
                     }
                     bufferedReader.close();
                 } catch (FileNotFoundException ex) {
@@ -668,8 +667,6 @@ public class MainStory1 implements Screen {
             quest2 = false;
             DefaultValues.questActivated = false;
             stage.addActor(dialog);
-            DungeonCoder.manager.get("UIElements/Animation/robottalking.wav", Music.class).setVolume(2f);
-            DungeonCoder.manager.get("UIElements/Animation/robottalking.wav", Music.class).play();
         }
 
         if (DefaultValues.quest2Activated == true) {
@@ -677,8 +674,6 @@ public class MainStory1 implements Screen {
             quest2 = true;
             DefaultValues.quest2Activated = false;
             stage.addActor(dialog2);
-            DungeonCoder.manager.get("UIElements/Animation/npc2.mp3", Music.class).setVolume(4f);
-            DungeonCoder.manager.get("UIElements/Animation/npc2.mp3", Music.class).play();
         }
 
         if (touchedFinishline == true) {
@@ -692,7 +687,7 @@ public class MainStory1 implements Screen {
                 saveProcessor.insClear();
                 System.out.println("Total clear:" + saveProcessor.getTotalCleared());
                 System.out.printf("You have cleared %d instructional stages.\n", saveProcessor.getInsCleared());
-                game.setScreen(new StageTwoComplete(game));
+                game.setScreen(new MainStoryGameComplete(game));
             } else {
                 touchedFinishline = false;
                 new Dialog("Dungeon Coder", skin, "dialog") {
@@ -729,9 +724,6 @@ public class MainStory1 implements Screen {
         //render game map
         renderer.render();
 
-        //update gif
-        gifRecorder.update();
-
         //render our Box2Ddebuglines
         b2dr.render(world, gamecam.combined);
 
@@ -748,11 +740,13 @@ public class MainStory1 implements Screen {
         hud.stage.draw();
 
         if (gameOver()) {
-            game.setScreen(new FreeBattleGameOver(game));
+            game.setScreen(new MainStoryGameOver(game));
         }
 
         stage.act(delta);
         stage.draw();
+        //update gif
+        gifRecorder.update();
     }
 
 

@@ -24,7 +24,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.mygdx.dungeoncoder.DungeonCoder;
-import com.mygdx.dungeoncoder.utils.ClientConnection;
 
 import java.io.FileNotFoundException;
 import java.text.ParseException;
@@ -162,26 +161,28 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
 
     private void stage_One(DungeonCoder g){
         Object[] listEntries = {"Objective",
-                "In this challenge, we review some basic concepts that will get you started with this module.",
+                "In this stage, we will learn decision making.",
                 "===========================================================================================",
                 "Task",
-                "To complete this challenge, you must save a line of input from stdin to a variable,",
-                "print 'Hello, World.' and finally print the value of your variable on the next line.",
+                "Reach the end of the stage and complete the quests along the way.",
                 "===========================================================================================",
-                "Sample Input",
-                "Welcome to Dungeon Coding!",
-                "--------------------------------------------------------------------------------------------------------------------------------------------",
-                "Sample Output",
-                "Hello World",
-                "Welcome to Dungeon Coding!",
+                "Notes: ",
+                "Decision making structures have one or more conditions to be evaluated or tested by the",
+                "program, along with a statement or statements that are to be executed if the condition is",
+                "determined to be true, and optionally, other statements to be executed if the condition is",
+                "determined to be false.",
                 "===========================================================================================",
-                "Explanation",
-                "On the first line, we print the string literal 'Hello, World.' On the second line, we",
-                "print the contents of the variable which, for this sample case, happens to be 'Welcome to",
-                "Dungeon Coding!'. If you do not print the variable's contents to stdout, you will not",
-                "pass the hidden test case.",
+                "1. if statement",
+                "    An if statement consists of a boolean expression followed by one or more statements.",
+                "2.	 if...else statement",
+                "   An if statement can be followed by an optional else statement, which executes when the",
+                "   boolean expression is false.",
+                "3. nested if statement",
+                "   You can use one if or else if statement inside another if or else if statement(s).",
+                "4.	switch statement",
+                "   A switch statement allows a variable to be tested for equality against a list of values.",
                 "===========================================================================================",
-                "Difficulty: One Dungeon"};
+                "Difficulty: Two Dungeon"};
 
         skin = new Skin(Gdx.files.internal("dialogSkins/plain-james-ui.json"));
         testSkin = new Skin(Gdx.files.internal("UIElements/test.json"));
@@ -243,7 +244,11 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         yesButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-             stageOne(game);
+                try {
+                    stageOne(game);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -251,7 +256,11 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                stageOne(game);
+                try {
+                    stageOne(game);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -280,7 +289,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
                 "Explore the Dungeon World",
                 "===========================================================================================",
                 "Task",
-                "Reach the end of the stage and solve the problems along the way.",
+                "Reach the end of the stage and complete the quests along the way.",
                 "",
                 "===========================================================================================",
                 "To move the character",
@@ -479,7 +488,11 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         yesButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                stageThree(game);
+                try {
+                    stageThree(game);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -487,7 +500,11 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                stageThree(game);
+                try {
+                    stageThree(game);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -510,11 +527,8 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         });
         stage.addActor(window);
     }
-    private void returnToInstructionalMode(DungeonCoder g){
-        g.setScreen(new InstructionalMode(g));
-    }
 
-    private void stageOne(DungeonCoder g) {
+    private void stageOne(DungeonCoder g) throws FileNotFoundException {
         g.setScreen(new TaskOne(g));
     }
 
@@ -522,7 +536,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         g.setScreen(new TaskTwo(g));
     }
 
-    private void stageThree(DungeonCoder g) {
+    private void stageThree(DungeonCoder g) throws FileNotFoundException {
         g.setScreen(new TaskThree(g));
     }
 }

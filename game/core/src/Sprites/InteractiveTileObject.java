@@ -7,7 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.dungeoncoder.screens.TaskThree;
+import com.mygdx.dungeoncoder.screens.MarioGame;
 import com.mygdx.dungeoncoder.screens.TaskTwo;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 
@@ -18,11 +18,11 @@ public abstract class InteractiveTileObject {
     protected Rectangle bounds;
     protected Body body;
     protected Fixture fixture;
-    protected TaskThree screen;
+    protected MarioGame screen;
     protected TaskTwo screen2;
     protected MapObject object;
 
-    public InteractiveTileObject(TaskThree screen, MapObject object){
+    public InteractiveTileObject(MarioGame screen, MapObject object){
         this.object = object;
         this.screen = screen;
         this.world = screen.getWorld();

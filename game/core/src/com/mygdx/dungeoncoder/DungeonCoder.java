@@ -46,7 +46,7 @@ public class DungeonCoder extends Game {
 		manager.load("UIElements/Animation/robottalking.wav",Music.class);
 		manager.load("UIElements/Animation/jump.wav",Sound.class);
 		manager.load("UIElements/Animation/achievement.mp3",Sound.class);
-		manager.load("UIElements/Animation/npc2.mp3",Music.class);
+		manager.load("UIElements/Animation/npc2.wav",Music.class);
 		manager.load("UIElements/Animation/questcompleted.wav",Music.class);
 		manager.load("UIElements/Animation/fail.mp3",Music.class);
 		manager.load("UIElements/Animation/gamevictory.wav",Music.class);

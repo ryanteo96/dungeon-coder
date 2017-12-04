@@ -10,9 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.dungeoncoder.DungeonCoder;
-import com.mygdx.dungeoncoder.screens.FreeBattleModeGameScreen;
-import com.mygdx.dungeoncoder.screens.MainStory1;
-import com.mygdx.dungeoncoder.screens.TaskTwo;
+import com.mygdx.dungeoncoder.screens.*;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 
 public class Adventurer extends Sprite {
@@ -30,7 +28,121 @@ public class Adventurer extends Sprite {
     private boolean runningRight;
     private boolean adventurerIsDead;
 
+    public Adventurer(TaskOne screen){
+        super(screen.getAtlas().findRegion("walk"));
+        this.world = screen.getWorld();
+        currentState = Adventurer.State.STANDING;
+        previousState = Adventurer.State.STANDING;
+        stateTimer = 0;
+        runningRight = true;
+        adventurerIsDead = false;
+        //walk/run
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+        Texture standTexture = new Texture(Gdx.files.internal("UIElements/Animation/stickstand.png"));
+        Texture jumpTexture = new Texture(Gdx.files.internal("UIElements/Animation/stickjump.png"));
+
+        Texture walkTexture1 = new Texture(Gdx.files.internal("UIElements/Animation/walk1.png"));
+        Texture walkTexture2 = new Texture(Gdx.files.internal("UIElements/Animation/walk2.png"));
+        Texture walkTexture3 = new Texture(Gdx.files.internal("UIElements/Animation/walk3.png"));
+        Texture walkTexture4 = new Texture(Gdx.files.internal("UIElements/Animation/walk4.png"));
+        Texture walkTexture5 = new Texture(Gdx.files.internal("UIElements/Animation/walk5.png"));
+        Texture walkTexture6 = new Texture(Gdx.files.internal("UIElements/Animation/walk6.png"));
+
+        Texture deadTexture1 = new Texture(Gdx.files.internal("UIElements/Animation/stickdie1.png"));
+        Texture deadTexture2 = new Texture(Gdx.files.internal("UIElements/Animation/stickdie2.png"));
+        Texture deadTexture3 = new Texture(Gdx.files.internal("UIElements/Animation/stickdie3.png"));
+
+
+        frames.add(new TextureRegion(walkTexture1,0,0,256,256));
+        frames.add(new TextureRegion(walkTexture2,0,0,256,256));
+        frames.add(new TextureRegion(walkTexture3,0,0,256,256));
+        frames.add(new TextureRegion(walkTexture4,0,0,256,256));
+        frames.add(new TextureRegion(walkTexture5,0,0,256,256));
+        frames.add(new TextureRegion(walkTexture6,0,0,256,256));
+
+        //running animation
+        adventurerRun = new Animation(0.1f, frames);
+        frames.clear();
+
+
+        frames.add(new TextureRegion(jumpTexture, 1 , 0,256,256));
+
+        adventurerJump = new Animation(0.1f, frames);
+        frames.clear();
+
+        defineAdventurer();
+        adventurerStand = new TextureRegion(standTexture,0,0,256,256);
+
+
+        frames.add(new TextureRegion(deadTexture1,0,0,256,256));
+        frames.add(new TextureRegion(deadTexture2,0,0,256,256));
+        frames.add(new TextureRegion(deadTexture3,0,0,256,256));
+        adventurerDead = new Animation(0.1f,frames);
+
+        frames.clear();
+        setBounds(0,0,30/DefaultValues.PPM,30/DefaultValues.PPM);
+        setRegion(adventurerStand);
+
+    }
+
     public Adventurer(TaskTwo screen){
+        super(screen.getAtlas().findRegion("walk"));
+        this.world = screen.getWorld();
+        currentState = Adventurer.State.STANDING;
+        previousState = Adventurer.State.STANDING;
+        stateTimer = 0;
+        runningRight = true;
+        adventurerIsDead = false;
+        //walk/run
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+        Texture standTexture = new Texture(Gdx.files.internal("UIElements/Animation/stickstand.png"));
+        Texture jumpTexture = new Texture(Gdx.files.internal("UIElements/Animation/stickjump.png"));
+
+        Texture walkTexture1 = new Texture(Gdx.files.internal("UIElements/Animation/walk1.png"));
+        Texture walkTexture2 = new Texture(Gdx.files.internal("UIElements/Animation/walk2.png"));
+        Texture walkTexture3 = new Texture(Gdx.files.internal("UIElements/Animation/walk3.png"));
+        Texture walkTexture4 = new Texture(Gdx.files.internal("UIElements/Animation/walk4.png"));
+        Texture walkTexture5 = new Texture(Gdx.files.internal("UIElements/Animation/walk5.png"));
+        Texture walkTexture6 = new Texture(Gdx.files.internal("UIElements/Animation/walk6.png"));
+
+        Texture deadTexture1 = new Texture(Gdx.files.internal("UIElements/Animation/stickdie1.png"));
+        Texture deadTexture2 = new Texture(Gdx.files.internal("UIElements/Animation/stickdie2.png"));
+        Texture deadTexture3 = new Texture(Gdx.files.internal("UIElements/Animation/stickdie3.png"));
+
+
+        frames.add(new TextureRegion(walkTexture1,0,0,256,256));
+        frames.add(new TextureRegion(walkTexture2,0,0,256,256));
+        frames.add(new TextureRegion(walkTexture3,0,0,256,256));
+        frames.add(new TextureRegion(walkTexture4,0,0,256,256));
+        frames.add(new TextureRegion(walkTexture5,0,0,256,256));
+        frames.add(new TextureRegion(walkTexture6,0,0,256,256));
+
+        //running animation
+        adventurerRun = new Animation(0.1f, frames);
+        frames.clear();
+
+
+        frames.add(new TextureRegion(jumpTexture, 1 , 0,256,256));
+
+        adventurerJump = new Animation(0.1f, frames);
+        frames.clear();
+
+        defineAdventurer();
+        adventurerStand = new TextureRegion(standTexture,0,0,256,256);
+
+
+        frames.add(new TextureRegion(deadTexture1,0,0,256,256));
+        frames.add(new TextureRegion(deadTexture2,0,0,256,256));
+        frames.add(new TextureRegion(deadTexture3,0,0,256,256));
+        adventurerDead = new Animation(0.1f,frames);
+
+        frames.clear();
+        setBounds(0,0,30/DefaultValues.PPM,30/DefaultValues.PPM);
+        setRegion(adventurerStand);
+
+    }
+
+    public Adventurer(TaskThree screen){
         super(screen.getAtlas().findRegion("walk"));
         this.world = screen.getWorld();
         currentState = Adventurer.State.STANDING;
@@ -298,7 +410,6 @@ public class Adventurer extends Sprite {
         //what can adventurer collide with
         fdef.filter.maskBits = DefaultValues.GROUND_BIT |
                             DefaultValues.SKELETON_BIT |
-                            DefaultValues.OBJECT_BIT|
                             DefaultValues.END_BIT|
                             DefaultValues.NPC_BIT|
                             DefaultValues.NPC2_BIT; // | is or

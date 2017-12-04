@@ -729,9 +729,6 @@ public class FreeBattleModeGameScreen implements Screen {
         //render game map
         renderer.render();
 
-        //update gif
-        gifRecorder.update();
-
         //render our Box2Ddebuglines
         b2dr.render(world, gamecam.combined);
 
@@ -753,6 +750,8 @@ public class FreeBattleModeGameScreen implements Screen {
 
         stage.act(delta);
         stage.draw();
+        //update gif
+        gifRecorder.update();
     }
 
 

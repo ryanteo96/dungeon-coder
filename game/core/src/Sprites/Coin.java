@@ -4,17 +4,10 @@ import Scenes.Hud;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.dungeoncoder.DungeonCoder;
-import com.mygdx.dungeoncoder.screens.TaskThree;
+import com.mygdx.dungeoncoder.screens.MarioGame;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 import com.mygdx.dungeoncoder.values.ItemDef;
 import com.mygdx.dungeoncoder.values.Mushroom;
@@ -23,7 +16,7 @@ public class Coin extends InteractiveTileObject{
     private static TiledMapTileSet tileSet;//start counting on 1 instead of 0
     private final int BLANK_COIN = 28; //in the tile its ID is 27 but because everything starts from 1 so we add 1 to it
 
-    public Coin(TaskThree screen, MapObject object){
+    public Coin(MarioGame screen, MapObject object){
         super(screen, object);
         tileSet = map.getTileSets().getTileSet("tileset_gutter");
         fixture.setUserData(this);

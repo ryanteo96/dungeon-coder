@@ -4,18 +4,13 @@ import Scenes.Hud;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.dungeoncoder.DungeonCoder;
-import com.mygdx.dungeoncoder.screens.TaskThree;
+import com.mygdx.dungeoncoder.screens.MarioGame;
 import com.mygdx.dungeoncoder.values.DefaultValues;
-
-import java.awt.*;
 
 public class Brick extends InteractiveTileObject {
 
-    public Brick(TaskThree screen, MapObject object){
+    public Brick(MarioGame screen, MapObject object){
         super(screen, object);
         fixture.setUserData(this);
         setCategoryFilter(DefaultValues.BRICK_BIT);

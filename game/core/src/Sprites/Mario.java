@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.dungeoncoder.DungeonCoder;
-import com.mygdx.dungeoncoder.screens.TaskThree;
+import com.mygdx.dungeoncoder.screens.MarioGame;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 
 public class Mario extends Sprite {
@@ -39,9 +39,9 @@ public class Mario extends Sprite {
     private boolean timeToRedefineBigMario;
     private boolean marioIsDead;
 
-    private TaskThree screen;
+    private MarioGame screen;
 
-    public Mario(TaskThree screen){
+    public Mario(MarioGame screen){
         this.screen = screen;
         this.world = screen.getWorld();
         currentState = State.STANDING;

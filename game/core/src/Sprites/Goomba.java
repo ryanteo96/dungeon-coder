@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.dungeoncoder.DungeonCoder;
-import com.mygdx.dungeoncoder.screens.TaskThree;
+import com.mygdx.dungeoncoder.screens.MarioGame;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 
 public class Goomba extends Enemy {
@@ -21,7 +21,7 @@ public class Goomba extends Enemy {
     private Boolean setToDestroy;
     private Boolean destroyed;
 
-    public Goomba(TaskThree screen, float x, float y) {
+    public Goomba(MarioGame screen, float x, float y) {
         super(screen, x, y);
         frames = new Array<TextureRegion>();
         for(int i = 0; i < 2; i++){

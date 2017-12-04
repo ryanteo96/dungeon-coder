@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" nextobjectid="36">
+ <tileset firstgid="1" source="mapleMap/New Map 1/maze.tsx"/>
+ <tileset firstgid="2977" source="mapleMap/New Map 1/minotaur.tsx"/>
+ <tileset firstgid="3007" source="mapleMap/New Map 1/biguglyfish.tsx"/>
+ <layer name="background" width="240" height="13">
+  <data encoding="base64" compression="zlib">
+   eJzt2mWwVGUcB+Dl7l6UlDRBpRRQLEBQOi+dJqiUBSoKNkpLq4AJKiVtgQlIdxtIqKSkhVhcBAR9dvYy4rUulw/Mjuc3+8w7Z895v+zZ3/x3dk61UChUnRrUJIla1KYOdalHfdqTKRyTmSxkJRvZOYUc5CQXuclDXjJEQqEEukb+es0/7Xk9IRR6g0lM5k3e4m3e4V3eYwpTmZZiGMMZwUhG8TKjGcNYxjGeCUwkSJB4THd60JPH6EVv+tCXfvRnAK+RFI6pRW3qUJd61KcBDWlEY5rQNFV/j7z3X+s3ejXQutv6HXv4nh/4kZ/4mb0ksy/FejawkU1sZgtfsJVtbGcHO9kV9DdInGY2c5jLPOazgIUsYjFLWMrX9ArH9KYPfelHfwbwOE/wZDjWvUEMTtXfgSnnUxt4lOhxMYpzARdSgou4mEu4lMsoSSlKpziDMzmLfOTnbM7hXApQkEIUpkj4hHz0QYIcdw5xmN+iBxm8SCBMhEQychJFmR+OWcBCFrGYJSxlGctZwUo+4MNU/U3rzE5vf6/lOq6nGc25gRu5iRa0pBWtaRP0N0icppxOlqcCFalEZapQlWpUpwa3Zoj18EgXw0RIJCMncTKZyEwWspIt8uf+pnVm38bttKUdd3And9Geu7mHDnTkXp7hWZ7jeYYwlBd4kZcYxnBGMJJRQX+DxGke1slOPMKjdKYLXelGd3rQkzHRfkdiKlOFqlSjOjWoSRK1qB2dtdRN1d+0zuyxjGM8E5jIK7zKa7zOG0xiMm+yik9YzRrWso5P+YzPWc8GNrKJzUF/g8RppujkVKbxPtOZwUxmMZs5zGVrqv5Gu9iN7vSgJ4/Ri970ic5a+qVzZm/Tq+3sYCe7+JKv+Jpv+JbdfMcectiXk1zkJg95OZXTOJ0zOJOzyEf+yIm+C0GCpC97dTKZffzCfg5wkF85xOFox33Hp0Vi63RmMJNZzGYOc5nHfBawMDprWZzOmV2AghSiMEU4j/MpSjGKcwEXUoIGNKQRjaP/ddOUq7iaa7iW67ieZjQP+hskTlMyIRQqRWkupwxluYIrKUf5hD/6m8x+DnBFoo5bD3GY36I98F4GEggTIZHOznU5xpndgpa0ojVtuJlbuJXbuJ22tOMOHucJnmQggxjMUzzNMzzLczzPEIYG/Q0Sp+mgmx25l/u4nwd4kId4mE4Jsd7uS5m/ZfSxbGKsv1dSjvJUoCKVqEwVqlItMbbnWGf2MIYzgpGM4mVGM4axjGM8E5jIMpazgpV8wId8xMes4hNWs4a1rAv6GyROk9Znm47+/Zze/kZn9sFI2mf2euc2sJFNbGYLX7CVbWxnBzvZxcn2ZSIzWchKNrJzCjnISS5yk4e8iSf6LgQJkr6k9dmmI/M3+Tj6e6x7/u3cuRSgIIUoTBFqkkQtalOHutSjPg1oSCMa04SmQX+DxGnS+mxEKd/x0omx9UT29++uO7q/RYL+Bvkf5XcJPoXs
+  </data>
+ </layer>
+ <objectgroup name="Ground">
+  <object id="1" x="0.666667" y="141" width="444" height="66.6667"/>
+  <object id="4" x="128" y="132.333" width="130" height="8"/>
+  <object id="5" x="135" y="127" width="122.667" height="6.66667"/>
+  <object id="6" x="142.667" y="118.667" width="108.667" height="9"/>
+  <object id="7" x="148.667" y="112" width="95.3333" height="7"/>
+  <object id="9" x="258.667" y="134.333" width="156.667" height="6.66667"/>
+  <object id="10" x="444.333" y="144" width="7.33333" height="58.6667"/>
+  <object id="11" x="452.333" y="152.667" width="7.33333" height="29.3333"/>
+  <object id="12" x="460.667" y="160.333" width="5" height="25"/>
+  <object id="13" x="466" y="166" width="590.667" height="27.3333"/>
+  <object id="15" x="784.333" y="157.667" width="103" height="8"/>
+  <object id="16" x="790" y="152.667" width="90" height="4.66667"/>
+  <object id="17" x="798.667" y="144.667" width="75.6667" height="8"/>
+  <object id="18" x="801.333" y="138" width="64.3333" height="8.66667"/>
+ </objectgroup>
+ <objectgroup name="wall">
+  <object id="19" x="460" y="160.667" width="6.33333" height="9.66667"/>
+  <object id="20" x="783.667" y="160" width="6.33333" height="10"/>
+  <object id="21" x="880.667" y="159.333" width="6.66667" height="10.6667"/>
+  <object id="22" x="1049.67" y="155.667" width="5.66667" height="14.3333"/>
+  <object id="23" x="0" y="22.3333" width="13.6667" height="128.333"/>
+ </objectgroup>
+ <objectgroup name="skeleton">
+  <object id="29" x="534.5" y="144.5" width="20.5" height="20"/>
+  <object id="30" x="640.5" y="141.5" width="23" height="24"/>
+  <object id="31" x="906.5" y="141" width="13.5" height="25"/>
+  <object id="33" x="107" y="-228" width="1"/>
+ </objectgroup>
+ <objectgroup name="Endpoint">
+  <object id="25" x="952" y="93" width="49.5" height="74"/>
+ </objectgroup>
+ <objectgroup name="npc">
+  <object id="26" x="318.5" y="79.5" width="43.5" height="55"/>
+ </objectgroup>
+ <layer name="npc" width="240" height="13">
+  <data encoding="base64" compression="zlib">
+   eJzt07kNwkAARNHN3X8B3Lexue/amBKABK30nvTzSaYUAAAA4FuDppRhGqVxmqRp8+9VwCdm+eo8LdIyrdLaf6EKm3y1TdvUpT7t/BeqsM9XD+mYTumcLv4LVbjmq7d0T4/0TC//BQAAAOBHbw65Fdw=
+  </data>
+ </layer>
+ <objectgroup name="npc2">
+  <object id="28" x="715.5" y="86" width="60.5" height="82"/>
+ </objectgroup>
+ <layer name="npc2" width="240" height="13">
+  <data encoding="base64" compression="zlib">
+   eJzt1rduAlEYBeHt9/2fB5NMMsHkaMA2lKSWIAYBEjSUcIXmk6bZ6jZH/0aRJD1fIo6iD0pSitKUoSx9xq9+naRHcmw0TwUqUim+/yYpXNfNflGZKtSkFrXdrxS0DhvtUpVq9E11alx2LClc1zs7pV/6o3+axedtSwrX6fb2qE8DGtKIfmjhfqWgLdnoita0oTFNbu6xpHDd/i/PaUs72tPB/UqSJEmSJL2FI07JONE=
+  </data>
+ </layer>
+</map>

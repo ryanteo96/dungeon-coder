@@ -230,7 +230,7 @@ public class TaskTwo implements Screen {
         textArea.setHeight(500);
 
         //
-        okButton = new TextButton(" I am ready! ", skin);
+        okButton = new TextButton(" Yes ", skin);
         okButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
@@ -245,7 +245,7 @@ public class TaskTwo implements Screen {
         noButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                new Dialog("Dr.Robot NPC", skin, "dialog") {
+                new Dialog("Robot NPC", skin, "dialog") {
                     protected void result(Object object) {
                     }
                 }.text("    I guess you are not ready yet, come back next time  ").button(comeBackNextTimeButton, true).
@@ -359,28 +359,26 @@ public class TaskTwo implements Screen {
 
 
         //return to instructional
-        comeBackNextTimeButton = new TextButton("Ok", skin);
+        comeBackNextTimeButton = new TextButton("   Ok   ", skin);
         comeBackNextTimeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 hud.stopMusic();
-                dispose();
                 game.setScreen(new InstructionalMode(game));
             }
         });
 
-        dialog = new Dialog("Dr.Robot NPC", skin, "dialog") {
+        dialog = new Dialog("Robot NPC", skin, "dialog") {
             public void result(Object obj) {
             }
         };
 
-        dialog.text("Hi, " + DefaultValues.username + ", Welcome to the Dungeon!\nTo gain points and complete the stage,you\n will need to solve these problems by using\n Java programming, Are you ready?");
+        dialog.text("Welcome, " + DefaultValues.username + " \nTo get to the secret door, \nyou must complete my quest.\n Do you want to proceed?");
         dialog.button(okButton, true); //sends "true" as the result
         dialog.button(noButton, false);
         dialog.setPosition(500, 300);
         dialog.setHeight(150);
-        dialog.setWidth(330);
-
+        dialog.setWidth(300);
 
         quest2YesButton = new TextButton("  Yes  ", skin);
         quest2YesButton.addListener(new ClickListener() {
@@ -394,25 +392,25 @@ public class TaskTwo implements Screen {
         quest2NoButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                new Dialog("Mr.Katana NPC", skin, "dialog") {
+                new Dialog("Dragon Master NPC", skin, "dialog") {
                     protected void result(Object object) {
                     }
-                }.text("You will not be able to complete the stage until\nyou earn enough points from both of us!").button("Ok", true).show(stage);
+                }.text("You will not be able to open the secret door until\nyou earn enough points from both of us!").button("  Ok  ", true).show(stage);
             }
         });
 
 
-        dialog2 = new Dialog("Mr.Katana NPC", skin, "dialog") {
+        dialog2 = new Dialog("Dragon Master NPC", skin, "dialog") {
             public void result(Object obj) {
             }
         };
 
-        dialog2.text("Looks like you have passed your first test, \nbut what about my test?\nAre you prepared?");
+        dialog2.text("Puny human, looks like you\nhave completed your first quest, \nI dare you not to proceed.");
         dialog2.button(quest2YesButton, true); //sends "true" as the result
         dialog2.button(quest2NoButton, false);
         dialog2.setPosition(500, 300);
         dialog2.setHeight(130);
-        dialog2.setWidth(350);
+        dialog2.setWidth(300);
 
         runButton = new TextButton("Run", skin);
         runButton.setPosition(460, 10);
@@ -472,7 +470,7 @@ public class TaskTwo implements Screen {
                                 }
                                 questOne();
                             } else {
-                                new Dialog("Dr.Robot NPC", skin, "dialog") {
+                                new Dialog("Robot NPC", skin, "dialog") {
                                     protected void result(Object object) {
                                     }
                                 }.text("You have already completed my quest, you may continue your journey.").button("     Ok     ", true).show(stage);
@@ -489,7 +487,7 @@ public class TaskTwo implements Screen {
                                 System.out.println("quest2Passed: " + quest2Passed);
                                 questTwo();
                             } else {
-                                new Dialog("Mr.Katana NPC", skin, "dialog") {
+                                new Dialog("Dragon Master NPC", skin, "dialog") {
                                     protected void result(Object object) {
                                     }
                                 }.text("You have already completed my quest, you may continue your journey.").button("     Ok     ", true).show(stage);
@@ -541,16 +539,16 @@ public class TaskTwo implements Screen {
             hud.addProgress(progress);
             hud.addScore(score);
             DungeonCoder.manager.get("UIElements/Animation/questcompleted.wav", Music.class).play();
-            new Dialog("Dr.Robot NPC", skin, "dialog") {
+            new Dialog("Robot NPC", skin, "dialog") {
                 protected void result(Object object) {
                 }
-            }.text("Congratualtion! You have passed my test! \nBut beware, a greater task is yet to come.").button("     Ok     ", true).show(stage);
+            }.text("Wow I do not expect you to be able to complete my quest, \n                     Dragon Master is waiting for you.").button("     Ok     ", true).show(stage);
         } else if (quest1Passed == false) {
             DungeonCoder.manager.get("UIElements/Animation/fail.mp3", Music.class).play();
-            new Dialog("Dr.Robot NPC", skin, "dialog") {
+            new Dialog("Robot NPC", skin, "dialog") {
                 protected void result(Object object) {
                 }
-            }.text("Too bad... But don't be disappointed, you can still do it!").button("Try again", true).show(stage);
+            }.text("No.. You are only making it worse.. Try again... ").button("Try again", true).show(stage);
         }
     }
 
@@ -562,16 +560,16 @@ public class TaskTwo implements Screen {
             hud.addProgress(progress);
             hud.addScore(score);
             DungeonCoder.manager.get("UIElements/Animation/questcompleted.wav", Music.class).play();
-            new Dialog("Mr.Katana NPC", skin, "dialog") {
+            new Dialog("Dragon Master NPC", skin, "dialog") {
                 protected void result(Object object) {
                 }
-            }.text("Congratulation! You have earned my respect and you shall pass.").button("     Ok     ", true).show(stage);
+            }.text("Hmmmm... You are lucky....").button("     Ok     ", true).show(stage);
         } else if (quest2Passed == false) {
             DungeonCoder.manager.get("UIElements/Animation/fail.mp3", Music.class).play();
-            new Dialog("Mr.Katana NPC", skin, "dialog") {
+            new Dialog("Dragon Master NPC", skin, "dialog") {
                 protected void result(Object object) {
                 }
-            }.text("Don't be disappointed, you can still do it!").button("Try again", true).show(stage);
+            }.text("Just give up, why even bother trying?").button("Try again", true).show(stage);
         }
     }
 
@@ -610,7 +608,6 @@ public class TaskTwo implements Screen {
     }
 
     private void backToInstructionalMode(DungeonCoder g) {
-        dispose();
         g.setScreen(new InstructionalMode(g));
         hud.stopMusic();
     }
@@ -681,8 +678,8 @@ public class TaskTwo implements Screen {
             quest2 = true;
             DefaultValues.quest2Activated = false;
             stage.addActor(dialog2);
-            DungeonCoder.manager.get("UIElements/Animation/npc2.mp3", Music.class).setVolume(4f);
-            DungeonCoder.manager.get("UIElements/Animation/npc2.mp3", Music.class).play();
+            //DungeonCoder.manager.get("UIElements/Animation/npc2.wav", Music.class).setVolume(0.7f);
+            DungeonCoder.manager.get("UIElements/Animation/npc2.wav", Music.class).play();
         }
 
         if (touchedFinishline == true) {
@@ -734,7 +731,7 @@ public class TaskTwo implements Screen {
         renderer.render();
 
         //render our Box2Ddebuglines
-        b2dr.render(world, gamecam.combined);
+        //b2dr.render(world, gamecam.combined);
 
         //set batch to draw what the Hud camera sees.
         game.batch.setProjectionMatrix(gamecam.combined);
@@ -749,7 +746,7 @@ public class TaskTwo implements Screen {
         hud.stage.draw();
 
         if (gameOver()) {
-            game.setScreen(new AdventurerGameOver(game));
+            game.setScreen(new TaskTwoGameOver(game));
         }
 
         stage.act(delta);

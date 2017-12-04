@@ -12,11 +12,18 @@ public class StageTwo {
         catch (Exception e) {
             // Shouldn't happen.
         }
-        // USER WRITE CODE HERE
-        String a = "No one can stop a Dungeon Coder!";
-        //String a = "ARGHHHH";
-        System.out.println(a);
-
+         //USER WRITE CODE HERE
+         
+        int x = 5;
+        int y = 10;
+        int z = 3;
+        if( x < z){
+           //write your code here
+           //print something here
+          System.out.println("x is less than z");
+        }else{
+          System.out.println("x is not less than z");
+        }
         // DO NOT WRITE CODE PAST THIS POINT
         out.close();
     }
