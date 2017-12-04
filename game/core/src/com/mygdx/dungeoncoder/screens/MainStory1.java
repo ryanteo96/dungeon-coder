@@ -52,7 +52,7 @@ public class MainStory1 implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(172/255f, 115/255f, 57/255f, 1);
+        Gdx.gl.glClearColor(240/255f, 240/255f, 240/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
         stage.act(delta);
