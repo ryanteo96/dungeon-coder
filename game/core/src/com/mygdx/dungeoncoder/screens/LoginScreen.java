@@ -43,11 +43,11 @@ public class LoginScreen implements Screen {
 
         // creating buttons
         TextButton btnLogin = new TextButton("Login", skin);
-        btnLogin.setPosition(750,150);
+        btnLogin.setPosition(750,200);
         btnLogin.setSize(150,60);
 
         TextButton btnCreateAcc = new TextButton("Create Account", skin);
-        btnCreateAcc.setPosition(350,150);
+        btnCreateAcc.setPosition(350,200);
         btnCreateAcc.setSize(300,60);
 
         btnCreateAcc.addListener(new ClickListener(){
