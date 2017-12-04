@@ -40,7 +40,7 @@ public class LoginScreen implements Screen {
         ping = new Pinger();
         Gdx.input.setInputProcessor(stage);
         Skin skin = new Skin(Gdx.files.internal("comic-ui.json"));
-      
+
         // creating buttons
         TextButton btnLogin = new TextButton("Login", skin);
         btnLogin.setPosition(750,150);
@@ -77,7 +77,7 @@ public class LoginScreen implements Screen {
         labelStyle.font = myFont;
 
         Label lblGameLogo = new Label("DUNGEON CODER", labelStyle);
-        lblGameLogo.setPosition(360, 50);
+        lblGameLogo.setPosition(360, 500);
         lblGameLogo.setFontScale(2);
         /*lblGameLogo.addListener(new ClickListener(){
             @Override
