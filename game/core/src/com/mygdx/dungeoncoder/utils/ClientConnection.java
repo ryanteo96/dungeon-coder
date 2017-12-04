@@ -341,8 +341,8 @@ public class ClientConnection {
 			//catch(IOException e) {
 				// Do Nothing
 			//}
-		}
 	}
+
 
 	public synchronized boolean uploadLevel(String levelName, File level) {
 		sendCode((byte)(0x0B));

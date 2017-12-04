@@ -17,7 +17,9 @@ import com.mygdx.dungeoncoder.utils.ClientConnection;
 import com.mygdx.dungeoncoder.values.DefaultValues;
 import com.sun.deploy.util.SessionState;
 
+import java.io.*;
 import java.text.ParseException;
+import java.util.Scanner;
 
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
@@ -38,14 +40,14 @@ public class LoginScreen implements Screen {
         ping = new Pinger();
         Gdx.input.setInputProcessor(stage);
         Skin skin = new Skin(Gdx.files.internal("comic-ui.json"));
-
+      
         // creating buttons
         TextButton btnLogin = new TextButton("Login", skin);
-        btnLogin.setPosition(750,200);
+        btnLogin.setPosition(750,150);
         btnLogin.setSize(150,60);
 
         TextButton btnCreateAcc = new TextButton("Create Account", skin);
-        btnCreateAcc.setPosition(350,200);
+        btnCreateAcc.setPosition(350,150);
         btnCreateAcc.setSize(300,60);
 
         btnCreateAcc.addListener(new ClickListener(){
@@ -57,13 +59,15 @@ public class LoginScreen implements Screen {
         textSkin = new Skin(Gdx.files.internal("UIElements/test.json"));
 
         // creating text fields
-        txfUsername = new TextField("TestUser", textSkin);
+        txfUsername = new TextField("", textSkin);
+        txfUsername.setMessageText("Enter your username here");
         txfUsername.setPosition(400, 360);
         txfUsername.setSize(450,40);
 
-        txfPassword = new TextField("NewPass", textSkin);
+        txfPassword = new TextField("", textSkin);
         txfPassword.setPasswordCharacter('*');
         txfPassword.setPasswordMode(true);
+        txfPassword.setMessageText("Enter your password here");
         txfPassword.setPosition(400, 280);
         txfPassword.setSize(450,40);
 
@@ -73,7 +77,7 @@ public class LoginScreen implements Screen {
         labelStyle.font = myFont;
 
         Label lblGameLogo = new Label("DUNGEON CODER", labelStyle);
-        lblGameLogo.setPosition(360, 500);
+        lblGameLogo.setPosition(360, 50);
         lblGameLogo.setFontScale(2);
         /*lblGameLogo.addListener(new ClickListener(){
             @Override
@@ -123,6 +127,7 @@ public class LoginScreen implements Screen {
         });
         stage.addActor(btnBack);
     }
+
 
     @Override
     public void show() {

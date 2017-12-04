@@ -773,7 +773,7 @@ public class TaskOne implements Screen {
         hud.stage.draw();
 
         if (gameOver()) {
-            game.setScreen(new TaskTwoGameOver(game));
+            game.setScreen(new TaskOneGameOver(game));
         }
 
         stage.act(delta);
