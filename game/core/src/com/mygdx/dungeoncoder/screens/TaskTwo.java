@@ -380,7 +380,7 @@ public class TaskTwo implements Screen {
         dialog.setHeight(150);
         dialog.setWidth(300);
 
-        quest2YesButton = new TextButton("  Yes  ", skin);
+        quest2YesButton = new TextButton("  Proceed  ", skin);
         quest2YesButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
@@ -388,7 +388,7 @@ public class TaskTwo implements Screen {
             }
         });
 
-        quest2NoButton = new TextButton("  No  ", skin);
+        quest2NoButton = new TextButton("  Don't Proceed  ", skin);
         quest2NoButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
