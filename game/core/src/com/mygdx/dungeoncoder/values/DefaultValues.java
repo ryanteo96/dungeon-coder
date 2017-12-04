@@ -31,6 +31,8 @@ public class DefaultValues {
     public static boolean quest2Activated = false;
     public static boolean questActivated = false;
 
+    public static String loadMap = "";
+
     public static int mode = 0;
 
     public static String username = "";

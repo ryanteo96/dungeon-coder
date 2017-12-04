@@ -30,6 +30,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
 import com.mygdx.dungeoncoder.DungeonCoder;
+import com.mygdx.dungeoncoder.values.DefaultValues;
 
 
 import javax.swing.*;
@@ -38,6 +39,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -141,6 +143,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 System.out.println("choosestage: " + chooseStage.getText());
+                DefaultValues.loadMap = chooseStage.getText();
                 if (chooseStage.getText().trim().equals("")) {
                     new Dialog(" Error ", skin, "dialog") {
                         protected void result(Object object) {
@@ -163,7 +166,11 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         yesButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                game.setScreen(new FreeBattleModeGameScreen(game));
+                try {
+                    game.setScreen(new FreeBattleModeGameScreen(game));
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
         stage.addActor(launchButton);
@@ -207,7 +214,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         }
         int count = 1;
         for (int i = 0, k = 0; i < levels.size(); i++) {
-            strings[k++] = "Level "+ count + " : " + levels.get(i);
+            strings[k++] = count + ". " + levels.get(i);
             count++;
         }
 
