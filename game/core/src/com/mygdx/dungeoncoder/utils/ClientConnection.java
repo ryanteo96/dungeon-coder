@@ -333,13 +333,14 @@ public class ClientConnection {
 
 	public synchronized void ping() {
 		sendCode((byte)(0xFF));
-		while(recieveCode() != 0xFF) {
-			try {
-				messages.add(incoming.readUTF());
-			}
-			catch(IOException e) {
+		recieveCode();
+		//while(recieveCode() != 0xFF) {
+			//try {
+				//messages.add(incoming.readUTF());
+			//}
+			//catch(IOException e) {
 				// Do Nothing
-			}
+			//}
 		}
 	}
 
