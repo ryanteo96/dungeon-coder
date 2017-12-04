@@ -90,7 +90,7 @@ public class SplashScreen implements Screen {
         TextureRegion main4Region = new TextureRegion(main4);
         TextureRegionDrawable main4Drawable = new TextureRegionDrawable(main4Region);
         Image main4Image = new Image(main4Drawable);
-        main4Image.setPosition(0,600);
+        main4Image.setPosition(0,580);
         main4Image.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -112,7 +112,7 @@ public class SplashScreen implements Screen {
         TextureRegion main4Region = new TextureRegion(main4);
         TextureRegionDrawable main4Drawable = new TextureRegionDrawable(main4Region);
         Image main4Image = new Image(main4Drawable);
-        main4Image.setPosition(1160,600);
+        main4Image.setPosition(1160,580);
         main4Image.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
