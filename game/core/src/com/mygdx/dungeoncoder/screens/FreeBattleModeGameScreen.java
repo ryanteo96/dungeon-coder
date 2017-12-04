@@ -183,7 +183,9 @@ public class FreeBattleModeGameScreen implements Screen {
         btnBack.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
-                backToInstructionalMode(game);
+                disposeNotStage();
+                game.setScreen(new FreeBattleMode(game));
+                hud.stopMusic();
             }
         });
         stage.addActor(btnBack);
@@ -365,8 +367,8 @@ public class FreeBattleModeGameScreen implements Screen {
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 hud.stopMusic();
-                dispose();
-                game.setScreen(new InstructionalMode(game));
+                disposeNotStage();
+                game.setScreen(new FreeBattleMode(game));
             }
         });
 
@@ -610,11 +612,6 @@ public class FreeBattleModeGameScreen implements Screen {
         return atlas;
     }
 
-    private void backToInstructionalMode(DungeonCoder g) {
-        dispose();
-        g.setScreen(new InstructionalMode(g));
-        hud.stopMusic();
-    }
 
     @Override
     public void show() {
@@ -697,6 +694,7 @@ public class FreeBattleModeGameScreen implements Screen {
                 saveProcessor.insClear();
                 System.out.println("Total clear:" + saveProcessor.getTotalCleared());
                 System.out.printf("You have cleared %d instructional stages.\n", saveProcessor.getInsCleared());
+                disposeNotStage();
                 game.setScreen(new StageTwoComplete(game));
             } else {
                 touchedFinishline = false;
@@ -753,7 +751,7 @@ public class FreeBattleModeGameScreen implements Screen {
         hud.stage.draw();
 
         if (gameOver()) {
-            game.setScreen(new AdventurerGameOver(game));
+            game.setScreen(new FreeBattleGameOver(game));
         }
 
         stage.act(delta);
@@ -784,10 +782,13 @@ public class FreeBattleModeGameScreen implements Screen {
 
     @Override
     public void dispose() {
+        stage.dispose();
+    }
+
+    public void disposeNotStage(){
         world.dispose();
         map.dispose();
         hud.dispose();
-        stage.dispose();
         b2dr.dispose();
         renderer.dispose();
         gifRecorder.clearFrames();

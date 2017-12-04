@@ -174,7 +174,7 @@ public class TaskThree implements Screen {
     }
 
     private void backToInstructionalMode(DungeonCoder g) {
-        dispose();
+        disposeNotStage();
         g.setScreen(new InstructionalMode(g));
         music.stop();
     }
@@ -266,7 +266,7 @@ public class TaskThree implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
     if(gameOver()){
-        dispose();
+        disposeNotStage();
         game.setScreen(new GameOverScreen(game));
     }
         stage.draw();
@@ -305,11 +305,15 @@ public class TaskThree implements Screen {
 
     @Override
     public void dispose() {
+        stage.dispose();
+
+    }
+
+    public void disposeNotStage(){
         map.dispose();
         world.dispose();
         b2dr.dispose();
         hud.dispose();
-        stage.dispose();
         renderer.dispose();
     }
 

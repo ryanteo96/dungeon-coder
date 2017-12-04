@@ -197,7 +197,7 @@ public class AdventurerHud implements Disposable {
         table.add(deadline).expandX();
         table.add(progress).expandX();
 
-        stage.addActor(table);
+        //stage.addActor(table);
     }
 
     public void update(float dt){

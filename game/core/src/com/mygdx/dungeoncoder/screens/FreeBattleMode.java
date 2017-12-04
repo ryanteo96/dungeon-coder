@@ -259,7 +259,6 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
                 try {
-                    dispose();
                     game.setScreen(new MainMenuScreen(game));
                 } catch (ParseException e1) {
                     e1.printStackTrace();
