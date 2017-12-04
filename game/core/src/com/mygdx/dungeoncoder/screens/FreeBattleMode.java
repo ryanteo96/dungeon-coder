@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -20,9 +21,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
@@ -34,12 +39,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
 
+import static com.mygdx.dungeoncoder.values.DefaultValues.GROUND_BIT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_HEIGHT;
 import static com.mygdx.dungeoncoder.values.DefaultValues.VIRTUAL_WIDTH;
 
@@ -48,7 +55,6 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
     private ScrollPane scrollPane;
     private List<String> list;
     private SpriteBatch batcher;
-    private float gameWidth, gameHeight;
     private TextureAtlas atlas;
 
     private DungeonCoder game;
@@ -59,9 +65,10 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
     private TextButton downloadButton;
     private TextButton sortButton;
     private Object[] listEntries = {};
-    private boolean open = false;
     private int result;
     private int sort = 0;
+
+    private TextField textArea;
 
 
     public FreeBattleMode (DungeonCoder g) {
@@ -72,10 +79,10 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
 
         Gdx.input.setInputProcessor(stage);
         System.out.println("It has gone in free battle mode");
+        createTable(sort);
         createUploadButton();
         createDownloadButton();
         createSortButton();
-        //createTable(sort);
         createBack();
     }
 
@@ -120,11 +127,8 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
 
 
     private void createTable(int order) {
-        gameWidth = 400;
-        gameHeight = 225;
-        atlas = new TextureAtlas(Gdx.files.internal("comic-ui.atlas"));
-        skin = new Skin(Gdx.files.internal("comic-ui.json"), atlas);
-
+        atlas = new TextureAtlas(Gdx.files.internal("dialogSkins/plain-james-ui.atlas"));
+        skin = new Skin(Gdx.files.internal(("dialogSkins/plain-james-ui.json")));
         batcher = new SpriteBatch();
         list = new List<String>(skin);
 
@@ -167,7 +171,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         labelStyle.font = myFont;
 
         Label lblLevelList = new Label("LEVELS", labelStyle);
-        lblLevelList.setPosition(100, 550);
+        lblLevelList.setPosition(120, 600);
         lblLevelList.setFontScale(1);
         stage.addActor(lblLevelList);
 
@@ -189,14 +193,24 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         }*/
 
         list.setItems(strings);
+        Texture background = new Texture(Gdx.files.internal("UIElements/greybackground.png"));
+        TextureRegion backgroundRegion = new TextureRegion(background);
+        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundRegion);
+        Image backgroundImage = new Image(backgroundDrawable);
+
+        //backgroundImage.setSize(500,500);
+        backgroundImage.setBounds(0,0,710,530);
+        backgroundImage.setPosition(107,50);
+        skin = new Skin(Gdx.files.internal("UIElements/test.json"));
         scrollPane = new ScrollPane(list);
-        scrollPane.setBounds(0, 0, gameWidth, gameHeight);
+        scrollPane.setBounds(0, 0, 470, 350);
         scrollPane.setSmoothScrolling(false);
-        // gameWidth / 2 - scrollPane.getWidth() / 4
-        // gameHeight / 2 - scrollPane.getHeight() / 4
-        scrollPane.setPosition(100, 200);
+        scrollPane.setPosition(110, 50);
         scrollPane.setTransform(true);
         scrollPane.setScale(1.5f);
+        scrollPane.setColor(Color.WHITE);
+        //scrollPane.setColor(145/255f,145/255f,145/255f,1);
+        stage.addActor(backgroundImage);
         stage.addActor(scrollPane);
         Gdx.input.setInputProcessor(stage);
     }
@@ -210,6 +224,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
                 try {
+                    dispose();
                     game.setScreen(new MainMenuScreen(game));
                 } catch (ParseException e1) {
                     e1.printStackTrace();
@@ -258,10 +273,21 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
                 fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 if (fc.showOpenDialog(openFileChooser) == JFileChooser.APPROVE_OPTION) {
                     JOptionPane.showMessageDialog(null, fc.getSelectedFile().getAbsolutePath());
-
-                    //File f = new File(fc.getSelectedFile().getAbsolutePath());
-                    //clientConnection.uploadLevel("testLevel", f);
-
+                    System.out.println("The path: " + fc.getSelectedFile().getAbsoluteFile().getAbsolutePath());
+                    String filePath = fc.getSelectedFile().getAbsoluteFile().getAbsolutePath();
+                    int indexOfDot = filePath.lastIndexOf('.');
+                    String fileName = "";
+                    int filenameStart = 0;
+                    for(int i = indexOfDot - 1; i >= 0; i--){
+                        if(!Character.isLetterOrDigit(filePath.charAt(i))){
+                            filenameStart = i;
+                            break;
+                        }
+                    }
+                    fileName = filePath.substring(filenameStart + 1);
+                    System.out.println("fileName is: "+ fileName);
+                    File f = new File(fc.getSelectedFile().getAbsolutePath());
+                    shareVariable.connect.uploadLevel(fileName, f);
                     result = JFileChooser.APPROVE_OPTION;
 
                     //System.out.println(result);
@@ -277,6 +303,12 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
     }
 
     private void createDownloadButton() {
+        textArea = new TextField("", skin);
+        textArea.setPosition(830,400);
+        textArea.setSize(150,50);
+        textArea.setAlignment(Align.center);
+        textArea.setMessageText("Type in here!");
+        stage.addActor(textArea);
         skin = new Skin(Gdx.files.internal("UIElements/test.json"));
         downloadButton = new TextButton("DOWNLOAD", skin);
         downloadButton.setPosition(1000, 400);
@@ -284,7 +316,7 @@ public class FreeBattleMode extends ApplicationAdapter implements Screen {
         downloadButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                Gdx.net.openURI("http://18.221.243.28/DownloadLevelPage.html");
+                shareVariable.connect.requestCustomLevel(textArea.getText());
             }
         });
         stage.addActor(downloadButton);

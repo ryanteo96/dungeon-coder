@@ -53,7 +53,6 @@ public class TimeOver implements Screen {
     public void render(float delta) {
         if(Gdx.input.justTouched()){
             try {
-                dispose();
                 game.setScreen(new TaskTwo((DungeonCoder)game));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

@@ -40,7 +40,7 @@ public class MainMenuScreen implements Screen {
     private Stage stage;
     private Skin backButtonSkin;
     private Skin dialogSkin;
-    private boolean finishedAssignment = true;
+    private boolean finishedAssignment = false;
     private TextButton cannotContinue;
     private TextButton continueButton;
     private TextButton yesButton;
@@ -76,6 +76,16 @@ public class MainMenuScreen implements Screen {
         System.out.println("This is the current date: " + dateString);
         System.out.println("This is the deadline: " + deadline);
         Date currentDate = sdf.parse(dateString);
+
+        if(shareVariable.connect.requestTaskInformation("Task1","Completion").equals("100")){
+            finishedAssignment = true;
+        }else{
+            finishedAssignment = false;
+        }
+
+        System.out.println("finish assignment: " + finishedAssignment);
+
+
         if (deadline_Date.compareTo(currentDate) > 0) {
             System.out.println("The student cannot play other modes");
             deadlinePassed = false;
@@ -295,90 +305,100 @@ public class MainMenuScreen implements Screen {
                 } else if (DefaultValues.mode == 1) {
                     System.out.println("deadlinePassed: " + deadlinePassed);
                     if (finishedAssignment) {
-                            //not lock and deadline has not passed, student can play
-                        if (!shareVariable.connect.requestLockStatus() && !deadlinePassed) {
+                        //lock status is true
+                        if (shareVariable.connect.requestLockStatus()) {
+                            new Dialog("Access Denied!", dialogSkin, "dialog") {
+                                protected void result(Object object) {
+                                }
+                            }.text("     You may not proceed.     ").button(cannotContinue, false).button("Cancel", false).
+                                    key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                            //lock and deadline has not passed, student cannot play
+                        } else if (!shareVariable.connect.requestLockStatus()){
                             new Dialog("Access Granted.", dialogSkin, "dialog") {
                                 protected void result(Object object) {
                                 }
-                            }.text("    You have finished your assignment.    ").button(continueButton, true).button("Cancel", false).
-                                    key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
-                            //not lock and deadline has passed,  student cannot play
-                        } else if (!shareVariable.connect.requestLockStatus() && deadlinePassed) {
-                            new Dialog("Access Denied!.", dialogSkin, "dialog") {
-                                protected void result(Object object) {
-                                }
-                            }.text("    The deadline has already passed.    ").button(cannotContinue, true).button("Cancel", false).
-                                    key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
-                            //lock and deadline has passed, student cannot play
-                        } else if (shareVariable.connect.requestLockStatus() && deadlinePassed) {
-                            new Dialog("Access Denied!", dialogSkin, "dialog") {
-                                protected void result(Object object) {
-                                }
-                            }.text("     The deadline has already passed.     ").button(cannotContinue, false).button("Cancel", false).
-                                    key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
-                            //lock and deadline has not passed, student cannot play
-                        } else if (shareVariable.connect.requestLockStatus() && !deadlinePassed) {
-                            new Dialog("Access Denied!", dialogSkin, "dialog") {
-                                protected void result(Object object) {
-                                }
-                            }.text("     Other modes are currently locked, please request permission from the instructor in order to access them    ").button(cannotContinue, false).button("Cancel", false).
+                            }.text("    You may proceed.    ").button(continueButton, true).button("Cancel", false).
                                     key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
                         }
 
-                    }
+                    }else if(!finishedAssignment) {
+                        //deadline has not pass yet and lock is true
+                        if(shareVariable.connect.requestLockStatus() && !deadlinePassed){
+                            new Dialog("Access Denied!", dialogSkin, "dialog") {
+                                protected void result(Object object) {
+                                }
+                            }.text("     You may not proceed.     ").button(cannotContinue, false).button("Cancel", false).
+                                    key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                            //if lock is false and deadline has not pass
+                        }else if(!shareVariable.connect.requestLockStatus() && !deadlinePassed){
+                            new Dialog("Access Granted.", dialogSkin, "dialog") {
+                                protected void result(Object object) {
+                                }
+                            }.text("    You may proceed.    ").button(continueButton, true).button("Cancel", false).
+                                    key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                            //if deadline is passed no matter its lock or not cant play
+                        }else if(deadlinePassed){
+                            new Dialog("Access Denied!", dialogSkin, "dialog") {
+                                protected void result(Object object) {
+                                }
+                            }.text("     You may not proceed.     ").button(cannotContinue, false).button("Cancel", false).
+                                    key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                        }
 
-                    if (!finishedAssignment && deadlinePassed == true) {
-                        new Dialog("Access Denied!", dialogSkin, "dialog") {
-                            protected void result(Object object) {
-                            }
-                        }.text("     You have not completed your assignment and the deadline has already passed.     ").button(cannotContinue, false).button("Cancel", false).
-                                key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
-                    } else {
-                        new Dialog("Access Denied!", dialogSkin, "dialog") {
-                            protected void result(Object object) {
-                            }
-                        }.text("     You have not finished your assignment!     ").button(cannotContinue, false).button("Cancel", false).
-                                key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+
                     }
 
                     //continue to go to main story mode if assignment is finished.
                     continueButton.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
-                            mainStoryMode(game);
+                                mainStoryMode(game);
                         }
                     });
 
-                } else if (DefaultValues.mode == 2)
+                }else if(DefaultValues.mode == 2){
+                    if (finishedAssignment) {
+                        //lock status is true
+                        if (shareVariable.connect.requestLockStatus()) {
+                            new Dialog("Access Denied!", dialogSkin, "dialog") {
+                                protected void result(Object object) {
+                                }
+                            }.text("     You may not proceed.     ").button(cannotContinue, false).button("Cancel", false).
+                                    key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                            //lock and deadline has not passed, student cannot play
+                        } else if (!shareVariable.connect.requestLockStatus()){
+                            new Dialog("Access Granted.", dialogSkin, "dialog") {
+                                protected void result(Object object) {
+                                }
+                            }.text("    You may proceed.    ").button(continueButton, true).button("Cancel", false).
+                                    key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                        }
 
-                {
-                    finishedAssignment = true;
-                    deadlinePassed = false;
-                    if (finishedAssignment && deadlinePassed == false) {
-                        new Dialog("Access Granted.", dialogSkin, "dialog") {
-                            protected void result(Object object) {
-                            }
-                        }.text("    You have finished your assignment.    ").button(continueButton, true).button("Cancel", false).
-                                key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                    }else if(!finishedAssignment) {
+                        //deadline has not pass yet and lock is true
+                        if(shareVariable.connect.requestLockStatus() && !deadlinePassed){
+                            new Dialog("Access Denied!", dialogSkin, "dialog") {
+                                protected void result(Object object) {
+                                }
+                            }.text("     You may not proceed.     ").button(cannotContinue, false).button("Cancel", false).
+                                    key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                            //if lock is false and deadline has not pass
+                        }else if(!shareVariable.connect.requestLockStatus() && !deadlinePassed){
+                            new Dialog("Access Granted.", dialogSkin, "dialog") {
+                                protected void result(Object object) {
+                                }
+                            }.text("    You may proceed.    ").button(continueButton, true).button("Cancel", false).
+                                    key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                            //if deadline is passed no matter its lock or not cant play
+                        }else if(deadlinePassed){
+                            new Dialog("Access Denied!", dialogSkin, "dialog") {
+                                protected void result(Object object) {
+                                }
+                            }.text("     You may not proceed.     ").button(cannotContinue, false).button("Cancel", false).
+                                    key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+                        }
 
-                    } else if (finishedAssignment && deadlinePassed == true) {
-                        new Dialog("Access Denied!", dialogSkin, "dialog") {
-                            protected void result(Object object) {
-                            }
-                        }.text("     The deadline has already passed.     ").button(cannotContinue, false).button("Cancel", false).
-                                key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
-                    } else if (!finishedAssignment && deadlinePassed == true) {
-                        new Dialog("Access Denied!", dialogSkin, "dialog") {
-                            protected void result(Object object) {
-                            }
-                        }.text("     You have not completed your assignment and the deadline has already passed.     ").button(cannotContinue, false).button("Cancel", false).
-                                key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
-                    } else {
-                        new Dialog("Access Denied!", dialogSkin, "dialog") {
-                            protected void result(Object object) {
-                            }
-                        }.text("     You have not finished your assignment!     ").button(cannotContinue, false).button("Cancel", false).
-                                key(Input.Keys.ENTER, true).key(Input.Keys.ESCAPE, false).show(stage);
+
                     }
 
                     //continue to go to main story mode if assignment is finished.
@@ -402,7 +422,6 @@ public class MainMenuScreen implements Screen {
                 }
             }
         });
-        finishedAssignment = true;
         stage.addActor(main1Image);
     }
 

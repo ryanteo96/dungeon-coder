@@ -43,7 +43,7 @@ import static com.mygdx.dungeoncoder.values.DefaultValues.*;
 
 public class TaskTwo implements Screen {
     //Write files
-    CodeEvaluator codeevaluator;
+    CodeEvaluator codeEvaluator;
     SaveProcessor saveProcessor;
     BufferedWriter bw = null;
     FileWriter fw = null;
@@ -129,7 +129,7 @@ public class TaskTwo implements Screen {
         gamePort = new FitViewport(V_WIDTH / DefaultValues.PPM, V_HEIGHT / DefaultValues.PPM, gamecam);
 
         //get compiling
-        codeevaluator = new CodeEvaluator();
+        codeEvaluator = new CodeEvaluator();
 
         //Load our map and setup our map renderer
         mapLoader = new TmxMapLoader();
@@ -311,6 +311,7 @@ public class TaskTwo implements Screen {
                 } else if (quest2 == true) {
                     list.setItems(listEntries2);
                 }
+
                 ScrollPane scrollPane = new ScrollPane(list, skin);
                 scrollPane.setSize(0, 0);
                 scrollPane.setFlickScroll(false);
@@ -449,11 +450,11 @@ public class TaskTwo implements Screen {
                 try {
                     String filepath = file.getAbsolutePath();
                     System.out.println(filepath);
-                    if (codeevaluator.evaluate(filepath) == true) {
+                    if (codeEvaluator.evaluate(filepath) == true) {
                         System.out.println("it gets in the if statement");
-                        codeevaluator.run(classPath, runName);
+                        codeEvaluator.run(classPath, runName);
                     }
-                    System.out.println("Code Evaluator: " + codeevaluator.evaluate(filepath));
+                    System.out.println("Code Evaluator: " + codeEvaluator.evaluate(filepath));
                     FileReader fileReader = new FileReader("code.txt");
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
 

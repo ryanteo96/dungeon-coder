@@ -124,9 +124,7 @@ public class InstructionalMode extends ScreenAdapter implements Screen{
         stage_OneImage.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-               // if()
                stage_Two(game);
-
             }
         });
 
